@@ -1,10 +1,11 @@
 <?php
+
 include_once('helpers/conn.php');
 include_once('process/validate_reg_fields.php');
 session_start();
 if(isset($_SESSION["user_id"]))
 {
-    header("location:dashboard.php");
+    header("location:dashboard");
 }
 if(isset($_POST["register-submit"]))
 {
@@ -66,6 +67,15 @@ if(isset($_POST["login-submit"]))
             $row = mysqli_fetch_assoc($result);
             if(password_verify($password, $row['password']))
             {
+                if(isset($_POST["remember-me"]))
+                {
+                    setcookie("login_remember", $_POST["login"], time() + 3600 * 24 * 30);
+                }
+                else if(isset($_COOKIE["login_remember"]))
+                {
+                    unset($_COOKIE['login_remember']);
+                    setcookie('login_remember', null, time() - 3600);
+                }
                 $_SESSION['user_id'] = $row['id'];
                 header("location:dashboard");
             }
@@ -152,7 +162,8 @@ if(isset($_POST["login-submit"]))
                                             <i class="fas fa-user"></i>
                                         </div>
                                     </div>
-                                    <input type="text" id="login" name="login" class="form-control" placeholder="username or email" autofocus>
+                                    <input type="text" id="login" name="login" class="form-control" placeholder="username or email"
+                                           value="<?php echo isset($_COOKIE["login_remember"]) ? htmlspecialchars($_COOKIE["login_remember"]) : ''; ?>" autofocus>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -165,6 +176,11 @@ if(isset($_POST["login-submit"]))
                                     </div>
                                     <input type="password" id="password" name="password" class="form-control" placeholder="password">
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="checkbox" id="remember-me" name="remember-me"
+                                    <?php echo isset($_COOKIE["login_remember"]) ? 'checked' : 'unchecked'; ?>>
+                                <label for="remember-me">Remember username</label>
                             </div>
                             <div class="text-right mt-3">
                                 <a href="/?action=register">Register</a>

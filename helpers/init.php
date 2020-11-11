@@ -1,4 +1,5 @@
 <?php
 
 include 'conn.php';
-include 'helper.php';
+include 'init_session.php';
+include 'get_subview.php';
