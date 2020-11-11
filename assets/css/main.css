@@ -1,0 +1,13 @@
+label.error {
+    float: none;
+    clear: both;
+    font-size: 14px;
+    color: red;
+    margin-bottom: 5px;
+    margin-left: 5px;
+}
+
+input.error {
+    border: 2px solid red;
+    color: red;
+}

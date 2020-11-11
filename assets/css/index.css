@@ -2,19 +2,3 @@ body {
     background: url('../../assets/images/index-background.jpg') no-repeat;
     background-size: cover;
 }
-
-#form-login label.error,
-#form-register label.error {
-    float: none;
-    clear: both;
-    font-size: 14px;
-    color: red;
-    margin-bottom: 5px;
-    margin-left: 5px;
-}
-
-#form-login input.error,
-#form-register input.error {
-    border: 2px solid red;
-    color: red;
-}
