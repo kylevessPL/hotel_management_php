@@ -1,5 +1,6 @@
 <?php
 include_once('helpers/conn.php');
+include_once('process/validate_reg_fields.php');
 session_start();
 if(isset($_SESSION["user_id"]))
 {
@@ -7,58 +8,78 @@ if(isset($_SESSION["user_id"]))
 }
 if(isset($_POST["register-submit"]))
 {
-    $username = mysqli_real_escape_string($con, $_POST["username"]);
-    $password = mysqli_real_escape_string($con, $_POST["password"]);
-    $email = mysqli_real_escape_string($con, $_POST["email"]);
-    $password = password_hash($password, PASSWORD_DEFAULT);
-    $sql1 = "SELECT id FROM users WHERE username = '$username'";
-    $sql2 = "SELECT id FROM users WHERE email = '$email'";
-    $result1 = query($sql1);
-    $result2 = query($sql2);
-    if(mysqli_num_rows($result1) > 0)
+    if(count($_POST) != count(array_filter($_POST)))
     {
-        $alertMsg = "Username not available";
-        $alertType = "danger";
-    }
-    else if(mysqli_num_rows($result2) > 0)
-    {
-        $alertMsg = "There is already a user with this email";
+        $alertMsg = "All fields are required";
         $alertType = "danger";
     }
     else
     {
-        $sql = "INSERT INTO users (username, password, email) VALUES('$username', '$password', '$email')";
-        if(query($sql))
+        validate_reg_fields($_POST, $alertMsg, $alertType);
+        if(!isset($alertMsg))
         {
-            $alertMsg = "You have successfully registered";
-            $alertType = "success";
+            $username = mysqli_real_escape_string($con, $_POST["username"]);
+            $password = mysqli_real_escape_string($con, $_POST["password"]);
+            $email = mysqli_real_escape_string($con, $_POST["email"]);
+            $password = password_hash($password, PASSWORD_DEFAULT);
+            $sql1 = "SELECT id FROM users WHERE username = '$username'";
+            $sql2 = "SELECT id FROM users WHERE email = '$email'";
+            $result1 = query($sql1);
+            $result2 = query($sql2);
+            if(mysqli_num_rows($result1) > 0)
+            {
+                $alertMsg = "Username not available";
+                $alertType = "danger";
+            }
+            else if(mysqli_num_rows($result2) > 0)
+            {
+                $alertMsg = "There is already a user with this email";
+                $alertType = "danger";
+            }
+            else
+            {
+                $sql = "INSERT INTO users (username, password, email) VALUES('$username', '$password', '$email')";
+                if(query($sql))
+                {
+                    $alertMsg = "You have successfully registered";
+                    $alertType = "success";
+                }
+            }
         }
     }
 }
 if(isset($_POST["login-submit"]))
 {
-    $login = mysqli_real_escape_string($con, $_POST["login"]);
-    $password = mysqli_real_escape_string($con, $_POST["password"]);
-    $sql = "SELECT * FROM users WHERE username = '$login' OR email = '$login'";
-    $result = query($sql);
-    if(mysqli_num_rows($result) > 0)
+    if(count($_POST) != count(array_filter($_POST)))
     {
-        $row = mysqli_fetch_assoc($result);
-        if(password_verify($password, $row['password']))
-        {
-            $_SESSION['user_id'] = $row['id'];
-            header("location:dashboard");
-        }
-        else
-        {
-            $alertMsg = "Wrong password!";
-            $alertType = "danger";
-        }
+        $alertMsg = "All fields are required";
+        $alertType = "danger";
     }
     else
     {
-        $alertMsg = "User not found!";
-        $alertType = "danger";
+        $login = mysqli_real_escape_string($con, $_POST["login"]);
+        $password = mysqli_real_escape_string($con, $_POST["password"]);
+        $sql = "SELECT * FROM users WHERE username = '$login' OR email = '$login'";
+        $result = query($sql);
+        if(mysqli_num_rows($result) > 0)
+        {
+            $row = mysqli_fetch_assoc($result);
+            if(password_verify($password, $row['password']))
+            {
+                $_SESSION['user_id'] = $row['id'];
+                header("location:dashboard");
+            }
+            else
+            {
+                $alertMsg = "Invalid username or password";
+                $alertType = "danger";
+            }
+        }
+        else
+        {
+            $alertMsg = "Invalid username or password";
+            $alertType = "danger";
+        }
     }
 }
 ?>
@@ -74,7 +95,7 @@ if(isset($_POST["login-submit"]))
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
     <script src="assets/js/form-validation.js"></script>
 
-    <title>Sign In</title>
+    <title><?php echo (isset($_GET["action"]) == "register" ? 'Register' : 'Log In') ?></title>
 </head>
 <body>
 <div class="container">
@@ -88,8 +109,8 @@ if(isset($_POST["login-submit"]))
                     {
                         ?>
                         <h5 class="card-title text-center mb-4">Register</h5>
-                        <p class="alert alert-<?php echo isset($alertType) ? $alertType : 'info'; ?>">
-                            <?php echo isset($alertMsg) ? $alertMsg : 'Fill in your data'; ?></p>
+                        <p class="alert alert-<?php echo $alertType ?? 'info'; ?>">
+                            <?php echo $alertMsg ?? 'Fill in your data'; ?></p>
                         <form id="form-register" name="form-register" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                             <div class="form-group">
                                 <label for="username">Username</label>
@@ -105,7 +126,7 @@ if(isset($_POST["login-submit"]))
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label" for="email">E-mail</label>
-                                <input type="email" id="email" name="email" class="form-control" placeholder="email">
+                                <input type="text" id="email" name="email" class="form-control" placeholder="email">
                             </div>
                             <div class="text-right mt-3">
                                 <a href="/">Sign In</a>
@@ -118,9 +139,9 @@ if(isset($_POST["login-submit"]))
                     {
                         ?>
                         <h5 class="card-title text-center mb-4">Login</h5>
-                        <p class="alert alert-<?php echo isset($alertType) ? $alertType : 'success'; ?>"
+                        <p class="alert alert-<?php echo $alertType ?? 'success'; ?>"
                            style="display: <?php echo isset($alertMsg) ? 'block' : 'none'; ?>;">
-                            <?php echo isset($alertMsg) ? $alertMsg : ''; ?></p>
+                            <?php echo $alertMsg ?? ''; ?></p>
                         <form id="form-login" name="form-login" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                             <div class="form-group">
                                 <label for="login">Username or e-mail</label>

@@ -46,7 +46,7 @@ $(function() {
                 required: "Username is mandatory",
                 minlength: "Username must be minimum 6 characters long",
                 maxlength: "Username must be maximum 16 characters long",
-                regex: "Username must may contain only letters, digits or - _ . characters",
+                regex: "Username must contain only letters, digits or - _ . characters",
                 remote: "Username not available"
             },
             password: {
