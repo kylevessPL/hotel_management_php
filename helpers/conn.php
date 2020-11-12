@@ -1,5 +1,6 @@
 <?php
 
+global $con;
 $con = mysqli_connect("localhost","root","","hotel");
 
 if(mysqli_connect_errno()) {

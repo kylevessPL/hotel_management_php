@@ -163,7 +163,17 @@ if(isset($_POST["login-submit"]))
                                         </div>
                                     </div>
                                     <input type="text" id="login" name="login" class="form-control" placeholder="username or email"
-                                           value="<?php echo isset($_COOKIE["login_remember"]) ? htmlspecialchars($_COOKIE["login_remember"]) : ''; ?>" autofocus>
+                                           value=
+                                           <?php
+                                           if(isset($_COOKIE["login_remember"]))
+                                           {
+                                               echo '"', htmlspecialchars($_COOKIE["login_remember"]), '"';
+                                           }
+                                           else
+                                           {
+                                               echo '"" autofocus';
+                                           }
+                                           ?>>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -174,7 +184,8 @@ if(isset($_POST["login-submit"]))
                                             <i class="fas fa-key"></i>
                                         </div>
                                     </div>
-                                    <input type="password" id="password" name="password" class="form-control" placeholder="password">
+                                    <input type="password" id="password" name="password" class="form-control" placeholder="password"
+                                        <?php echo isset($_COOKIE["login_remember"]) ? 'autofocus' : ''; ?>>
                                 </div>
                             </div>
                             <div class="form-group">
