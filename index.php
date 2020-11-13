@@ -1,12 +1,8 @@
 <?php
+require_once 'helpers/conn.php';
+require_once 'helpers/init_session.php';
+include_once 'process/validate_reg_fields.php';
 
-include_once('helpers/conn.php');
-include_once('process/validate_reg_fields.php');
-session_start();
-if(isset($_SESSION["user_id"]))
-{
-    header("location:dashboard");
-}
 if(isset($_POST["register-submit"]))
 {
     if(count($_POST) != count(array_filter($_POST)))
@@ -19,9 +15,9 @@ if(isset($_POST["register-submit"]))
         validate_reg_fields($_POST, $alertMsg, $alertType);
         if(!isset($alertMsg))
         {
-            $username = mysqli_real_escape_string($con, $_POST["username"]);
-            $password = mysqli_real_escape_string($con, $_POST["password"]);
-            $email = mysqli_real_escape_string($con, $_POST["email"]);
+            $username = escape_string($_POST["username"]);
+            $password = escape_string($_POST["password"]);
+            $email = escape_string($_POST["email"]);
             $password = password_hash($password, PASSWORD_DEFAULT);
             $sql1 = "SELECT id FROM users WHERE username = '$username'";
             $sql2 = "SELECT id FROM users WHERE email = '$email'";
@@ -58,8 +54,8 @@ if(isset($_POST["login-submit"]))
     }
     else
     {
-        $login = mysqli_real_escape_string($con, $_POST["login"]);
-        $password = mysqli_real_escape_string($con, $_POST["password"]);
+        $login = escape_string($_POST["login"]);
+        $password = escape_string($_POST["password"]);
         $sql = "SELECT * FROM users WHERE username = '$login' OR email = '$login'";
         $result = query($sql);
         if(mysqli_num_rows($result) > 0)
@@ -94,7 +90,7 @@ if(isset($_POST["login-submit"]))
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

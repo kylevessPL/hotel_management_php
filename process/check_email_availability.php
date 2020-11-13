@@ -1,5 +1,5 @@
 <?php
-include_once(dirname(__DIR__).'/helpers/conn.php');
+include_once dirname(__DIR__).'/helpers/conn.php';
 
 if (!empty($_REQUEST['email']))
 {

@@ -1,5 +1,4 @@
 <?php
-
 function validate_reg_fields(array $data, &$alertMsg, &$alertType)
 {
     $username = $data["username"];

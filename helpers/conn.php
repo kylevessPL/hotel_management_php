@@ -1,10 +1,13 @@
 <?php
-
 global $con;
 $con = mysqli_connect("localhost","root","","hotel");
 
 if(mysqli_connect_errno()) {
     die(mysqli_connect_error());
+}
+
+function escape_string($str) {
+    return mysqli_real_escape_string($GLOBALS['con'], $str);
 }
 
 function query($sql) {
