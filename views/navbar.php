@@ -21,17 +21,17 @@ $user_data = mysqli_fetch_assoc($query);
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <li>
-                    <a class="dropdown-item pl-2" href="/dashboard/my-details">
+                    <a class="dropdown-item pl-2" href="/account/my-details">
                         <i class="las la-address-book align-top mr-1" style="font-size: 28px;"></i>My details
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item pl-2" href="/dashboard/my-addresses">
+                    <a class="dropdown-item pl-2" href="/account/my-addresses">
                         <i class="las la-map-marker-alt align-top mr-1" style="font-size: 28px;"></i>My addresses
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item logout-action pl-2" href="/logout">
+                    <a class="dropdown-item logout-action pl-2" href="../process/logout.php">
                         <i class="las la-sign-out-alt align-top mr-1" style="font-size: 28px;"></i>Sign out
                     </a>
                 </li>

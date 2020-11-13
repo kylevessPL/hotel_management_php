@@ -6,3 +6,7 @@ RewriteRule ^([^.]+)$ $1.php [NC,L]
 # redirect dashboard sub-pages to main dir php pages
 RewriteRule ^dashboard/([^_]*)-(.*)$ $1_$2 [E=underscores:Yes]
 RewriteRule ^dashboard/([^/]+)$ $1
+RewriteRule ^account/([^_]*)-(.*)$ $1_$2 [E=underscores:Yes]
+RewriteRule ^account/([^/]+)$ $1
+RewriteRule ^support/([^_]*)-(.*)$ $1_$2 [E=underscores:Yes]
+RewriteRule ^support/([^/]+)$ $1
