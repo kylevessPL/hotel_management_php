@@ -1,3 +1,8 @@
+# redirect non-php urls to php pages
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^.]+)$ $1.php [NC,L]
+
+# redirect dashboard sub-pages to main dir php pages
+RewriteRule ^dashboard/([^_]*)-(.*)$ $1_$2 [E=underscores:Yes]
+RewriteRule ^dashboard/([^/]+)$ $1

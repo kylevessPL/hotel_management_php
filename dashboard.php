@@ -10,22 +10,20 @@ $user_data = mysqli_fetch_assoc($query);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/assets/images/favicon.ico" rel="shortcut icon">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <link href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.5.4/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/sign-out-modal.js"></script>
 
     <title>
         <?php
-        $title = isset($_GET["action"]) ? htmlspecialchars($_GET["action"]) : 'HoteLAy Client Dashboard';
+        $title = isset($_GET["action"]) ? htmlspecialchars($_GET["action"]) : 'HoteLA Client Dashboard';
         echo ucfirst(str_replace("-"," ", $title));
         ?>
     </title>
@@ -37,7 +35,15 @@ $user_data = mysqli_fetch_assoc($query);
             left: 0;
             z-index: 100;
             padding: 90px 0 0;
-            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar .active
+        {
+            background-color: #eaecf0;
+            border-radius: 3px;
+            margin-left: 15px;
+            margin-right: 15px;
         }
 
         @media (max-width: 768px) {
@@ -61,19 +67,22 @@ $user_data = mysqli_fetch_assoc($query);
         }
 
         .sidebar .nav-link {
-            color: #333;
+            color: #41516f;
+            padding-left: 20px;
         }
 
         .sidebar .nav-link.active {
-            color: #0d6efd;
+            color: #0c68f1;
+            padding-left: 5px;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-light bg-light p-3">
+    <nav class="navbar navbar-light bg-light p-2">
         <div class="d-flex col-12 col-md-3 col-lg-2 mb-2 mb-lg-0 flex-wrap flex-md-nowrap justify-content-between">
             <a class="navbar-brand" href="/dashboard">
-                HoteLAy Client Dashboard
+                <img src="/assets/images/favicon.ico" alt="HoteLA logo" width="52" height="52" class="mr-2">
+                HoteLA Client Dashboard
             </a>
             <button class="navbar-toggler d-md-none collapsed mb-3" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -81,56 +90,68 @@ $user_data = mysqli_fetch_assoc($query);
         </div>
         <div class="col-12 col-md-5 col-lg-8 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
             <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
                     Hello, <?php echo $user_data['username']; ?>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <li><a class="dropdown-item" href="?action=personal-details">Your details</a></li>
-                    <li><a class="dropdown-item" href="?action=personal-addresses">Your addresses</a></li>
-                    <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+                    <li>
+                        <a class="dropdown-item pl-2" href="/dashboard/my-details">
+                            <i class="las la-address-book align-top mr-1" style="font-size: 28px;"></i>My details
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item pl-2" href="/dashboard/my-addresses">
+                            <i class="las la-map-marker-alt align-top mr-1" style="font-size: 28px;"></i>My addresses
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item logout-action pl-2" href="/logout">
+                            <i class="las la-sign-out-alt align-top mr-1" style="font-size: 28px;"></i>Sign out
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
     <div class="container-fluid">
         <div class="row">
-            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light mt-2 sidebar collapse">
                 <div class="position-sticky">
                     <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                                <span class="ml-2">Dashboard</span>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link active" aria-current="page" href="/dashboard">
+                                <i class="las la-home align-bottom" style="font-size: 32px;"></i>
+                                <span>Dashboard</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                                <span class="ml-2">Book a room</span>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link" href="/dashboard/available-rooms">
+                                <i class="las la-bed align-bottom" style="font-size: 32px;"></i>
+                                <span>Available rooms</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                                <span class="ml-2">Your bookings</span>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link" href="/dashboard/additional-services">
+                                <i class="las la-concierge-bell align-bottom" style="font-size: 32px;"></i>
+                                <span>Additional services</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                                <span class="ml-2">Available rooms</span>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link" href="/dashboard/book-room">
+                                <i class="las la-user-clock align-bottom" style="font-size: 32px;"></i>
+                                <span>Book a room</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                                <span class="ml-2">Additional services</span>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link" href="/dashboard/my-bookings">
+                                <i class="las la-bookmark align-bottom" style="font-size: 32px;"></i>
+                                <span>My bookings</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-                                <span class="ml-2">Your booking history</span>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link" href="/dashboard/payment-history">
+                                <i class="las la-file-invoice-dollar align-bottom" style="font-size: 32px;"></i>
+                                <span>Payment history</span>
                             </a>
                         </li>
                     </ul>
@@ -139,7 +160,7 @@ $user_data = mysqli_fetch_assoc($query);
             <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Overview</li>
                     </ol>
                 </nav>
@@ -260,40 +281,26 @@ $user_data = mysqli_fetch_assoc($query);
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-xl-4">
-                        <div class="card">
-                            <h5 class="card-header">Traffic last 6 months</h5>
-                            <div class="card-body">
-                                <div id="traffic-chart"></div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <footer class="pt-5 d-flex justify-content-between">
-                    <span>Copyright © 2020 HoteLAy</span>
+                    <span>Copyright © 2020 HoteLA</span>
                     <ul class="nav m-0">
                         <li class="nav-item">
-                            <a class="nav-link text-secondary" href="?action=faq">FAQ</a>
+                            <a class="nav-link text-secondary" href="/dashboard/faq">FAQ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-secondary" href="?action=contact">Contact</a>
+                            <a class="nav-link text-secondary" href="/dashboard/about-us">About us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" href="/dashboard/contact">Contact</a>
                         </li>
                     </ul>
                 </footer>
             </main>
         </div>
     </div>
-    <!-- Github buttons -->
-    <script>
-        new Chartist.Line('#traffic-chart', {
-            labels: ['January', 'Februrary', 'March', 'April', 'May', 'June'],
-            series: [
-                [23000, 25000, 19000, 34000, 56000, 64000]
-            ]
-        }, {
-            low: 0,
-            showArea: true
-        });
-    </script>
+
+    <?php view('sign_out_modal.php'); ?>
+
 </body>
 </html>
