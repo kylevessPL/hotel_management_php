@@ -30,7 +30,7 @@ include 'helpers/page_info.php';
                 <a href="/dashboard/book-room"
                    class=<?php echo $title == 'Book room' ? '"nav-link active" aria-current="page"' : '"nav-link"'; ?>>
                     <i class="las la-user-clock align-bottom" style="font-size: 32px;"></i>
-                    <span>Book a room</span>
+                    <span>Book room</span>
                 </a>
             </li>
             <li class="nav-item mb-2">
