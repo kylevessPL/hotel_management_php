@@ -1,10 +1,10 @@
 .sidebar {
     position: fixed;
-    top: 0.2rem;
+    top: 0;
     bottom: 0;
     left: 0;
     z-index: 100;
-    padding: 90px 0 0;
+    padding: 101px 0 0;
     box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
 }
 
@@ -15,9 +15,15 @@
     margin-right: 15px;
 }
 
+@media (max-width: 992px) {
+    .sidebar {
+        top: 9px;
+    }
+}
+
 @media (max-width: 768px) {
     .sidebar {
-        top: 11.5rem;
+        top: 9.5rem;
         padding: 0;
     }
 }
@@ -38,6 +44,7 @@
 .sidebar .nav-link {
     color: #41516f;
     padding-left: 20px;
+    margin-bottom: 0.75rem;
 }
 
 .sidebar .nav-link.active {
