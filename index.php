@@ -1,7 +1,12 @@
 <?php
 require_once 'helpers/conn.php';
-require_once 'helpers/init_session.php';
 include_once 'process/validate_reg_fields.php';
+
+session_start();
+if(isset($_SESSION["user_id"]))
+{
+    header("location:dashboard");
+}
 
 if(isset($_POST["register-submit"]))
 {
