@@ -197,7 +197,7 @@ if(isset($_POST["login-submit"]))
                                 <label for="remember-me">Remember username</label>
                             </div>
                             <div class="text-right mt-3">
-                                <a href="/?action=register">Register</a>
+                                <a href="?action=register">Register</a>
                             </div>
                             <input class="btn btn-lg btn-primary btn-block mt-2" name="login-submit" value="Sign In" type="submit">
                         </form>
