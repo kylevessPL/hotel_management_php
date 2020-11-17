@@ -23,7 +23,7 @@ include 'helpers/include_all.php';
                                     <button type="button" class="btn btn-link text-decoration-none collapsed" data-toggle="collapse" data-target="#faqOne"><i class="fa fa-plus mr-2"></i> Do you have any meal packages?</button>
                                 </h2>
                             </div>
-                            <div id="faqOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFaq">
+                            <div id="faqOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionFaq">
                                 <div class="card-body">
                                     <p>Yes, we have breakfast, lunch & dinner packs - each of them available in affordable price. More information <a href="/dashboard/additional-services" target="_blank">here</a>.</p>
                                 </div>
