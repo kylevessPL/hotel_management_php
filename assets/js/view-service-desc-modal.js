@@ -8,9 +8,6 @@ $(document).ready(function() {
         $('#viewServiceDescDesc').html('<br>' + desc);
         $('#viewServiceDescModal').modal();
     });
-});
-
-$(document).ready(function() {
     $('#viewServiceDescModal').on('hide.bs.modal', function () {
         $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show();
     });
