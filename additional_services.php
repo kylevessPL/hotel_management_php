@@ -38,10 +38,10 @@ $result = query($sql);
                                     <tbody>
                                     <?php while($row = mysqli_fetch_array($result)) {
                                         echo "<tr>
-                                        <th class='service-id' scope='row'>" . $row[0] . "</th>
-                                        <td class='service-name'>" . $row[1] . "</td>
-                                        <td class='text-center service-price'>" . $row[2] . "</td>
-                                        <td class='text-center'><button class='btn btn-sm btn-primary viewServiceBtn'>View</button></td>
+                                        <th class='service-id align-middle' scope='row'>" . $row[0] . "</th>
+                                        <td class='service-name align-middle'>" . $row[1] . "</td>
+                                        <td class='service-price align-middle text-center'>" . $row[2] . "</td>
+                                        <td class='align-middle text-center'><button class='btn btn-sm btn-primary viewServiceBtn'>View</button></td>
                                     </tr>";
                                     }
                                     ?>
