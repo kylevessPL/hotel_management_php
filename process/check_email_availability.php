@@ -3,7 +3,7 @@ include_once dirname(__DIR__).'/helpers/conn.php';
 
 if (!empty($_REQUEST['email']))
 {
-    $email = mysqli_real_escape_string($con, $_REQUEST['email']);
+    $email = escape_string($_REQUEST['email']);
     $sql = "SELECT id FROM users WHERE email = '$email'";
     $result = query($sql);
     if(mysqli_num_rows($result) > 0)

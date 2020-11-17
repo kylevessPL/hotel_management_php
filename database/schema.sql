@@ -7,6 +7,7 @@ CREATE TABLE `additional_services` (
 	`id` int(11) AUTO_INCREMENT,
 	`name` varchar(40) NOT NULL,
 	`price` numeric(10,2) DEFAULT 0,
+    `desc` varchar(300),
 	CONSTRAINT `additional_services_pk` PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
