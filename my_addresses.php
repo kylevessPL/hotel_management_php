@@ -18,7 +18,10 @@ include 'helpers/include_all.php';
         </main>
     </div>
 </div>
+
 <?php view('sign_out_modal.php'); ?>
+
+<?php view('scripts.php'); ?>
 
 </body>
 </html>

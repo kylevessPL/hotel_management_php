@@ -58,8 +58,6 @@ $result = query($sql);
     </div>
 </div>
 
-<script src="/assets/js/view-service-desc-modal.js"></script>
-
 <div aria-hidden="true" aria-labelledby="viewServiceDescModalTitle" class="modal fade" id="viewServiceDescModal" role="dialog" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -78,6 +76,9 @@ $result = query($sql);
 </div>
 
 <?php view('sign_out_modal.php'); ?>
+
+<?php view('scripts.php'); ?>
+<script src="/assets/js/view-service-desc-modal.js"></script>
 
 </body>
 </html>

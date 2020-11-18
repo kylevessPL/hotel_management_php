@@ -20,5 +20,7 @@ include 'helpers/include_all.php';
 </div>
 <?php view('sign_out_modal.php'); ?>
 
+<?php view('scripts.php'); ?>
+
 </body>
 </html>
