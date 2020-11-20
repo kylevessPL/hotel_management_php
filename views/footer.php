@@ -5,9 +5,6 @@
             <a class="nav-link text-secondary" href="/support/faq">FAQ</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-secondary" href="/support/about-us">About us</a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link text-secondary" href="/support/contact">Contact</a>
         </li>
     </ul>
