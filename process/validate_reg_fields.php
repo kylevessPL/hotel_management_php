@@ -1,6 +1,11 @@
 <?php
 function validate_reg_fields(array $data, &$alertMsg, &$alertType)
 {
+    if(!required_fields($data))
+    {
+        $alertMsg = "All fields are required";
+        $alertType = "danger";
+    }
     $username = $data["username"];
     $password = $data["password"];
     $password2 = $data["password2"];
@@ -35,6 +40,11 @@ function validate_reg_fields(array $data, &$alertMsg, &$alertType)
         $alertMsg = "E-mail not valid";
         $alertType = "danger";
     }
+}
+
+function required_fields(array $data)
+{
+    return count($data) == count(array_filter($data));
 }
 
 function valid_email($field)

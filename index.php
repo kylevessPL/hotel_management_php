@@ -10,42 +10,34 @@ if(isset($_SESSION["user_id"]))
 
 if(isset($_POST["register-submit"]))
 {
-    if(count($_POST) != count(array_filter($_POST)))
+    validate_reg_fields($_POST, $alertMsg, $alertType);
+    if(!isset($alertMsg))
     {
-        $alertMsg = "All fields are required";
-        $alertType = "danger";
-    }
-    else
-    {
-        validate_reg_fields($_POST, $alertMsg, $alertType);
-        if(!isset($alertMsg))
+        $username = escape_string($_POST["username"]);
+        $password = escape_string($_POST["password"]);
+        $email = escape_string($_POST["email"]);
+        $password = password_hash($password, PASSWORD_DEFAULT);
+        $sql1 = "SELECT id FROM users WHERE username = '$username'";
+        $sql2 = "SELECT id FROM users WHERE email = '$email'";
+        $result1 = query($sql1);
+        $result2 = query($sql2);
+        if(mysqli_num_rows($result1) > 0)
         {
-            $username = escape_string($_POST["username"]);
-            $password = escape_string($_POST["password"]);
-            $email = escape_string($_POST["email"]);
-            $password = password_hash($password, PASSWORD_DEFAULT);
-            $sql1 = "SELECT id FROM users WHERE username = '$username'";
-            $sql2 = "SELECT id FROM users WHERE email = '$email'";
-            $result1 = query($sql1);
-            $result2 = query($sql2);
-            if(mysqli_num_rows($result1) > 0)
+            $alertMsg = "Username not available";
+            $alertType = "danger";
+        }
+        else if(mysqli_num_rows($result2) > 0)
+        {
+            $alertMsg = "There is already a user with this email";
+            $alertType = "danger";
+        }
+        else
+        {
+            $sql = "INSERT INTO users (username, password, email) VALUES('$username', '$password', '$email')";
+            if(query($sql))
             {
-                $alertMsg = "Username not available";
-                $alertType = "danger";
-            }
-            else if(mysqli_num_rows($result2) > 0)
-            {
-                $alertMsg = "There is already a user with this email";
-                $alertType = "danger";
-            }
-            else
-            {
-                $sql = "INSERT INTO users (username, password, email) VALUES('$username', '$password', '$email')";
-                if(query($sql))
-                {
-                    $alertMsg = "You have successfully registered";
-                    $alertType = "success";
-                }
+                $alertMsg = "You have successfully registered";
+                $alertType = "success";
             }
         }
     }
@@ -124,19 +116,19 @@ if(isset($_POST["login-submit"]))
                         <form id="form-register" name="form-register" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                             <div class="form-group">
                                 <label for="username">Username</label>
-                                <input type="text" id="username" name="username" class="form-control" placeholder="username" autofocus>
+                                <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" autofocus>
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label" for="password">Password</label>
-                                <input type="password" id="password" name="password" class="form-control" placeholder="password">
+                                <input type="password" id="password" name="password" class="form-control" placeholder="Enter password">
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label" for="password2">Repeat password</label>
-                                <input type="password" id="password2" name="password2" class="form-control" placeholder="repeat password">
+                                <input type="password" id="password2" name="password2" class="form-control" placeholder="Repeat password">
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label" for="email">E-mail</label>
-                                <input type="text" id="email" name="email" class="form-control" placeholder="email">
+                                <input type="text" id="email" name="email" class="form-control" placeholder="Enter email">
                             </div>
                             <div class="text-right mt-3">
                                 <a href="/">Sign In</a>
@@ -161,7 +153,7 @@ if(isset($_POST["login-submit"]))
                                             <i class="fas fa-user"></i>
                                         </div>
                                     </div>
-                                    <input type="text" id="login" name="login" class="form-control" placeholder="username or email"
+                                    <input type="text" id="login" name="login" class="form-control" placeholder="Enter username or email"
                                            value=
                                            <?php
                                            if(isset($_COOKIE["login_remember"]))
@@ -183,7 +175,7 @@ if(isset($_POST["login-submit"]))
                                             <i class="fas fa-key"></i>
                                         </div>
                                     </div>
-                                    <input type="password" id="password" name="password" class="form-control" placeholder="password"
+                                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter password"
                                         <?php echo isset($_COOKIE["login_remember"]) ? 'autofocus' : ''; ?>>
                                 </div>
                             </div>
