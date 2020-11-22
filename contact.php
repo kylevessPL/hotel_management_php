@@ -54,7 +54,7 @@ if(isset($_POST["contact-submit"]))
                             <form id="form-contact" name="form-contact" method="post" action="/support/contact">
                                 <div class="form-group">
                                     <label for="name">Full name</label>
-                                    <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp" placeholder="Enter full name" required>
+                                    <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp" placeholder="Enter full name" minlength="2" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email address</label>
@@ -63,7 +63,7 @@ if(isset($_POST["contact-submit"]))
                                 </div>
                                 <div class="form-group">
                                     <label for="message">Message</label>
-                                    <textarea class="form-control" id="message" name="message" rows="6" required></textarea>
+                                    <textarea class="form-control" id="message" name="message" rows="6" minlength="10" required></textarea>
                                 </div>
                                 <input class="btn btn-primary text-right" name="contact-submit" value="Submit" type="submit">
                             </form>

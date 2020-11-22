@@ -48,7 +48,7 @@ CREATE TABLE `customers` (
 	`first_name` varchar(30) NOT NULL,
 	`last_name` varchar(30) NOT NULL,
 	`document_type` varchar(10) NOT NULL,
-	`document_id` varchar(10) NOT NULL,
+	`document_id` varchar(14) NOT NULL,
 	CONSTRAINT `customers_pk` PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
