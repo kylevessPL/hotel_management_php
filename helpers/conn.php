@@ -19,3 +19,7 @@ function query($sql) {
 
     return $result;
 }
+
+function insert_id() {
+    return mysqli_insert_id($GLOBALS['con']);
+}

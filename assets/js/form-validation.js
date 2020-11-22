@@ -131,7 +131,7 @@ $(function() {
                 required: "Document ID is mandatory",
                 minlength: "Document ID must be at least 7 characters long",
                 maxlength: "Document ID must be maximum 14 characters long",
-                regex: "Document ID must contain only letters, digits or - character",
+                regex: "Document ID must contain only capital letters, digits or - character",
             }
         },
         submitHandler : function(form) {
