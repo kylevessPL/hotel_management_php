@@ -64,15 +64,16 @@ if (isset($_POST["customer-details-submit"]))
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <?php view('head.php'); ?>
 
-<body>
+<body class="min-vh-100 d-flex flex-column">
 <?php view('navbar.php'); ?>
-<div class="container-fluid">
+<?php view('sign_out_modal.php'); ?>
+<div class="container-fluid flex-grow-1">
     <div class="row">
         <?php view('sidebar.php'); ?>
         <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4">
             <?php view('breadcrumb.php'); ?>
             <p>View your account details and edit</p>
-            <div class="row mb-4">
+            <div class="row">
                 <div class="col-10 col-xl-7 mb-4 mb-lg-0">
                     <div class="card">
                         <div class="card-body">
@@ -159,12 +160,10 @@ if (isset($_POST["customer-details-submit"]))
                 </div>
                 <?php view('chat.php'); ?>
             </div>
-            <?php view('footer.php'); ?>
         </main>
     </div>
 </div>
-
-<?php view('sign_out_modal.php'); ?>
+<?php view('footer.php'); ?>
 
 <?php view('scripts.php'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>

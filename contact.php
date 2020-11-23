@@ -37,9 +37,10 @@ if(isset($_POST["contact-submit"]))
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <?php view('head.php'); ?>
 
-<body>
+<body class="min-vh-100 d-flex flex-column">
 <?php view('navbar.php'); ?>
-<div class="container-fluid">
+<?php view('sign_out_modal.php'); ?>
+<div class="container-fluid flex-grow-1">
     <div class="row">
         <?php view('sidebar.php'); ?>
         <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4">
@@ -101,11 +102,10 @@ if(isset($_POST["contact-submit"]))
                     </div>
                 </div>
             </div>
-            <?php view('footer.php'); ?>
         </main>
     </div>
 </div>
-<?php view('sign_out_modal.php'); ?>
+<?php view('footer.php'); ?>
 
 <?php view('scripts.php'); ?>
 
