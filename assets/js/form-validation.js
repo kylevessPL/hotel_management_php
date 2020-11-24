@@ -139,3 +139,56 @@ $(function() {
         }
     });
 });
+$(function() {
+    $("form[name='address-form']").validate({
+        rules: {
+            streetName: {
+                required: true,
+                minlength: 2,
+                maxlength: 30
+            },
+            houseNumber: {
+                required: true,
+                regex: /^[0-9a-zA-Z ./]*$/,
+                maxlength: 10
+            },
+            zipCode: {
+                required: true,
+                regex: /^[0-9 \-]*$/,
+                minlength: 2,
+                maxlength: 10
+            },
+            city: {
+                required: true,
+                minlength: 2,
+                maxlength: 30
+            }
+        },
+        messages: {
+            streetName: {
+                required: "Street name is mandatory",
+                minlength: "Street name must be at least 2 characters long",
+                maxlength: "Street name must be maximum 30 characters long"
+            },
+            houseNumber: {
+                required: "House number is mandatory",
+                regex: "House number must contain only letters and numbers",
+                maxlength: "House number must be maximum 10 characters long"
+            },
+            zipCode: {
+                required: "Zip code is mandatory",
+                regex: "Zip code must contain only numbers, spaces or a dash",
+                minlength: "Zip code must be at least 2 characters long",
+                maxlength: "Zip code must be maximum 10 characters long"
+            },
+            city: {
+                required: "City is mandatory",
+                minlength: "City must be at least 2 characters long",
+                maxlength: "City name must be maximum 30 characters long"
+            }
+        },
+        submitHandler : function(form) {
+            form.submit();
+        }
+    });
+});

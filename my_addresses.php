@@ -100,10 +100,10 @@ if (isset($customerId))
 <?php view('footer.php'); ?>
 
 <?php if (isset($customerId)) { ?>
-<div id="addressForm" class="addressForm">
-    <form method="post" id="addressRequest" name="addressRequest" action="/account/my-addresses">
+<div id="addressRequest" class="addressRequest">
+    <form method="post" id="address-form" name="address-form" action="/account/my-addresses">
         <div aria-hidden="true" aria-labelledby="addressModalLabel" class="modal fade" id="addressModal" role="dialog" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="addressModalLabel"></h5><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
@@ -142,7 +142,9 @@ if (isset($customerId))
 <?php } ?>
 
 <?php view('scripts.php'); ?>
-<script src="/assets/js/address-modal.js"></script>
+<script src="../assets/js/address-modal.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+<script src="../assets/js/form-validation.js"></script>
 
 </body>
 </html>
