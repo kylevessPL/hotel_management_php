@@ -39,7 +39,7 @@ if(isset($_POST["contact-submit"]))
 
 <body class="min-vh-100 d-flex flex-column">
 <?php view('navbar.php'); ?>
-<?php view('sign_out_modal.php'); ?>
+<?php view('confirmation_modal.php'); ?>
 <div class="container-fluid flex-grow-1">
     <div class="row">
         <?php view('sidebar.php'); ?>

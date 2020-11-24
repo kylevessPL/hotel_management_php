@@ -11,7 +11,7 @@ $result = query($sql);
 <?php view('head.php'); ?>
 <body class="min-vh-100 d-flex flex-column">
 <?php view('navbar.php'); ?>
-<?php view('sign_out_modal.php'); ?>
+<?php view('confirmation_modal.php'); ?>
 <div class="container-fluid flex-grow-1">
     <div class="row">
         <?php view('sidebar.php'); ?>
@@ -37,14 +37,14 @@ $result = query($sql);
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <?php while($row = mysqli_fetch_array($result)) {
-                                        echo "<tr>
+                                    <?php while($row = mysqli_fetch_array($result)) { echo "
+                                    <tr>
                                         <th class='service-id align-middle' scope='row'>" . $row[0] . "</th>
                                         <td class='service-name align-middle'>" . $row[1] . "</td>
                                         <td class='service-price align-middle text-center'>" . $row[2] . "</td>
                                         <td class='align-middle text-center'><button class='btn btn-sm btn-primary viewServiceBtn'>View</button></td>
-                                    </tr>";
-                                    }
+                                    </tr>
+                                    ";}
                                     ?>
                                     </tbody>
                                 </table>
