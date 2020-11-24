@@ -19,4 +19,7 @@ $(document).ready(function() {
         $('#confirmationModal #actionRef').html('Delete').attr('href', href);
         $('#confirmationModal').modal();
     });
+    $('#confirmationModal').on('hide.bs.modal', function () {
+        setTimeout(function () { $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show(); }, 400);
+    });
 });

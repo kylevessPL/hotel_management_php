@@ -43,14 +43,15 @@ if (isset($customerId))
                                     </div>
                                 </div>
                                 <?php if (!isset($customerId))
-                                {
-                                    echo '<p class="alert alert-'.$alertType.'">'.$alertMsg.'</p>
-                                        <a class="btn btn-primary text-right" href="/account/my-details">Update my details</a>';
-                                }
+                                { echo '
+                                <p class="alert alert-'.$alertType.'">'.$alertMsg.'</p>
+                                <a class="btn btn-primary text-right" href="/account/my-details">Update my details</a>
+                                ';}
                                 else
                                 { if (mysqli_num_rows($result) == 0) { echo '
                                 <p class="alert alert-info">You need to add at least one address to unlock all site features</p>';} ?>
-                                <button class="btn btn-success text-right">New address</button>
+
+                                <button class="btn btn-success text-right add-address-action"><i class="las la-plus-circle la-lg mr-2"></i>New address</button>
                                 <?php if (isset($address_list)) {?>
                                 <div class="row mt-2">
                                     <div class="col-md-12">
@@ -69,11 +70,11 @@ if (isset($customerId))
                                                 </thead>
                                                 <tbody><?php $count = 0; while($row = mysqli_fetch_array($result)) { echo "
                                                 <tr>
-                                                    <td class='service-price align-middle text-center'>" . $count . "</td>
-                                                    <th class='service-id align-middle' scope='row'>" . $row[0] . "</th>
-                                                    <td class='service-name align-middle'>" . $row[1] . "</td>
-                                                    <td class='service-price align-middle text-center'>" . $row[2] . "</td>
-                                                    <td class='service-price align-middle text-center'>" . $row[3] . "</td>
+                                                    <td class='address-num align-middle text-center'>" . $count . "</td>
+                                                    <th class='address-street-name align-middle' scope='row'>" . $row[0] . "</th>
+                                                    <td class='address-house-number align-middle'>" . $row[1] . "</td>
+                                                    <td class='address-zip-code align-middle text-center'>" . $row[2] . "</td>
+                                                    <td class='address-city align-middle text-center'>" . $row[3] . "</td>
                                                     <td class='align-middle text-center'><button class='btn btn-sm btn-info edit-address-action'><i class='las la-edit'></i></button></td>
                                                     <td class='align-middle text-center'><a class='btn btn-sm btn-danger delete-address-action' href='../process/delete_address.php'><i class='las la-trash'></i></a></td>
                                                 </tr>
@@ -84,13 +85,13 @@ if (isset($customerId))
                                         </div>
                                     </div>
                                 </div>
-                                <?php }?>
-                                <?php
-                                } ?>
+                                <?php }} ?>
+
                             </div>
                         </div>
                     </div>
                     <?php view('chat.php'); ?>
+
                 </div>
             </main>
         </div>
@@ -98,7 +99,50 @@ if (isset($customerId))
 </div>
 <?php view('footer.php'); ?>
 
+<?php if (isset($customerId)) { ?>
+<div id="addressForm" class="addressForm">
+    <form method="post" id="addressRequest" name="addressRequest" action="/account/my-addresses">
+        <div aria-hidden="true" aria-labelledby="addressModalLabel" class="modal fade" id="addressModal" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addressModalLabel"></h5><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label class="control-label" for="streetName">Street name:</label>
+                                <input class="form-control" id="streetName" type="text" name="streetName" placeholder="Enter street name" autofocus>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label" for="houseNumber">House number:</label>
+                                <input class="form-control" id="houseNumber" type="text" placeholder="Enter house number" name="houseNumber">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label class="control-label" for="zipCode">Zip code:</label>
+                                <input class="form-control" id="zipCode" type="text" placeholder="Enter zip code" name="zipCode">
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label" for="city">City:</label>
+                                <input class="form-control" id="city" type="text" placeholder="Enter city" name="city">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                        <input class="btn btn-primary" name="address-submit" id="addressSubmitBtn" value="" type="submit">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<?php } ?>
+
 <?php view('scripts.php'); ?>
+<script src="/assets/js/address-modal.js"></script>
 
 </body>
 </html>

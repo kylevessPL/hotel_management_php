@@ -9,7 +9,7 @@ $(document).ready(function() {
         $('#viewServiceDescModal').modal();
     });
     $('#viewServiceDescModal').on('hide.bs.modal', function () {
-        $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show();
+        setTimeout(function () { $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show(); }, 400);
     });
 });
 
