@@ -1,6 +1,7 @@
 <?php
 include 'helpers/include_all.php';
 include 'process/get_customer_id.php';
+include 'process/validate_address_fields.php';
 
 get_customer_id($alertMsg, $alertType, $customerId);
 
@@ -10,9 +11,64 @@ if (isset($customerId))
     $result = query($sql);
     if (mysqli_num_rows($result) > 0)
     {
-        $address_list = mysqli_fetch_all($result);
+        while($row = mysqli_fetch_array($result))
+        {
+            $address_list[] = $row[0];
+        }
         $sql = "SELECT street_name, house_number, zip_code, city FROM addresses where id IN (".implode(',', $address_list).")";
         $result = query($sql);
+    }
+    else
+    {
+        $alertMsg = "You need to add at least one address to unlock all site features";
+        $alertType = "info";
+    }
+}
+
+if (isset($_POST["address-submit"]))
+{
+    validate_address_fields($_POST, $alertMsg, $alertType);
+    if (!isset($alertMsg) || $alertType == 'info')
+    {
+        $address_num = escape_string($_POST["addressNum"]);
+        $street_name = escape_string($_POST["streetName"]);
+        $house_number = escape_string($_POST["houseNumber"]);
+        $zip_code = escape_string($_POST["zipCode"]);
+        $city = escape_string($_POST["city"]);
+        if (empty($address_num)) {
+            $sql = "INSERT INTO addresses (street_name, house_number, zip_code, city) VALUES('$street_name', '$house_number', '$zip_code', '$city')";
+        }
+        else
+        {
+            $id = $address_list[$address_num - 1];
+            $sql = "UPDATE addresses SET street_name = '$street_name', house_number = '$house_number', zip_code = '$zip_code', city = '$city' where id = '$id'";
+        }
+        if (query($sql))
+        {
+            if(empty($address_num))
+            {
+                $address_id = insert_id();
+                $sql = "INSERT INTO customers_addresses (customer_id, address_id) VALUES('$customerId', '$address_id')";
+                if (!query($sql))
+                {
+                    $alertMsg = 'Oops, something went wrong. Please try again later.';
+                    $alertType = "danger";
+                }
+                else
+                {
+                    header("Refresh:0");
+                }
+            }
+            else
+            {
+                header("Refresh:0");
+            }
+        }
+        else
+        {
+            $alertMsg = 'Oops, something went wrong. Please try again later.';
+            $alertType = "danger";
+        }
     }
 }
 
@@ -33,7 +89,7 @@ if (isset($customerId))
                 <?php view('breadcrumb.php'); ?>
                 <p>View your home addresses and manage them</p>
                 <div class="row">
-                    <div class="col-10 col-xl-7 mb-lg-0">
+                    <div class="col-10 col-xl-8 mb-lg-0">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
@@ -48,9 +104,7 @@ if (isset($customerId))
                                 <a class="btn btn-primary text-right" href="/account/my-details">Update my details</a>
                                 ';}
                                 else
-                                { if (mysqli_num_rows($result) == 0) { echo '
-                                <p class="alert alert-info">You need to add at least one address to unlock all site features</p>';} ?>
-
+                                { echo isset($alertMsg) ? '<p class="alert alert-'.$alertType.'">'.$alertMsg.'</p>' : ''; ?>
                                 <button class="btn btn-success text-right add-address-action"><i class="las la-plus-circle la-lg mr-2"></i>New address</button>
                                 <?php if (isset($address_list)) {?>
                                 <div class="row mt-2">
@@ -61,25 +115,24 @@ if (isset($customerId))
                                                 <tr>
                                                     <th scope="col">#</th>
                                                     <th scope="col">Street name</th>
-                                                    <th scope="col">House number</th>
-                                                    <th scope="col">Zip code</th>
-                                                    <th scope="col">City</th>
+                                                    <th scope="col" class="text-center">House number</th>
+                                                    <th scope="col" class="text-center">Zip code</th>
+                                                    <th scope="col" class="text-center">City</th>
                                                     <th scope="col" class="text-center">Edit</th>
                                                     <th scope="col" class="text-center">Delete</th>
                                                 </tr>
                                                 </thead>
-                                                <tbody><?php $count = 0; while($row = mysqli_fetch_array($result)) { echo "
+                                                <tbody><?php $count = 1; while($row = mysqli_fetch_array($result)) { echo "
                                                 <tr>
-                                                    <td class='address-num align-middle text-center'>" . $count . "</td>
-                                                    <th class='address-street-name align-middle' scope='row'>" . $row[0] . "</th>
-                                                    <td class='address-house-number align-middle'>" . $row[1] . "</td>
+                                                    <th class='address-num align-middle text-center' scope='row'>" . $count . "</td>
+                                                    <td class='address-street-name align-middle'>" . $row[0] . "</td>
+                                                    <td class='address-house-number align-middle text-center'>" . $row[1] . "</td>
                                                     <td class='address-zip-code align-middle text-center'>" . $row[2] . "</td>
                                                     <td class='address-city align-middle text-center'>" . $row[3] . "</td>
-                                                    <td class='align-middle text-center'><button class='btn btn-sm btn-info edit-address-action'><i class='las la-edit'></i></button></td>
-                                                    <td class='align-middle text-center'><a class='btn btn-sm btn-danger delete-address-action' href='../process/delete_address.php'><i class='las la-trash'></i></a></td>
+                                                    <td class='align-middle text-center'><button class='btn btn-info edit-address-action'><i class='las la-edit'></i></button></td>
+                                                    <td class='align-middle text-center'><a class='btn btn-danger delete-address-action' href='../process/delete_address.php?id=".$address_list[$count - 1]."'><i class='las la-trash'></i></a></td>
                                                 </tr>
-                                                "; $count++;}
-                                                ?>
+                                                "; $count++;} ?>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -110,6 +163,7 @@ if (isset($customerId))
                     </div>
                     <div class="modal-body">
                         <div class="form-group row">
+                            <input class="form-control" id="addressNum" type="hidden" name="addressNum">
                             <div class="col-sm-8">
                                 <label class="control-label" for="streetName">Street name:</label>
                                 <input class="form-control" id="streetName" type="text" name="streetName" placeholder="Enter street name" autofocus>

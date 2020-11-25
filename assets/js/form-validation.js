@@ -149,7 +149,7 @@ $(function() {
             },
             houseNumber: {
                 required: true,
-                regex: /^[0-9a-zA-Z ./]*$/,
+                regex: /^[0-9a-zA-Z .\/]*$/,
                 maxlength: 10
             },
             zipCode: {

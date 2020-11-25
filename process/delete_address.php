@@ -1,9 +1,10 @@
 <?php
 include_once dirname(__DIR__).'/helpers/conn.php';
+include_once dirname(__DIR__).'/helpers/init_session.php';
 
-if (isset($_GET['address_id']))
+if (isset($_GET['id']))
 {
-    $id = escape_string($_GET['address_id']);
+    $id = escape_string($_GET['id']);
     $sql = "SELECT customer_id FROM customers_addresses where address_id = '$id'";
     $result = query($sql);
     if (mysqli_num_rows($result) > 0)
@@ -14,9 +15,26 @@ if (isset($_GET['address_id']))
         $userId = mysqli_fetch_assoc($result)['id'];
         if ($userId == $_SESSION['user_id'])
         {
-            $sql = "DELETE FROM addresses where id = '$id'";
+            $sql = "DELETE FROM customers_addresses where address_id = '$id'";
             query($sql);
+            if (!query($sql))
+            {
+                $alertMsg = 'Oops, something went wrong. Please try again later.';
+                $alertType = "danger";
+            }
+            else
+            {
+                $sql = "DELETE FROM addresses where id = '$id'";
+                query($sql);
+                if (!query($sql))
+                {
+                    $alertMsg = 'Oops, something went wrong. Please try again later.';
+                    $alertType = "danger";
+                }
+            }
         }
     }
 }
+
 header("location:/account/my-addresses");
+

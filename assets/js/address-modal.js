@@ -5,6 +5,7 @@ $(document).ready(function() {
         $('label.error').hide();
         $('.error').removeClass('error');
         $('.addressRequest #addressModalLabel').html('Add new address');
+        $('.addressRequest #number').val('');
         $('.addressRequest #streetName').val('');
         $('.addressRequest #houseNumber').val('');
         $('.addressRequest #zipCode').val('');
@@ -18,6 +19,7 @@ $(document).ready(function() {
         $('label.error').hide();
         $('.error').removeClass('error');
         $('.addressRequest #addressModalLabel').html('Edit address');
+        $('.addressRequest #addressNum').val($(this).closest("tr").find("td.address-num").text());
         $('.addressRequest #streetName').val($(this).closest("tr").find("td.address-street-name").text());
         $('.addressRequest #houseNumber').val($(this).closest("tr").find("td.address-house-number").text());
         $('.addressRequest #zipCode').val($(this).closest("tr").find("td.address-zip-code").text());
