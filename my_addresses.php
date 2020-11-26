@@ -35,7 +35,7 @@ if (isset($_POST["address-submit"]))
         $house_number = escape_string($_POST["houseNumber"]);
         $zip_code = escape_string($_POST["zipCode"]);
         $city = escape_string($_POST["city"]);
-        if ($address_num == '') {
+        if (!isset($address_num) || empty($address_num)) {
             $sql = "INSERT INTO addresses (street_name, house_number, zip_code, city) VALUES('$street_name', '$house_number', '$zip_code', '$city')";
         }
         else
@@ -45,7 +45,7 @@ if (isset($_POST["address-submit"]))
         }
         if (query($sql))
         {
-            if(empty($address_num))
+            if(!isset($address_num) || empty($address_num))
             {
                 $address_id = insert_id();
                 $sql = "INSERT INTO customers_addresses (customer_id, address_id) VALUES('$customerId', '$address_id')";
@@ -114,7 +114,7 @@ if (isset($_POST["address-submit"]))
                                                 <thead>
                                                 <tr>
                                                     <th scope="col">#</th>
-                                                    <th scope="col">Street name</th>
+                                                    <th scope="col" class="text-center">Street name</th>
                                                     <th scope="col" class="text-center">House number</th>
                                                     <th scope="col" class="text-center">Zip code</th>
                                                     <th scope="col" class="text-center">City</th>
@@ -124,8 +124,8 @@ if (isset($_POST["address-submit"]))
                                                 </thead>
                                                 <tbody><?php $count = 1; while($row = mysqli_fetch_array($result)) { echo "
                                                 <tr>
-                                                    <th class='address-num align-middle text-center' scope='row'>" . $count . "</th>
-                                                    <td class='address-street-name align-middle'>" . $row[0] . "</td>
+                                                    <th class='address-num align-middle' scope='row'>" . $count . "</th>
+                                                    <td class='address-street-name align-middle text-center'>" . $row[0] . "</td>
                                                     <td class='address-house-number align-middle text-center'>" . $row[1] . "</td>
                                                     <td class='address-zip-code align-middle text-center'>" . $row[2] . "</td>
                                                     <td class='address-city align-middle text-center'>" . $row[3] . "</td>

@@ -5,7 +5,7 @@ $(document).ready(function() {
         $('label.error').hide();
         $('.error').removeClass('error');
         $('.addressRequest #addressModalLabel').html('Add new address');
-        $('.addressRequest #number').val('');
+        $('.addressRequest #addressNum').val('');
         $('.addressRequest #streetName').val('');
         $('.addressRequest #houseNumber').val('');
         $('.addressRequest #zipCode').val('');
