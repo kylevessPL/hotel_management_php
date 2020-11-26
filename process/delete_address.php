@@ -17,20 +17,10 @@ if (isset($_GET['id']))
         {
             $sql = "DELETE FROM customers_addresses where address_id = '$id'";
             query($sql);
-            if (!query($sql))
-            {
-                $alertMsg = 'Oops, something went wrong. Please try again later.';
-                $alertType = "danger";
-            }
-            else
+            if (query($sql))
             {
                 $sql = "DELETE FROM addresses where id = '$id'";
                 query($sql);
-                if (!query($sql))
-                {
-                    $alertMsg = 'Oops, something went wrong. Please try again later.';
-                    $alertType = "danger";
-                }
             }
         }
     }
