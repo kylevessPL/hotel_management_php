@@ -1,5 +1,6 @@
 <?php
 include_once dirname(__DIR__).'/helpers/conn.php';
+include_once dirname(__DIR__).'/helpers/init_session.php';
 
 function get_customer_id(&$alertMsg, &$alertType, &$customerId)
 {

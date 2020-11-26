@@ -1,4 +1,5 @@
 <?php
+
 function validate_contact_fields(array $data, &$alertMsg, &$alertType)
 {
     if(!required_fields($data))

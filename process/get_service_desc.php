@@ -2,7 +2,6 @@
 
 include_once dirname(__DIR__).'/helpers/conn.php';
 
-
 if (isset($_GET['id']))
 {
     $id = escape_string($_GET['id']);
