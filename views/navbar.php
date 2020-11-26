@@ -20,7 +20,7 @@ $user_data = mysqli_fetch_assoc($query);
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
                 Hello, <?php echo $user_data['username']; ?>
             </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
                 <li>
                     <a class="dropdown-item pl-2" href="/account/my-details">
                         <i class="las la-address-book align-top mr-1" style="font-size: 28px;"></i>My details
