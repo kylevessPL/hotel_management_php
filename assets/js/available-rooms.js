@@ -79,7 +79,7 @@ function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice
                 data: null,
                 searchable: false,
                 orderable: false,
-                defaultContent: "<a class='btn btn-success' href='/dashboard/book-room?id='><i class='las la-calendar-check'></i></a>",
+                defaultContent: "<a class='btn btn-success py-1 px-2' href='/dashboard/book-room?id='><i class='las la-calendar-check la-lg'></i></a>",
                 className: 'align-middle text-center'
             },
             {
@@ -87,7 +87,7 @@ function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice
                 data: null,
                 searchable: false,
                 orderable: false,
-                defaultContent: "<button class='btn btn-primary viewRoomAmenitiesBtn'>View</button>",
+                defaultContent: "<button class='btn btn-primary py-1 px-2 viewRoomAmenitiesBtn'>View</button>",
                 className: 'align-middle text-center'
             }
         ],

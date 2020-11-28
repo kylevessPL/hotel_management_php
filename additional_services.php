@@ -32,8 +32,8 @@ $result = query($sql);
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Service name</th>
-                                        <th scope="col">Price per night</th>
-                                        <th scope="col">Description</th>
+                                        <th scope="col" class="text-center">Price per night</th>
+                                        <th scope="col" class="text-center">Description</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -42,7 +42,7 @@ $result = query($sql);
                                         <th class='service-id align-middle' scope='row'>" . $row[0] . "</th>
                                         <td class='service-name align-middle'>" . $row[1] . "</td>
                                         <td class='service-price align-middle text-center'>" . $row[2] . "</td>
-                                        <td class='align-middle text-center'><button class='btn btn-sm btn-primary viewServiceBtn'>View</button></td>
+                                        <td class='align-middle text-center'><button class='btn btn-primary py-1 px-2 viewServiceBtn'>View</button></td>
                                     </tr>
                                     ";}
                                     ?>
