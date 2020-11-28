@@ -60,6 +60,7 @@ function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice
             { data: 'standard-price' }
         ],
         responsive: true,
+        language: { emptyTable: "No rooms found matching the search criteria" },
         columnDefs: [
             {
                 searchable: false,
