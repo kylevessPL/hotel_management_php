@@ -218,11 +218,11 @@ $(function() {
         messages: {
             'filter-start-date': {
                 required: "Start date is mandatory",
-                futuredate: "Start date must be in future"
+                futuredate: "Start date must be in the future"
             },
             'filter-end-date': {
                 required: "End date is mandatory",
-                futuredate: "End date must be in future",
+                futuredate: "End date must be in the future",
                 afterstartdate: "End date cannot be before start date"
             }
         },

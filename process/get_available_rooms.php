@@ -2,7 +2,7 @@
 
 include_once dirname(__DIR__).'/helpers/conn.php';
 
-if (isset($_GET['start-date'], $_GET['end-date']))
+if (!empty($_GET['start-date']) && !empty($_GET['end-date']))
 {
     $start_date = date('Y-m-d', (strtotime(str_replace('/', '-', escape_string($_GET['start-date'])))));
     $end_date = date('Y-m-d', (strtotime(str_replace('/', '-', escape_string($_GET['end-date'])))));
