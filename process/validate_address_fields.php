@@ -45,7 +45,7 @@ function validate_address_fields(array $data, &$alertMsg, &$alertType)
 
 function required_fields(array $data)
 {
-    if (!isset($data['addressNum']) || empty($data['addressNum']))
+    if (empty($data['addressNum']))
     {
         return count($data) == count(array_filter($data)) + 1;
     }
