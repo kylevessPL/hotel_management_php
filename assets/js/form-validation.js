@@ -1,6 +1,16 @@
 $.validator.addMethod("regex", function(value, element, regexp) {
     return this.optional(element) || regexp.test(value);
 });
+$.validator.addMethod("futuredate", function (value, element) {
+    const now = new Date();
+    const myDate = new Date(moment(value, 'DD/MM/YYYY').format());
+    return this.optional(element) || myDate > now;
+});
+$.validator.addMethod("afterstartdate", function (value, element) {
+    const startDate = new Date(moment($('#filter-start-date').val(), 'DD/MM/YYYY').format());
+    const endDate = new Date(moment(value, 'DD/MM/YYYY').format());
+    return this.optional(element) || startDate < endDate || value === "";
+});
 $(function() {
     $("form[name='form-register']").validate({
         rules: {
@@ -196,18 +206,24 @@ $(function() {
     $("form[name='rooms-search-form']").validate({
         rules: {
             'filter-start-date': {
-                required: true
+                required: true,
+                futuredate: true
             },
             'filter-end-date': {
                 required: true,
+                futuredate: true,
+                afterstartdate: true
             }
         },
         messages: {
             'filter-start-date': {
                 required: "Start date is mandatory",
+                futuredate: "Start date must be in future"
             },
             'filter-end-date': {
                 required: "End date is mandatory",
+                futuredate: "End date must be in future",
+                afterstartdate: "End date cannot be before start date"
             }
         },
         submitHandler: function () {
