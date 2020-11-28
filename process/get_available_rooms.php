@@ -4,8 +4,8 @@ include_once dirname(__DIR__).'/helpers/conn.php';
 
 if (isset($_GET['start-date'], $_GET['end-date']))
 {
-    $start_date = date('Y-m-d', strtotime(escape_string($_GET['start-date'])));
-    $end_date = date('Y-m-d', strtotime(escape_string($_GET['end-date'])));
+    $start_date = date('Y-m-d', (strtotime(str_replace('/', '-', escape_string($_GET['start-date'])))));
+    $end_date = date('Y-m-d', (strtotime(str_replace('/', '-', escape_string($_GET['end-date'])))));
     $sql = "SELECT * FROM rooms where id NOT IN " .
         "(SELECT room_id from bookings_rooms where booking_id IN " .
         "(SELECT id from bookings where status = 'Confirmed' AND '$start_date' < end_date AND '$end_date' > start_date";
@@ -25,14 +25,14 @@ if (isset($_GET['start-date'], $_GET['end-date']))
         $max_price = escape_string($_GET['max-price']);
         $sql .= " AND standard_price <= '$max_price'";
     }
-    if (!empty($_GET['services']))
+    if (!empty($_GET['amenities']))
     {
-        foreach ($_GET['services'] as $service)
+        foreach ($_GET['amenities'] as $amenity)
         {
-            $services[] = escape_string($service);
+            $amenities[] = escape_string($amenity);
         }
         $sql .= " AND id IN " .
-            "(SELECT room_id from rooms_amenities where amenity_id IN (".implode(',', $services)."))";
+            "(SELECT room_id from rooms_amenities where amenity_id IN (".implode(',', $amenities)."))";
     }
     $result = query($sql);
     if (mysqli_num_rows($result) > 0)
@@ -41,9 +41,9 @@ if (isset($_GET['start-date'], $_GET['end-date']))
         {
             $rooms[] = array(
                 "id" => $row['id'],
-                "room_number" => $row['room_number'],
-                "bed_amount" => $row['bed_amount'],
-                "standard_price" => $row['standard_price']);
+                "room-number" => $row['room_number'],
+                "bed-amount" => $row['bed_amount'],
+                "standard-price" => $row['standard_price']);
         }
         try
         {
@@ -57,7 +57,7 @@ if (isset($_GET['start-date'], $_GET['end-date']))
     }
     else
     {
-        http_response_code(204);
+        echo '[]';
     }
 }
 else

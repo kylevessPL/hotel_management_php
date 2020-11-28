@@ -20,6 +20,6 @@ $(document).ready(function() {
         $('#confirmationModal').modal();
     });
     $('#confirmationModal').on('hide.bs.modal', function () {
-        setTimeout(function () { $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show(); }, 400);
+        setTimeout(() => $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show(), 400);
     });
 });

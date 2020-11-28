@@ -17,6 +17,6 @@ $(document).ready(function() {
         $('#viewServiceDescModal').modal();
     });
     $('#viewServiceDescModal').on('hide.bs.modal', function () {
-        setTimeout(function () { $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show(); }, 400);
+        setTimeout(() => $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show(), 400);
     });
 });

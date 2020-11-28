@@ -23,31 +23,64 @@ $(document).ready(function () {
     $('#filter-amenities').multiselect({
         includeSelectAllOption: true,
         buttonWidth: '100%',
-        numberDisplayed: 5,
-        selectedClass: 'amenities-selected',
+        numberDisplayed: 5
     });
+    $('#rooms-search').on('click', function() {
+        $('#roomsTable').DataTable().destroy();
+        const startDate = $("#filter-start-date").val();
+        const endDate = $("#filter-end-date").val();
+        const bedAmount = $("#filter-bed-amount").val();
+        const amenities = $("#filter-amenities").val();
+        const minPrice = $("#filter-min-price").val();
+        const maxPrice = $("#filter-max-price").val();
+        buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice);
+    });
+});
+
+function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice) {
     const table = $('#roomsTable').DataTable({
         ajax: {
             url: '../../process/get_available_rooms.php',
             type: 'GET',
-            traditional: true,
             data: {
-                'start-date': start_date,
-                'end-date': end_date,
-                'bed-amount': bed_amount,
-                'min-price': min_price,
-                'max-price': max_price,
-                'services': services
+                'start-date': startDate,
+                'end-date': endDate,
+                'bed-amount': bedAmount,
+                'amenities': amenities,
+                'min-price': minPrice,
+                'max-price': maxPrice,
             },
             dataSrc: ''
         },
         columns: [
+            { data: null },
             { data: 'id' },
-            { data: 'room_number' },
-            { data: 'bed_amount' },
-            { data: 'standard_price' }
+            { data: 'room-number' },
+            { data: 'bed-amount' },
+            { data: 'standard-price' }
         ],
-        responsive: true
+        responsive: true,
+        columnDefs: [
+            {
+                searchable: false,
+                orderable: false,
+                targets: 0
+            },
+            {
+                targets: [ 1 ],
+                visible: false
+            }
+        ],
+        order: [[ 2, 'asc' ]],
+        fnCreatedRow: function (row, data, index) {
+            const info = table.page.info();
+            const value = index + 1 + info.start;
+            $('td', row).eq(0).html(value); },
     });
+    table.on( 'order.dt search.dt', function () {
+        table.column(0, {search: 'applied', order: 'applied'}).nodes().each( function (cell, i) {
+            cell.innerHTML = i+1;
+        } );
+    } ).draw();
     new $.fn.dataTable.FixedHeader(table);
-});
+}
