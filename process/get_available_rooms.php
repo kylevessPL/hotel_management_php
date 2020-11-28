@@ -8,7 +8,7 @@ if (isset($_GET['start-date'], $_GET['end-date']))
     $end_date = date('Y-m-d', (strtotime(str_replace('/', '-', escape_string($_GET['end-date'])))));
     $sql = "SELECT * FROM rooms where id NOT IN " .
         "(SELECT room_id from bookings_rooms where booking_id IN " .
-        "(SELECT id from bookings where status = 'Confirmed' AND '$start_date' < end_date AND '$end_date' > start_date";
+        "(SELECT id from bookings where status IN ('Confirmed', 'Scheduled') AND '$start_date' < end_date AND '$end_date' > start_date";
     $sql .= "))";
     if (!empty($_GET['bed-amount']))
     {
@@ -32,7 +32,7 @@ if (isset($_GET['start-date'], $_GET['end-date']))
             $amenities[] = escape_string($amenity);
         }
         $sql .= " AND id IN " .
-            "(SELECT room_id from rooms_amenities where amenity_id IN (".implode(',', $amenities)."))";
+            "(SELECT room_id from rooms_amenities GROUP BY room_id, amenity_id having COUNT(amenity_id NOT IN (".implode(',', $amenities).") OR NULL) = 0)";
     }
     $result = query($sql);
     if (mysqli_num_rows($result) > 0)

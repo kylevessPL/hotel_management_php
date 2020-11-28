@@ -66,6 +66,10 @@ function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice
         language: { emptyTable: "No rooms found matching the search criteria" },
         columnDefs: [
             {
+                targets: '_all',
+                className: 'align-middle text-center',
+            },
+            {
                 searchable: false,
                 orderable: false,
                 targets: 0
@@ -79,16 +83,14 @@ function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice
                 data: null,
                 searchable: false,
                 orderable: false,
-                defaultContent: "<a class='btn btn-success py-1 px-2' href='/dashboard/book-room?id='><i class='las la-calendar-check la-lg'></i></a>",
-                className: 'align-middle text-center'
+                defaultContent: "<a class='btn btn-success py-1 px-2' href='/dashboard/book-room?id='><i class='las la-calendar-check la-lg'></i></a>"
             },
             {
                 targets: -2,
                 data: null,
                 searchable: false,
                 orderable: false,
-                defaultContent: "<button class='btn btn-primary py-1 px-2 viewRoomAmenitiesBtn'>View</button>",
-                className: 'align-middle text-center'
+                defaultContent: "<button class='btn btn-primary py-1 px-2 viewRoomAmenitiesBtn'>View</button>"
             }
         ],
         order: [[ 2, 'asc' ]]
