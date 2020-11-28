@@ -72,11 +72,7 @@ function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice
                 visible: false
             }
         ],
-        order: [[ 2, 'asc' ]],
-        fnCreatedRow: function (row, data, index) {
-            const info = table.page.info();
-            const value = index + 1 + info.start;
-            $('td', row).eq(0).html(value); },
+        order: [[ 2, 'asc' ]]
     });
     table.on( 'order.dt search.dt', function () {
         table.column(0, {search: 'applied', order: 'applied'}).nodes().each( function (cell, i) {
