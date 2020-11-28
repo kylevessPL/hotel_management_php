@@ -25,17 +25,18 @@ $(document).ready(function () {
         buttonWidth: '100%',
         numberDisplayed: 5
     });
-    $('#rooms-search').on('click', function() {
-        $('#roomsTable').DataTable().destroy();
-        const startDate = $("#filter-start-date").val();
-        const endDate = $("#filter-end-date").val();
-        const bedAmount = $("#filter-bed-amount").val();
-        const amenities = $("#filter-amenities").val();
-        const minPrice = $("#filter-min-price").val();
-        const maxPrice = $("#filter-max-price").val();
-        buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice);
-    });
 });
+
+function roomsSearchHandler() {
+    $('#roomsTable').DataTable().destroy();
+    const startDate = $("#filter-start-date").val();
+    const endDate = $("#filter-end-date").val();
+    const bedAmount = $("#filter-bed-amount").val();
+    const amenities = $("#filter-amenities").val();
+    const minPrice = $("#filter-min-price").val();
+    const maxPrice = $("#filter-max-price").val();
+    buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice);
+}
 
 function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice) {
     const table = $('#roomsTable').DataTable({
@@ -68,7 +69,7 @@ function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice
                 targets: 0
             },
             {
-                targets: [ 1 ],
+                targets: 1,
                 visible: false
             }
         ],

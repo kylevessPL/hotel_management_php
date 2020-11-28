@@ -192,3 +192,27 @@ $(function() {
         }
     });
 });
+$(function() {
+    $("form[name='rooms-search-form']").validate({
+        rules: {
+            'filter-start-date': {
+                required: true
+            },
+            'filter-end-date': {
+                required: true,
+            }
+        },
+        messages: {
+            'filter-start-date': {
+                required: "Start date is mandatory",
+            },
+            'filter-end-date': {
+                required: "End date is mandatory",
+            }
+        },
+        submitHandler: function () {
+            roomsSearchHandler();
+            return false;
+        }
+    });
+});
