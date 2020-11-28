@@ -32,8 +32,8 @@ $result = query($sql);
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Service name</th>
-                                        <th scope="col" class="text-center">Price per night</th>
-                                        <th scope="col" class="text-center">Description</th>
+                                        <th scope="col">Price per night</th>
+                                        <th scope="col">Description</th>
                                     </tr>
                                     </thead>
                                     <tbody>

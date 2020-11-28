@@ -109,6 +109,8 @@ $amenities_result = query($sql);
                                     <th>Room number</th>
                                     <th>Bed amount</th>
                                     <th>Standard price [USD]</th>
+                                    <th class="text-center">Amenities</th>
+                                    <th class="text-center">Book</th>
                                 </tr>
                                 </thead>
                             </table>

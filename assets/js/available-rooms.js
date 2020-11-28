@@ -2,7 +2,7 @@ $(document).ready(function () {
     $('#filter-start-date, #filter-end-date').datepicker({
         clearBtn: true,
         format: "dd/mm/yyyy",
-        orientation: 'auto bottom',
+        orientation: 'right bottom',
         weekStart: 1
     });
     $("#filter-price-slider").ionRangeSlider({
@@ -58,7 +58,9 @@ function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice
             { data: 'id' },
             { data: 'room-number' },
             { data: 'bed-amount' },
-            { data: 'standard-price' }
+            { data: 'standard-price' },
+            { data: null },
+            { data: null }
         ],
         responsive: true,
         language: { emptyTable: "No rooms found matching the search criteria" },
@@ -71,6 +73,22 @@ function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice
             {
                 targets: 1,
                 visible: false
+            },
+            {
+                targets: -1,
+                data: null,
+                searchable: false,
+                orderable: false,
+                defaultContent: "<a class='btn btn-success' href='/dashboard/book-room?id='><i class='las la-calendar-check'></i></a>",
+                className: 'align-middle text-center'
+            },
+            {
+                targets: -2,
+                data: null,
+                searchable: false,
+                orderable: false,
+                defaultContent: "<button class='btn btn-primary viewRoomAmenitiesBtn'>View</button>",
+                className: 'align-middle text-center'
             }
         ],
         order: [[ 2, 'asc' ]]
