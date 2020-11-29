@@ -59,7 +59,7 @@ $result = query($sql);
 </div>
 <?php view('footer.php'); ?>
 
-<div aria-hidden="true" aria-labelledby="viewServiceDescModalTitle" class="modal fade" id="viewServiceDescModal" role="dialog" tabindex="-1">
+<div aria-hidden="true" aria-labelledby="viewServiceDescName" class="modal fade" id="viewServiceDescModal" role="dialog" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
