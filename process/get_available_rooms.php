@@ -31,8 +31,10 @@ if (!empty($_GET['start-date']) && !empty($_GET['end-date']))
         {
             $amenities[] = escape_string($amenity);
         }
+        $size = count($amenities);
         $sql .= " AND id IN " .
-            "(SELECT room_id from rooms_amenities GROUP BY room_id, amenity_id having COUNT(amenity_id NOT IN (".implode(',', $amenities).") OR NULL) = 0)";
+            "(SELECT room_id from rooms_amenities GROUP BY room_id " .
+            "having SUM(amenity_id IN (".implode(',', $amenities).")) = '$size')";
     }
     $result = query($sql);
     if (mysqli_num_rows($result) > 0)
