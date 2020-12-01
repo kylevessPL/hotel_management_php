@@ -102,6 +102,8 @@ function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice
             { data: null },
             { data: null }
         ],
+        lengthMenu: [[7, 15, 25, 50], [7, 15, 25, 50]],
+        pageLength: 7,
         responsive: true,
         language: { emptyTable: "No rooms found matching the search criteria" },
         columnDefs: [
@@ -136,7 +138,7 @@ function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice
                 searchable: false,
                 orderable: false,
                 render: function (row) {
-                    return '<a class="btn btn-success py-1 px-2" href="/dashboard/book-room?id='+row.id+'"><i class="las la-calendar-check la-lg"></i></a>'
+                    return '<a class="btn btn-success py-1 px-2" href="/dashboard/book-room?id='+row.id+'&start-date='+encodeURIComponent($("#filter-start-date").val())+'&end-date='+encodeURIComponent($("#filter-end-date").val())+'"><i class="las la-calendar-check la-lg"></i></a>'
                 }
             },
             {

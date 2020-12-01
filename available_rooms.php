@@ -68,7 +68,7 @@ $amenities_result = query($sql);
                                         <input type="text" id="filter-price-slider" name="filter-price-slider">
                                     </div>
                                     <div id="filter-price-value" class="row my-4 justify-content-center">
-                                        <div class="col-sm-2">
+                                        <div class="col">
                                             <input class="form-control text-center" type="text" id="filter-min-price" name="filter-min-price" value="<?php echo $min_price; ?>">
                                         </div>
                                         <div class="input-group-addon">
@@ -76,7 +76,7 @@ $amenities_result = query($sql);
                                                 <span>-</span>
                                             </div>
                                         </div>
-                                        <div class="col-sm-2">
+                                        <div class="col">
                                             <input class="form-control text-center" type="text" id="filter-max-price" name="filter-max-price" value="<?php echo $max_price; ?>">
                                         </div>
                                     </div>
@@ -94,21 +94,19 @@ $amenities_result = query($sql);
                             <h5>Available rooms list</h5>
                         </div>
                         <div class="card-body">
-                            <div class="row">
-                                <table class="table table-bordered w-100" id="roomsTable">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th class="d-none">Id</th>
-                                        <th>Room number</th>
-                                        <th>Bed amount</th>
-                                        <th>Standard price [USD]</th>
-                                        <th class="text-center">Amenities</th>
-                                        <th class="text-center">Book</th>
-                                    </tr>
-                                    </thead>
-                                </table>
-                            </div>
+                            <table class="table table-bordered w-100" id="roomsTable">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th class="d-none">Id</th>
+                                    <th>Room number</th>
+                                    <th>Bed amount</th>
+                                    <th>Standard price [USD]</th>
+                                    <th class="text-center">Amenities</th>
+                                    <th class="text-center">Book</th>
+                                </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
