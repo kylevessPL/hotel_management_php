@@ -14,11 +14,25 @@ $(document).ready(function () {
         drag_interval: true,
         min: $("#filter-min-price").val(),
         max: $("#filter-max-price").val(),
-        prefix: "$"
-    }).on("change", function () {
-        const $this = $(this), value = $this.prop("value").split(";");
-        $("#filter-min-price").val(value[0]);
-        $("#filter-max-price").val(value[1]);
+        prefix: "$",
+        onChange: function (data) {
+            $("#filter-min-price").val(data.from);
+            $("#filter-max-price").val(data.to);
+        }
+    });
+    $('#filter-min-price, #filter-max-price').on("change", function () {
+        const data = $("#filter-price-slider").data("ionRangeSlider");
+        const from = $("#filter-min-price");
+        const to = $("#filter-max-price");
+        if (!(from.val() >= data.result.min && from.val() <= data.result.max && to.val() >= data.result.min && to.val() <= data.result.max && from.val() <= to.val())) {
+            from.val(data.result.from);
+            to.val(data.result.to);
+        } else {
+            data.update({
+                from: from.val(),
+                to: to.val()
+            });
+        }
     });
     $('#filter-amenities').multiselect({
         includeSelectAllOption: true,

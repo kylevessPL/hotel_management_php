@@ -69,7 +69,7 @@ $amenities_result = query($sql);
                                     </div>
                                     <div id="filter-price-value" class="row my-4 justify-content-center">
                                         <div class="col-sm-2">
-                                            <input class="form-control text-center" type="text" id="filter-min-price" name="filter-min-price" value="<?php echo $min_price; ?>" disabled>
+                                            <input class="form-control text-center" type="text" id="filter-min-price" name="filter-min-price" value="<?php echo $min_price; ?>">
                                         </div>
                                         <div class="input-group-addon">
                                             <div class="input-group-text">
@@ -77,7 +77,7 @@ $amenities_result = query($sql);
                                             </div>
                                         </div>
                                         <div class="col-sm-2">
-                                            <input class="form-control text-center" type="text" id="filter-max-price" name="filter-max-price" value="<?php echo $max_price; ?>" disabled>
+                                            <input class="form-control text-center" type="text" id="filter-max-price" name="filter-max-price" value="<?php echo $max_price; ?>">
                                         </div>
                                     </div>
                                 </div>
