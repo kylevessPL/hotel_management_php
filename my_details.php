@@ -83,7 +83,7 @@ if (isset($_POST["customer-details-submit"]))
                                     <hr>
                                 </div>
                             </div>
-                            <?php echo isset($alertMsg) ? '<p class="alert alert-'.$alertType.'">'.$alertMsg.'</p>' : ''; ?>
+                            <?php echo isset($alertMsg) ? '<p class="alert alert-'.htmlspecialchars($alertType).'">'.htmlspecialchars($alertMsg).'</p>' : ''; ?>
                             <div class="row">
                                 <div class="col-md-12">
                                     <form id="form-customer-details" name="form-customer-details" method="post" action="/account/my-details">
@@ -93,11 +93,11 @@ if (isset($_POST["customer-details-submit"]))
                                                 <input type="text" id="first-name" name="first-name" placeholder="Enter first name" class="form-control"
                                                     <?php if (isset($_POST["customer-details-submit"]))
                                                     {
-                                                        echo 'value="'.$_POST['first-name'].'"';
+                                                        echo 'value="'.htmlspecialchars($_POST['first-name']).'"';
                                                     }
                                                     else if (isset($customerData))
                                                     {
-                                                        echo 'value="'.$customerData['first_name'].'"';
+                                                        echo 'value="'.htmlspecialchars($customerData['first_name']).'"';
                                                     }
                                                     ?>>
                                             </div>
@@ -108,11 +108,11 @@ if (isset($_POST["customer-details-submit"]))
                                                 <input type="text" id="last-name" name="last-name" placeholder="Enter last name" class="form-control"
                                                     <?php if (isset($_POST["customer-details-submit"]))
                                                     {
-                                                        echo 'value="'.$_POST['last-name'].'"';
+                                                        echo 'value="'.htmlspecialchars($_POST['last-name']).'"';
                                                     }
                                                     else if (isset($customerData))
                                                     {
-                                                        echo 'value="'.$customerData['last_name'].'"';
+                                                        echo 'value="'.htmlspecialchars($customerData['last_name']).'"';
                                                     }
                                                     ?>>
                                             </div>
@@ -142,11 +142,11 @@ if (isset($_POST["customer-details-submit"]))
                                                 <input type="text" id="document-id" name="document-id" placeholder="Enter document ID" class="form-control"
                                                     <?php if (isset($_POST["customer-details-submit"]))
                                                     {
-                                                        echo 'value="'.$_POST['document-id'].'"';
+                                                        echo 'value="'.htmlspecialchars($_POST['document-id']).'"';
                                                     }
                                                     else if (isset($customerData))
                                                     {
-                                                        echo 'value="'.$customerData['document_id'].'"';
+                                                        echo 'value="'.htmlspecialchars($customerData['document_id']).'"';
                                                     }
                                                     ?>>
                                             </div>

@@ -100,11 +100,11 @@ if (isset($_POST["address-submit"]))
                                 </div>
                                 <?php if (!isset($customerId))
                                 { echo '
-                                <p class="alert alert-'.$alertType.'">'.$alertMsg.'</p>
+                                <p class="alert alert-'.htmlspecialchars($alertType).'">'.htmlspecialchars($alertMsg).'</p>
                                 <a class="btn btn-primary text-right" href="/account/my-details">Update my details</a>
                                 ';}
                                 else
-                                { echo isset($alertMsg) ? '<p class="alert alert-'.$alertType.'">'.$alertMsg.'</p>' : ''; ?>
+                                { echo isset($alertMsg) ? '<p class="alert alert-'.htmlspecialchars($alertType).'">'.htmlspecialchars($alertMsg).'</p>' : ''; ?>
                                 <button class="btn btn-success text-right add-address-action"><i class="las la-plus-circle la-lg mr-2"></i>New address</button>
                                 <?php if (isset($address_list)) {?>
                                 <div class="row mt-2">
@@ -124,13 +124,13 @@ if (isset($_POST["address-submit"]))
                                                 </thead>
                                                 <tbody><?php $count = 1; while($row = mysqli_fetch_array($result)) { echo "
                                                 <tr>
-                                                    <th class='address-num align-middle' scope='row'>" . $count . "</th>
-                                                    <td class='address-street-name align-middle text-center'>" . $row[0] . "</td>
-                                                    <td class='address-house-number align-middle text-center'>" . $row[1] . "</td>
-                                                    <td class='address-zip-code align-middle text-center'>" . $row[2] . "</td>
-                                                    <td class='address-city align-middle text-center'>" . $row[3] . "</td>
+                                                    <th class='address-num align-middle' scope='row'>".htmlspecialchars($count)."</th>
+                                                    <td class='address-street-name align-middle text-center'>".htmlspecialchars($row[0])."</td>
+                                                    <td class='address-house-number align-middle text-center'>".htmlspecialchars($row[1])."</td>
+                                                    <td class='address-zip-code align-middle text-center'>".htmlspecialchars($row[2])."</td>
+                                                    <td class='address-city align-middle text-center'>".htmlspecialchars($row[3])."</td>
                                                     <td class='align-middle text-center'><button class='btn btn-info edit-address-action'><i class='las la-edit'></i></button></td>
-                                                    <td class='align-middle text-center'><a class='btn btn-danger delete-address-action' href='../process/delete_address.php?id=".$address_list[$count - 1]."'><i class='las la-trash'></i></a></td>
+                                                    <td class='align-middle text-center'><a class='btn btn-danger delete-address-action' href='../process/delete_address.php?id=".htmlspecialchars($address_list[$count - 1])."'><i class='las la-trash'></i></a></td>
                                                 </tr>
                                                 "; $count++;} ?>
                                                 </tbody>

@@ -48,7 +48,7 @@ $amenities_result = query($sql);
                                     <select class="form-control" name="filter-bed-amount" id="filter-bed-amount" class="form-control">
                                         <option value="">None selected</option>
                                         <?php while($row = mysqli_fetch_array($beds_result)) { echo '
-                                            <option value="'.$row[0].'">'.$row[0].'</option>';
+                                            <option value="'.htmlspecialchars($row[0]).'">'.htmlspecialchars($row[0]).'</option>';
                                         } ?>
 
                                     </select>
@@ -57,7 +57,7 @@ $amenities_result = query($sql);
                                     <label class="form-label" for="filter-amenities">Amenities (optional):</label>
                                     <select class="form-control" name="filter-amenities" id="filter-amenities" class="form-control" multiple="multiple">
                                         <?php while($row = mysqli_fetch_array($amenities_result)) { echo '
-                                            <option value="'.$row[0].'">'.$row[1].'</option>';
+                                            <option value="'.htmlspecialchars($row[0]).'">'.htmlspecialchars($row[1]).'</option>';
                                         } ?>
 
                                     </select>
@@ -69,7 +69,7 @@ $amenities_result = query($sql);
                                     </div>
                                     <div id="filter-price-value" class="row my-4 justify-content-center">
                                         <div class="col">
-                                            <input class="form-control text-center" type="text" id="filter-min-price" name="filter-min-price" value="<?php echo $min_price; ?>">
+                                            <input class="form-control text-center" type="text" id="filter-min-price" name="filter-min-price" value="<?php echo htmlspecialchars($min_price); ?>">
                                         </div>
                                         <div class="input-group-addon">
                                             <div class="input-group-text">
@@ -77,7 +77,7 @@ $amenities_result = query($sql);
                                             </div>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control text-center" type="text" id="filter-max-price" name="filter-max-price" value="<?php echo $max_price; ?>">
+                                            <input class="form-control text-center" type="text" id="filter-max-price" name="filter-max-price" value="<?php echo htmlspecialchars($max_price); ?>">
                                         </div>
                                     </div>
                                 </div>
