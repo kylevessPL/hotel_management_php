@@ -64,7 +64,7 @@ $amenities_result = query($sql);
                                 </div>
                                 <div class="form-group">
                                     <div id="filter-price-range">
-                                        <label class="form-label pb-2" for="filter-price-slider">Price range [USD]:</label>
+                                        <label class="form-label pb-2" for="filter-price-slider">Price range [PLN]:</label>
                                         <input type="text" id="filter-price-slider" name="filter-price-slider">
                                     </div>
                                     <div id="filter-price-value" class="row my-4 justify-content-center">
@@ -101,7 +101,7 @@ $amenities_result = query($sql);
                                     <th class="d-none">Id</th>
                                     <th>Room number</th>
                                     <th>Bed amount</th>
-                                    <th>Standard price [USD]</th>
+                                    <th>Standard price [PLN]</th>
                                     <th class="text-center">Amenities</th>
                                     <th class="text-center">Book</th>
                                 </tr>

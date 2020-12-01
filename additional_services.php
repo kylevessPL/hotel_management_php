@@ -25,7 +25,7 @@ $result = query($sql);
                             <h5>Additional services list</h5>
                         </div>
                         <div class="card-body">
-                            <div class="card-title">All prices are in PLN (Polish Zloty)</div>
+                            <div class="card-title">All prices are in PLN</div>
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
