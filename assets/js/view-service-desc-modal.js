@@ -8,7 +8,7 @@ $(document).ready(function() {
             data: { id: $(this).closest("tr").find("th.service-id").text() },
             dataType: 'JSON',
             success: function (response) {
-                $('#viewServiceDescDesc').html(response[0]['desc']);
+                $('#viewServiceDescDesc').html('<br>' + response[0]['desc']);
             }
         });
         $('#viewServiceDescName').html($(this).closest("tr").find("td.service-name").text());
