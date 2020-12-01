@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    initTable();
     $('#filter-start-date, #filter-end-date').datepicker({
         clearBtn: true,
         format: "dd/mm/yyyy",
@@ -76,6 +77,36 @@ function roomsSearchHandler() {
         $('#viewRoomDescAmenities').html('<br>' + 'Amenities: ');
         $('#viewRoomDescModal').modal();
     });
+}
+
+function initTable() {
+    $('#roomsTable').DataTable({
+        columns: [
+            { data: null },
+            { data: 'id' },
+            { data: 'room-number' },
+            { data: 'bed-amount' },
+            { data: 'standard-price' },
+            { data: null },
+            { data: null }
+        ],
+        lengthMenu: [[7, 15, 25, 50], [7, 15, 25, 50]],
+        pageLength: 7,
+        responsive: true,
+        language: { emptyTable: "Please use the search form to find rooms matching your criteria" },
+        columnDefs: [
+            {
+                targets: '_all',
+                className: 'align-middle text-center'
+            },
+            {
+                searchable: false,
+                orderable: false,
+                targets: 0
+            }
+        ],
+        order: [[ 2, 'asc' ]]
+    }).clear().draw();
 }
 
 function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice) {
