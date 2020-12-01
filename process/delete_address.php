@@ -31,4 +31,3 @@ if (isset($_GET['id']))
 }
 
 header("location:/account/my-addresses");
-
