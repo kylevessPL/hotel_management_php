@@ -15,8 +15,8 @@ include 'helpers/include_all.php';
         <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4">
             <?php view('breadcrumb.php'); ?>
             <p>Frequently asked questions</p>
-            <div class="row">
-                <div class="col-10 col-xl-7 mb-4 mb-lg-0">
+            <div class="row mb-4">
+                <div class="col-10 col-xl-7 mb-lg-0">
                     <div class="accordion" id="accordionFaq">
                         <div class="card">
                             <div class="card-header pl-2" id="headingOne">

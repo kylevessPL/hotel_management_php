@@ -18,8 +18,8 @@ $result = query($sql);
         <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4">
             <?php view('breadcrumb.php'); ?>
             <p>View available additional services you can order</p>
-            <div class="row">
-                <div class="col-10 col-xl-7 mb-4 mb-lg-0">
+            <div class="row mb-4">
+                <div class="col-10 col-xl-7 mb-lg-0">
                     <div class="card">
                         <div class="card-header">
                             <h5>Additional services list</h5>

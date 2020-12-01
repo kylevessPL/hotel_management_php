@@ -46,24 +46,24 @@ if(isset($_POST["contact-submit"]))
         <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4">
             <?php view('breadcrumb.php'); ?>
             <p>Feel free to contact us if you have any any questions regarding our service</p>
-            <div class="row">
-                <div class="col-10 col-xl-7 mb-4 mb-lg-0">
+            <div class="row mb-4">
+                <div class="col-10 col-xl-7 mb-lg-0">
                     <div class="card">
                         <div class="card-header bg-primary text-white"><i class="las la-envelope la-lg mr-2"></i> Contact us</div>
                         <div class="card-body">
                             <?php echo isset($alertMsg) ? '<p class="alert alert-'.$alertType.'">'.$alertMsg.'</p>' : ''; ?>
                             <form id="form-contact" name="form-contact" method="post" action="/support/contact">
                                 <div class="form-group">
-                                    <label for="name">Full name</label>
+                                    <label for="name">Full name<span style="color: red">*</span>:</label>
                                     <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp" placeholder="Enter full name" minlength="2" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Email address</label>
+                                    <label for="email">Email address<span style="color: red">*</span>:</label>
                                     <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email" required>
                                     <small id="emailHelp" class="form-text text-muted">We never share your email with anyone else.</small>
                                 </div>
                                 <div class="form-group">
-                                    <label for="message">Message</label>
+                                    <label for="message">Message<span style="color: red">*</span>:</label>
                                     <textarea class="form-control" id="message" name="message" rows="6" minlength="10" required></textarea>
                                 </div>
                                 <input class="btn btn-primary text-right" name="contact-submit" value="Submit" type="submit">

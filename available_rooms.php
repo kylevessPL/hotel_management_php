@@ -27,93 +27,88 @@ $amenities_result = query($sql);
         <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4">
             <?php view('breadcrumb.php'); ?>
             <p>View available rooms and search by predefined criteria</p>
-            <div class="col-10 col-xl-8 mb-4 mb-lg-0">
-                <div class="card">
-                    <div class="card-header">
-                        <h5>Available rooms search</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-8">
-                                <form name="rooms-search-form">
-                                    <div class="form-group">
-                                        <label for="filter-start-date">Start date*:</label>
-                                        <input class="form-control" id="filter-start-date" type="text" placeholder="dd/MM/yyyy" name="filter-start-date">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label" for="filter-end-date">End date*:</label>
-                                        <input class="form-control" id="filter-end-date" type="text" placeholder="dd/MM/yyyy" name="filter-end-date">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label" for="filter-bed-amount">Bed amount (optional):</label>
-                                        <select class="form-control" name="filter-bed-amount" id="filter-bed-amount" class="form-control">
-                                            <option value="">None selected</option>
-                                            <?php while($row = mysqli_fetch_array($beds_result)) { echo '
+            <div class="row mb-4">
+                <div class="col-12 col-xl-4 mb-lg-0">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5>Available rooms search</h5>
+                        </div>
+                        <div class="card-body">
+                            <form name="rooms-search-form">
+                                <div class="form-group">
+                                    <label for="filter-start-date">Start date<span style="color: red">*</span>:</label>
+                                    <input class="form-control" id="filter-start-date" type="text" placeholder="dd/MM/yyyy" name="filter-start-date">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="filter-end-date">End date<span style="color: red">*</span>:</label>
+                                    <input class="form-control" id="filter-end-date" type="text" placeholder="dd/MM/yyyy" name="filter-end-date">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="filter-bed-amount">Bed amount (optional):</label>
+                                    <select class="form-control" name="filter-bed-amount" id="filter-bed-amount" class="form-control">
+                                        <option value="">None selected</option>
+                                        <?php while($row = mysqli_fetch_array($beds_result)) { echo '
                                             <option value="'.$row[0].'">'.$row[0].'</option>';
-                                            } ?>
+                                        } ?>
 
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label" for="filter-amenities">Amenities (optional):</label>
-                                        <select class="form-control" name="filter-amenities" id="filter-amenities" class="form-control" multiple="multiple">
-                                            <?php while($row = mysqli_fetch_array($amenities_result)) { echo '
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="filter-amenities">Amenities (optional):</label>
+                                    <select class="form-control" name="filter-amenities" id="filter-amenities" class="form-control" multiple="multiple">
+                                        <?php while($row = mysqli_fetch_array($amenities_result)) { echo '
                                             <option value="'.$row[0].'">'.$row[1].'</option>';
-                                            } ?>
+                                        } ?>
 
-                                        </select>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <div id="filter-price-range">
+                                        <label class="form-label pb-2" for="filter-price-slider">Price range [USD]:</label>
+                                        <input type="text" id="filter-price-slider" name="filter-price-slider">
                                     </div>
-                                    <div class="form-group">
-                                        <div id="filter-price-range">
-                                            <label class="form-label pb-2" for="filter-price-slider">Price range [USD]:</label>
-                                            <input type="text" id="filter-price-slider" name="filter-price-slider">
+                                    <div id="filter-price-value" class="row my-4 justify-content-center">
+                                        <div class="col-sm-2">
+                                            <input class="form-control text-center" type="text" id="filter-min-price" name="filter-min-price" value="<?php echo $min_price; ?>" disabled>
                                         </div>
-                                        <div id="filter-price-value" class="row my-4 justify-content-center">
-                                            <div class="col-sm-2">
-                                                <input class="form-control text-center" type="text" id="filter-min-price" name="filter-min-price" value="<?php echo $min_price; ?>" disabled>
-                                            </div>
-                                            <div class="input-group-addon">
-                                                <div class="input-group-text">
-                                                    <span>-</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <input class="form-control text-center" type="text" id="filter-max-price" name="filter-max-price" value="<?php echo $max_price; ?>" disabled>
+                                        <div class="input-group-addon">
+                                            <div class="input-group-text">
+                                                <span>-</span>
                                             </div>
                                         </div>
+                                        <div class="col-sm-2">
+                                            <input class="form-control text-center" type="text" id="filter-max-price" name="filter-max-price" value="<?php echo $max_price; ?>" disabled>
+                                        </div>
                                     </div>
-                                    <div class="form-group text-center">
-                                        <button type="submit" name="rooms-search" id="rooms-search" class="btn btn-info"><i class="las la-search mr-2"></i>Search</button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-md-4"></div>
+                                </div>
+                                <div class="form-group text-center">
+                                    <button type="submit" name="rooms-search" id="rooms-search" class="btn btn-info"><i class="las la-search mr-2"></i>Search</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-                <?php view('chat.php'); ?>
-            </div>
-            <div class="col-10 col-xl-8 my-4 mb-lg-0">
-                <div class="card">
-                    <div class="card-header">
-                        <h5>Available rooms list</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <table class="table table-bordered w-100" id="roomsTable">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th class="d-none">Id</th>
-                                    <th>Room number</th>
-                                    <th>Bed amount</th>
-                                    <th>Standard price [USD]</th>
-                                    <th class="text-center">Amenities</th>
-                                    <th class="text-center">Book</th>
-                                </tr>
-                                </thead>
-                            </table>
+                <div class="col-12 col-xl-8 mb-lg-0">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5>Available rooms list</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <table class="table table-bordered w-100" id="roomsTable">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th class="d-none">Id</th>
+                                        <th>Room number</th>
+                                        <th>Bed amount</th>
+                                        <th>Standard price [USD]</th>
+                                        <th class="text-center">Amenities</th>
+                                        <th class="text-center">Book</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
