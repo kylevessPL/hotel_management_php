@@ -51,7 +51,7 @@ if(isset($_POST["contact-submit"]))
                     <div class="card">
                         <div class="card-header bg-primary text-white"><i class="las la-envelope la-lg mr-2"></i> Contact us</div>
                         <div class="card-body">
-                            <?php echo isset($alertMsg) ? '<p class="alert alert-'.$alertType.'">'.$alertMsg.'</p>' : ''; ?>
+                            <?php echo isset($alertMsg) ? '<p class="alert alert-'.htmlspecialchars($alertType).'">'.htmlspecialchars($alertMsg).'</p>' : ''; ?>
                             <form id="form-contact" name="form-contact" method="post" action="/support/contact">
                                 <div class="form-group">
                                     <label for="name">Full name<span style="color: red">*</span>:</label>

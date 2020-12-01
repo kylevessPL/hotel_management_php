@@ -111,8 +111,8 @@ if(isset($_POST["login-submit"]))
                     {
                         ?>
                         <h5 class="card-title text-center mb-4">Register</h5>
-                        <p class="alert alert-<?php echo htmlspecialchars($alertType) ?? 'info'; ?>">
-                            <?php echo htmlspecialchars($alertMsg) ?? 'Fill in your data'; ?></p>
+                        <p class="alert alert-<?php echo isset($alertType) ? htmlspecialchars($alertType) : 'info'; ?>">
+                            <?php echo isset($alertMsg) ? htmlspecialchars($alertMsg) : 'Fill in your data'; ?></p>
                         <form id="form-register" name="form-register" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                             <div class="form-group">
                                 <label for="username">Username</label>
@@ -143,7 +143,7 @@ if(isset($_POST["login-submit"]))
                         <h5 class="card-title text-center mb-4">Login</h5>
                         <p class="alert alert-<?php echo $alertType ?? 'success'; ?>"
                            style="display: <?php echo isset($alertMsg) ? 'block' : 'none'; ?>;">
-                            <?php echo htmlspecialchars($alertMsg) ?? ''; ?></p>
+                            <?php echo $alertMsg ?? ''; ?></p>
                         <form id="form-login" name="form-login" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                             <div class="form-group">
                                 <label for="login">Username or e-mail</label>
