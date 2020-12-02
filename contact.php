@@ -54,16 +54,16 @@ if(isset($_POST["contact-submit"]))
                             <?php echo isset($alertMsg) ? '<p class="alert alert-'.htmlspecialchars($alertType).'">'.htmlspecialchars($alertMsg).'</p>' : ''; ?>
                             <form id="form-contact" name="form-contact" method="post" action="/support/contact">
                                 <div class="form-group">
-                                    <label for="name">Full name<span style="color: red">*</span>:</label>
+                                    <label for="name">Full name<span style="color: red">*</span></label>
                                     <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp" placeholder="Enter full name" minlength="2" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Email address<span style="color: red">*</span>:</label>
+                                    <label for="email">Email address<span style="color: red">*</span></label>
                                     <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email" required>
                                     <small id="emailHelp" class="form-text text-muted">We never share your email with anyone else.</small>
                                 </div>
                                 <div class="form-group">
-                                    <label for="message">Message<span style="color: red">*</span>:</label>
+                                    <label for="message">Message<span style="color: red">*</span></label>
                                     <textarea class="form-control" id="message" name="message" rows="6" minlength="10" required></textarea>
                                 </div>
                                 <input class="btn btn-primary text-right" name="contact-submit" value="Submit" type="submit">

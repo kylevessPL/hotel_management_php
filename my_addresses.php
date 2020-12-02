@@ -165,21 +165,21 @@ if (isset($_POST["address-submit"]))
                         <div class="form-group row">
                             <input class="form-control" id="addressNum" type="hidden" name="addressNum">
                             <div class="col-sm-8">
-                                <label class="control-label" for="streetName">Street name<span style="color: red">*</span>:</label>
+                                <label class="control-label" for="streetName">Street name<span style="color: red">*</span></label>
                                 <input class="form-control" id="streetName" type="text" name="streetName" placeholder="Enter street name" autofocus>
                             </div>
                             <div class="col-sm-4">
-                                <label class="control-label" for="houseNumber">House number<span style="color: red">*</span>:</label>
+                                <label class="control-label" for="houseNumber">House number<span style="color: red">*</span></label>
                                 <input class="form-control" id="houseNumber" type="text" placeholder="Your house number" name="houseNumber">
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-4">
-                                <label class="control-label" for="zipCode">Zip code<span style="color: red">*</span>:</label>
+                                <label class="control-label" for="zipCode">Zip code<span style="color: red">*</span></label>
                                 <input class="form-control" id="zipCode" type="text" placeholder="Enter zip code" name="zipCode">
                             </div>
                             <div class="col-sm-8">
-                                <label class="control-label" for="city">City<span style="color: red">*</span>:</label>
+                                <label class="control-label" for="city">City<span style="color: red">*</span></label>
                                 <input class="form-control" id="city" type="text" placeholder="Enter city" name="city">
                             </div>
                         </div>

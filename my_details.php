@@ -88,7 +88,7 @@ if (isset($_POST["customer-details-submit"]))
                                 <div class="col-md-12">
                                     <form id="form-customer-details" name="form-customer-details" method="post" action="/account/my-details">
                                         <div class="form-group row">
-                                            <label for="first-name" class="col-4 col-form-label">First name<span style="color: red">*</span>:</label>
+                                            <label for="first-name" class="col-4 col-form-label">First name<span style="color: red">*</span></label>
                                             <div class="col-8">
                                                 <input type="text" id="first-name" name="first-name" placeholder="Enter first name" class="form-control"
                                                     <?php if (isset($_POST["customer-details-submit"]))
@@ -103,7 +103,7 @@ if (isset($_POST["customer-details-submit"]))
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="last-name" class="col-4 col-form-label">Last name<span style="color: red">*</span>:</label>
+                                            <label for="last-name" class="col-4 col-form-label">Last name<span style="color: red">*</span></label>
                                             <div class="col-8">
                                                 <input type="text" id="last-name" name="last-name" placeholder="Enter last name" class="form-control"
                                                     <?php if (isset($_POST["customer-details-submit"]))
@@ -118,7 +118,7 @@ if (isset($_POST["customer-details-submit"]))
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="document-type" class="col-4 col-form-label">Document type<span style="color: red">*</span>:</label>
+                                            <label for="document-type" class="col-4 col-form-label">Document type<span style="color: red">*</span></label>
                                             <div class="col-8">
                                                 <select id="document-type" name="document-type" class="custom-select">
                                                     <option value="ID card"
@@ -137,7 +137,7 @@ if (isset($_POST["customer-details-submit"]))
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="document-id" class="col-4 col-form-label">Document ID<span style="color: red">*</span>:</label>
+                                            <label for="document-id" class="col-4 col-form-label">Document ID<span style="color: red">*</span></label>
                                             <div class="col-8">
                                                 <input type="text" id="document-id" name="document-id" placeholder="Enter document ID" class="form-control"
                                                     <?php if (isset($_POST["customer-details-submit"]))

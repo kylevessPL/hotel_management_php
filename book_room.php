@@ -1,5 +1,28 @@
 <?php
 include 'helpers/include_all.php';
+include 'process/get_customer_id.php';
+
+get_customer_id($alertMsg, $alertType, $customerId);
+
+if (isset($_GET['id'], $_GET['start-date'], $_GET['end-date']))
+{
+    $id = escape_string($_GET['id']);
+    $start_date = escape_string($_GET['start-date']);
+    $end_date = escape_string($_GET['end-date']);
+    $result = file_get_contents($_SERVER ["REQUEST_SCHEME"].'://'.$_SERVER['SERVER_NAME']."/process/check_room_availability.php?id=$id&start-date=".rawurlencode($start_date)."&end-date=".rawurlencode($end_date)."");
+    if ($result == 'false')
+    {
+        $alertMsg = "Room not available within $start_date - $end_date period";
+        $alertType = "warning";
+    }
+}
+
+$sql = "SELECT id, street_name, house_number, zip_code, city FROM addresses where id IN (SELECT address_id FROM customers_addresses where customer_id = '$customerId') ORDER BY 1";
+$address_result = query($sql);
+
+$sql = "SELECT DISTINCT bed_amount FROM rooms ORDER BY 1";
+$beds_result = query($sql);
+
 ?>
 
 <!DOCTYPE html>
@@ -22,21 +45,52 @@ include 'helpers/include_all.php';
                             <h5>Booking form</h5>
                         </div>
                         <div class="card-body">
-                            <div class="card-title">All prices are in PLN</div>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Service name</th>
-                                        <th scope="col" class="text-center">Price per night</th>
-                                        <th scope="col" class="text-center">Description</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
+                        <?php if (!isset($customerId))
+                        { echo '
+                            <p class="alert alert-'.htmlspecialchars($alertType).'">'.htmlspecialchars($alertMsg).'</p>
+                            <a class="btn btn-primary text-right" href="/account/my-details">Update my details</a>
+                        ';}
+                        else
+                        {?>
+                            <p class="alert alert-<?php echo isset($alertType) ? htmlspecialchars($alertType) : 'info'; ?>">
+                                <?php echo isset($alertMsg) ? htmlspecialchars($alertMsg) : 'You can check available room list <a href="/dashboard/available-rooms">here</a>'; ?></p>
+                            <form method="post" id="booking-form" name="booking-form" action="/dashboard/book-room">
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label class="control-label" for="startDate">Start date<span style="color: red">*</span></label>
+                                        <input class="form-control" id="startDate" type="text" name="startDate" placeholder="dd/MM/yyyy" autofocus>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="control-label" for="endDate">End date<span style="color: red">*</span></label>
+                                        <input class="form-control" id="endDate" type="text" name="endDate" placeholder="dd/MM/yyyy">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label class="form-label" for="myAddress">My address<span style="color: red">*</span></label>
+                                        <select class="form-control" name="myAddress" id="myAddress" class="form-control">
+                                            <option value="">None selected</option>
+                                            <?php while($row = mysqli_fetch_array($address_result)) { echo '
+                                            <option value="'.htmlspecialchars($row[0]).'">'.htmlspecialchars($row[1]).' '.htmlspecialchars($row[2]).', '.htmlspecialchars($row[3]).' '.htmlspecialchars($row[4]).'</option>';
+                                            } ?>
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="form-label" for="bedAmount">Bed amount<span style="color: red">*</span></label>
+                                        <select class="form-control" name="bedAmount" id="bedAmount" class="form-control">
+                                            <option value="">None selected</option>
+                                            <?php while($row = mysqli_fetch_array($beds_result)) { echo '
+                                            <option value="'.htmlspecialchars($row[0]).'">'.htmlspecialchars($row[0]).'</option>';
+                                            } ?>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <input class="btn btn-primary text-right float-right" name="booking-submit" value="Submit" type="submit">
+                            </form>
+                            <?php } ?>
+
                         </div>
                     </div>
                 </div>
@@ -48,6 +102,11 @@ include 'helpers/include_all.php';
 <?php view('footer.php'); ?>
 
 <?php view('scripts.php'); ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.min.js"></script>
+<script src="/assets/js/form-validation.js"></script>
+<script src="/assets/js/book-room.js"></script>
 
 </body>
 </html>

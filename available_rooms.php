@@ -9,6 +9,7 @@ $max_price = ceil($row['max_price']);
 
 $sql = "SELECT DISTINCT bed_amount FROM rooms ORDER BY 1";
 $beds_result = query($sql);
+
 $sql = "SELECT id, name FROM amenities ORDER BY 1";
 $amenities_result = query($sql);
 
@@ -36,15 +37,15 @@ $amenities_result = query($sql);
                         <div class="card-body">
                             <form name="rooms-search-form">
                                 <div class="form-group">
-                                    <label for="filter-start-date">Start date<span style="color: red">*</span>:</label>
+                                    <label for="filter-start-date">Start date<span style="color: red">*</span></label>
                                     <input class="form-control" id="filter-start-date" type="text" placeholder="dd/MM/yyyy" name="filter-start-date">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="filter-end-date">End date<span style="color: red">*</span>:</label>
+                                    <label class="form-label" for="filter-end-date">End date<span style="color: red">*</span></label>
                                     <input class="form-control" id="filter-end-date" type="text" placeholder="dd/MM/yyyy" name="filter-end-date">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="filter-bed-amount">Bed amount (optional):</label>
+                                    <label class="form-label" for="filter-bed-amount">Bed amount (optional)</label>
                                     <select class="form-control" name="filter-bed-amount" id="filter-bed-amount" class="form-control">
                                         <option value="">None selected</option>
                                         <?php while($row = mysqli_fetch_array($beds_result)) { echo '
@@ -54,7 +55,7 @@ $amenities_result = query($sql);
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="filter-amenities">Amenities (optional):</label>
+                                    <label class="form-label" for="filter-amenities">Amenities (optional)</label>
                                     <select class="form-control" name="filter-amenities" id="filter-amenities" class="form-control" multiple="multiple">
                                         <?php while($row = mysqli_fetch_array($amenities_result)) { echo '
                                             <option value="'.htmlspecialchars($row[0]).'">'.htmlspecialchars($row[1]).'</option>';
@@ -64,7 +65,7 @@ $amenities_result = query($sql);
                                 </div>
                                 <div class="form-group">
                                     <div id="filter-price-range">
-                                        <label class="form-label pb-2" for="filter-price-slider">Price range [PLN]:</label>
+                                        <label class="form-label pb-2" for="filter-price-slider">Price range [PLN]</label>
                                         <input type="text" id="filter-price-slider" name="filter-price-slider">
                                     </div>
                                     <div id="filter-price-value" class="row my-4 justify-content-center">
