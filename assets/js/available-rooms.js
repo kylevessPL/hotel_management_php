@@ -35,11 +35,18 @@ $(document).ready(function () {
             });
         }
     });
-    $('#filter-amenities').multiselect({
-        includeSelectAllOption: true,
-        buttonWidth: '100%',
-        numberDisplayed: 5
+    $('#filter-amenities').selectpicker({
+        noneSelectedText: 'None selected',
+        actionsBox: true,
+        style: '',
+        styleBase: 'form-control',
+        tickIcon: 'mt-1 las la-check'
     });
+    $('#filter-bed-amount').selectpicker({
+        style: '',
+        styleBase: 'form-control'
+    });
+    $.fn.selectpicker.Constructor.BootstrapVersion = '4';
     $('#viewRoomDescModal').on('hide.bs.modal', function () {
         setTimeout(() => $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show(), 400);
     });

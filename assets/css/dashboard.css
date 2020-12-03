@@ -63,14 +63,17 @@
     padding-left: 5px;
 }
 
-.btn:focus, .page-link:focus {
+.btn:focus,
+.page-link:focus {
     box-shadow: none !important;
+    outline: none !important;
 }
 
-.multiselect-container {
-    width: 100%;
-}
-
-.multiselect.dropdown-toggle {
-    text-align: left;
+*, input,
+select,
+textarea,
+option,
+button,
+.bootstrap-select .dropdown-toggle:focus {
+    outline: none !important;
 }

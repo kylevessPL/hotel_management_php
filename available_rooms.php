@@ -45,8 +45,8 @@ $amenities_result = query($sql);
                                     <input class="form-control" id="filter-end-date" type="text" placeholder="dd/MM/yyyy" name="filter-end-date">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="filter-bed-amount">Bed amount (optional)</label>
-                                    <select class="form-control" name="filter-bed-amount" id="filter-bed-amount">
+                                    <label class="form-label" for="filter-bed-amount">Bed amount</label>
+                                    <select class="selectpicker form-control" name="filter-bed-amount" id="filter-bed-amount">
                                         <option value="">None selected</option>
                                         <?php while($row = mysqli_fetch_array($beds_result)) { echo '
                                             <option value="'.htmlspecialchars($row[0]).'">'.htmlspecialchars($row[0]).'</option>';
@@ -55,8 +55,8 @@ $amenities_result = query($sql);
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="filter-amenities">Amenities (optional)</label>
-                                    <select class="form-control" name="filter-amenities" id="filter-amenities" multiple="multiple">
+                                    <label class="form-label" for="filter-amenities">Amenities</label>
+                                    <select class="selectpicker form-control" name="filter-amenities" id="filter-amenities" multiple>
                                         <?php while($row = mysqli_fetch_array($amenities_result)) { echo '
                                             <option value="'.htmlspecialchars($row[0]).'">'.htmlspecialchars($row[1]).'</option>';
                                         } ?>
@@ -140,7 +140,7 @@ $amenities_result = query($sql);
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
 <script src="https://cdn.datatables.net/v/bs4/dt-1.10.22/fh-3.1.7/r-2.2.6/datatables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-<script src="https://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
 <script src="/assets/js/form-validation.js"></script>
 <script src="/assets/js/available-rooms.js"></script>

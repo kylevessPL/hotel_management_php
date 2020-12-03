@@ -78,7 +78,7 @@ $services_result = query($sql);
                                     <div class="form-group row">
                                         <div class="col-sm-6">
                                             <label class="form-label" for="myAddress">My address<span style="color: red">*</span></label>
-                                            <select class="form-control" name="myAddress" id="myAddress">
+                                            <select class="selectpicker form-control" name="myAddress" id="myAddress">
                                                 <?php if (mysqli_num_rows($address_result) == 0) { echo "<option value=''>You don't have any addresses</option>"; }
                                                 $count = 0; while($row = mysqli_fetch_array($address_result)) { echo '
                                                 <option value="'.htmlspecialchars($row[0]).'"'; if ($count == 0) { echo ' selected'; } echo '>'.htmlspecialchars($row[1]).' '.htmlspecialchars($row[2]).', '.htmlspecialchars($row[3]).' '.htmlspecialchars($row[4]).'</option>';
@@ -88,7 +88,7 @@ $services_result = query($sql);
                                         </div>
                                         <div class="col-sm-6">
                                             <label class="form-label" for="bedAmount">Bed amount<span style="color: red">*</span></label>
-                                            <select class="form-control" name="bedAmount" id="bedAmount">
+                                            <select class="selectpicker form-control" name="bedAmount" id="bedAmount">
                                                 <option value="">None selected</option>
                                                 <?php while($row = mysqli_fetch_array($beds_result)) { echo '
                                                 <option value="'.htmlspecialchars($row[0]).'"'; if (($bed_number[0] ?? null) == $row[0]) { echo ' selected'; } echo '>'.htmlspecialchars($row[0]).'</option>';
@@ -100,13 +100,13 @@ $services_result = query($sql);
                                     <div class="form-group row">
                                         <div class="col-sm-6">
                                             <label class="form-label" for="room">Room<span style="color: red">*</span></label>
-                                            <select class="form-control overflow-auto" name="room" id="room" style="max-height: 50px;">
+                                            <select class="selectpicker form-control" name="room" id="room">
                                                 <option value="">Choose dates and bed amount first</option>
                                             </select>
                                         </div>
                                         <div class="col-sm-6">
                                             <label class="form-label" for="services">Additional services</label>
-                                            <select class="form-control" name="services" id="services" multiple="multiple">
+                                            <select class="selectpicker form-control" name="services" id="services" multiple data-selected-text-format="count > 2">
                                                 <?php while($row = mysqli_fetch_array($services_result)) { echo '
                                                 <option value="'.htmlspecialchars($row[0]).'">'.htmlspecialchars($row[1]).'</option>';
                                                 } ?>
@@ -132,7 +132,7 @@ $services_result = query($sql);
 <?php view('scripts.php'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-<script src="https://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 <script src="/assets/js/form-validation.js"></script>
 <script src="/assets/js/book-room.js"></script>
 
@@ -147,7 +147,10 @@ $services_result = query($sql);
             startDate.val() === '<?php echo htmlspecialchars($start_date); ?>' &&
             endDate.val() === '<?php echo htmlspecialchars($end_date); ?>'
         ) {
-            $('#room option[value="<?php echo htmlspecialchars($id); ?>"]').attr('selected', 'selected');
+            const room = $('#room');
+            room.selectpicker('val', '<?php echo htmlspecialchars($id); ?>');
+            room.selectpicker('setStyle', 'btn', 'remove');
+            room.selectpicker('setStyle', 'form-control');
         }
     }
 </script>

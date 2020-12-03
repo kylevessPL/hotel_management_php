@@ -5,11 +5,19 @@ $(document).ready(function () {
         orientation: 'right bottom',
         weekStart: 1
     });
-    $('#services').multiselect({
-        includeSelectAllOption: true,
-        buttonWidth: '100%',
-        numberDisplayed: 2
+    $('#services').selectpicker({
+        noneSelectedText: 'None selected',
+        actionsBox: true,
+        style: '',
+        styleBase: 'form-control',
+        tickIcon: 'mt-1 las la-check'
     });
+    $('#myAddress, #bedAmount, #room').selectpicker({
+        style: '',
+        styleBase: 'form-control',
+        size: 5
+    });
+    $.fn.selectpicker.Constructor.BootstrapVersion = '4';
     $('#bedAmount, #startDate, #endDate').on('change', function () {
         const startDate = $('#startDate');
         const endDate = $('#endDate');
@@ -38,7 +46,9 @@ function fetchRooms(startDate, endDate, bedAmount) {
             $.each(response, function(key, val) {
                 list += '<option value="'+val['id']+'">Room number: '+val['room-number']+', Price: '+val['standard-price']+' PLN</option>';
             });
-            $('#room').html(list);
+            const room = $('#room');
+            room.html(list);
+            room.selectpicker('refresh');
             if (typeof setChoice === 'function') {
                 setChoice();
             }
