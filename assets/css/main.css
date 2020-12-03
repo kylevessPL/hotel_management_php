@@ -1,3 +1,9 @@
+.btn:focus,
+.page-link:focus,
+.custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: none !important;
+}
+
 label.error {
     float: none;
     clear: both;

@@ -64,6 +64,6 @@ function showPeopleOption(bedAmount) {
     if (bedAmount.val() > 1) {
         $('#booking-form-main').after('<div id="booking-form-people" class="pt-2"></div>');
         peopleSection = $(selector);
-        peopleSection.html('<button class="btn btn-success text-right add-person-action" type="button"><i class="las la-plus-circle la-lg mr-2"></i>Add person</button>');
+        peopleSection.html('<button class="btn btn-outline-success text-right add-person-action" type="button"><i class="las la-plus-circle la-lg mr-2"></i>Add person</button>');
     }
 }

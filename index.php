@@ -115,19 +115,19 @@ if(isset($_POST["login-submit"]))
                             <?php echo isset($alertMsg) ? htmlspecialchars($alertMsg) : 'Fill in your data'; ?></p>
                         <form id="form-register" name="form-register" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                             <div class="form-group">
-                                <label for="username">Username</label>
+                                <label for="username">Username<span style="color: red">*</span></label>
                                 <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" autofocus>
                             </div>
                             <div class="form-group">
-                                <label class="col-form-label" for="password">Password</label>
+                                <label class="col-form-label" for="password">Password<span style="color: red">*</span></label>
                                 <input type="password" id="password" name="password" class="form-control" placeholder="Enter password">
                             </div>
                             <div class="form-group">
-                                <label class="col-form-label" for="password2">Repeat password</label>
+                                <label class="col-form-label" for="password2">Repeat password<span style="color: red">*</span></label>
                                 <input type="password" id="password2" name="password2" class="form-control" placeholder="Repeat password">
                             </div>
                             <div class="form-group">
-                                <label class="col-form-label" for="email">E-mail</label>
+                                <label class="col-form-label" for="email">E-mail<span style="color: red">*</span></label>
                                 <input type="text" id="email" name="email" class="form-control" placeholder="Enter email">
                             </div>
                             <div class="text-right mt-3">
@@ -179,10 +179,10 @@ if(isset($_POST["login-submit"]))
                                         <?php echo isset($_COOKIE["login_remember"]) ? 'autofocus' : ''; ?>>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <input type="checkbox" id="remember-me" name="remember-me"
+                            <div class="form-group custom-control custom-checkbox">
+                                <input type="checkbox" id="remember-me" name="remember-me" class="custom-control-input"
                                     <?php echo isset($_COOKIE["login_remember"]) ? 'checked' : 'unchecked'; ?>>
-                                <label for="remember-me">Remember username</label>
+                                <label class="custom-control-label" for="remember-me">Remember username</label>
                             </div>
                             <div class="text-right mt-3">
                                 <a href="?action=register">Register</a>
