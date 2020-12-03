@@ -15,6 +15,12 @@ if (isset($_GET['id'], $_GET['start-date'], $_GET['end-date']))
         $alertMsg = "Room not available within $start_date - $end_date period";
         $alertType = "warning";
     }
+    else
+    {
+        $sql = "SELECT bed_amount FROM rooms where id = '$id'";
+        $result = query($sql);
+        $bed_number = mysqli_fetch_array($result);
+    }
 }
 
 $sql = "SELECT id, street_name, house_number, zip_code, city FROM addresses where id IN (SELECT address_id FROM customers_addresses where customer_id = '$customerId') ORDER BY 1";
@@ -22,6 +28,9 @@ $address_result = query($sql);
 
 $sql = "SELECT DISTINCT bed_amount FROM rooms ORDER BY 1";
 $beds_result = query($sql);
+
+$sql = "SELECT id, name FROM additional_services ORDER BY 1";
+$services_result = query($sql);
 
 ?>
 
@@ -58,30 +67,47 @@ $beds_result = query($sql);
                                 <div class="form-group row">
                                     <div class="col-sm-6">
                                         <label class="control-label" for="startDate">Start date<span style="color: red">*</span></label>
-                                        <input class="form-control" id="startDate" type="text" name="startDate" placeholder="dd/MM/yyyy" autofocus>
+                                        <input class="form-control" id="startDate" type="text" name="startDate" value="<?php if(isset($bed_number)) { echo htmlspecialchars($start_date); } ?>" placeholder="dd/MM/yyyy">
                                     </div>
                                     <div class="col-sm-6">
                                         <label class="control-label" for="endDate">End date<span style="color: red">*</span></label>
-                                        <input class="form-control" id="endDate" type="text" name="endDate" placeholder="dd/MM/yyyy">
+                                        <input class="form-control" id="endDate" type="text" name="endDate" value="<?php if(isset($bed_number)) { echo htmlspecialchars($end_date); } ?>" placeholder="dd/MM/yyyy">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6">
                                         <label class="form-label" for="myAddress">My address<span style="color: red">*</span></label>
-                                        <select class="form-control" name="myAddress" id="myAddress" class="form-control">
-                                            <option value="">None selected</option>
-                                            <?php while($row = mysqli_fetch_array($address_result)) { echo '
-                                            <option value="'.htmlspecialchars($row[0]).'">'.htmlspecialchars($row[1]).' '.htmlspecialchars($row[2]).', '.htmlspecialchars($row[3]).' '.htmlspecialchars($row[4]).'</option>';
-                                            } ?>
+                                        <select class="form-control" name="myAddress" id="myAddress">
+                                            <?php if (mysqli_num_rows($address_result) == 0) { echo "<option value=''>You don't have any addresses</option>"; }
+                                            $count = 0; while($row = mysqli_fetch_array($address_result)) { echo '
+                                            <option value="'.htmlspecialchars($row[0]).'"'; if ($count == 0) { echo ' selected'; } echo '>'.htmlspecialchars($row[1]).' '.htmlspecialchars($row[2]).', '.htmlspecialchars($row[3]).' '.htmlspecialchars($row[4]).'</option>';
+                                            $count++; } ?>
 
                                         </select>
                                     </div>
                                     <div class="col-sm-6">
                                         <label class="form-label" for="bedAmount">Bed amount<span style="color: red">*</span></label>
-                                        <select class="form-control" name="bedAmount" id="bedAmount" class="form-control">
+                                        <select class="form-control" name="bedAmount" id="bedAmount">
                                             <option value="">None selected</option>
                                             <?php while($row = mysqli_fetch_array($beds_result)) { echo '
-                                            <option value="'.htmlspecialchars($row[0]).'">'.htmlspecialchars($row[0]).'</option>';
+                                            <option value="'.htmlspecialchars($row[0]).'"'; if (($bed_number[0] ?? null) == $row[0]) { echo ' selected'; } echo '>'.htmlspecialchars($row[0]).'</option>';
+                                            } ?>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label class="form-label" for="room">Room<span style="color: red">*</span></label>
+                                        <select class="form-control overflow-auto" name="room" id="room" style="max-height: 50px;">
+                                            <option value="">Choose dates and bed amount first</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="form-label" for="services">Additional services</label>
+                                        <select class="form-control" name="services" id="services" multiple="multiple">
+                                            <?php while($row = mysqli_fetch_array($services_result)) { echo '
+                                            <option value="'.htmlspecialchars($row[0]).'">'.htmlspecialchars($row[1]).'</option>';
                                             } ?>
 
                                         </select>
@@ -107,6 +133,17 @@ $beds_result = query($sql);
 <script src="https://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.min.js"></script>
 <script src="/assets/js/form-validation.js"></script>
 <script src="/assets/js/book-room.js"></script>
+
+<?php if(isset($bed_number[0])) { ?>
+<script>
+    fetchRooms();
+    function setChoice() {
+        if ($('#bedAmount').val() === '<?php echo htmlspecialchars($bed_number[0]); ?>') {
+            $('#room option[value="<?php echo htmlspecialchars($id); ?>"]').attr('selected', 'selected');
+        }
+    }
+</script>
+<?php } ?>
 
 </body>
 </html>

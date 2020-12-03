@@ -6,8 +6,8 @@ $.validator.addMethod("futuredate", function (value, element) {
     const myDate = new Date(moment(value, 'DD/MM/YYYY').format());
     return this.optional(element) || myDate > now;
 });
-$.validator.addMethod("afterstartdate", function (value, element) {
-    const startDate = new Date(moment($('#filter-start-date').val(), 'DD/MM/YYYY').format());
+$.validator.addMethod("afterstartdate", function (value, element, date) {
+    const startDate = new Date(moment(date, 'DD/MM/YYYY').format());
     const endDate = new Date(moment(value, 'DD/MM/YYYY').format());
     return this.optional(element) || startDate < endDate || value === "";
 });
@@ -203,6 +203,55 @@ $(function() {
     });
 });
 $(function() {
+    $("form[name='booking-form']").validate({
+        rules: {
+            startDate: {
+                required: true,
+                futuredate: true
+            },
+            endDate: {
+                required: true,
+                futuredate: true,
+                afterstartdate: function () {
+                    return $('#startDate').val();
+                },
+            },
+            myAddress: {
+                required: true
+            },
+            bedAmount: {
+                required: true
+            },
+            room: {
+                required: true
+            }
+        },
+        messages: {
+            startDate: {
+                required: "Start date is mandatory",
+                futuredate: "Start date must be in the future"
+            },
+            endDate: {
+                required: "End date is mandatory",
+                futuredate: "End date must be in the future",
+                afterstartdate: "End date cannot be before start date"
+            },
+            myAddress: {
+                required: "Address is mandatory"
+            },
+            bedAmount: {
+                required: "Bed amount is mandatory"
+            },
+            room: {
+                required: "Room is mandatory"
+            }
+        },
+        submitHandler : function(form) {
+            form.submit();
+        }
+    });
+});
+$(function() {
     $("form[name='rooms-search-form']").validate({
         rules: {
             'filter-start-date': {
@@ -212,7 +261,9 @@ $(function() {
             'filter-end-date': {
                 required: true,
                 futuredate: true,
-                afterstartdate: true
+                afterstartdate: function () {
+                    return $('#filter-start-date').val();
+                },
             }
         },
         messages: {

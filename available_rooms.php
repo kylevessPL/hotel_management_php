@@ -46,7 +46,7 @@ $amenities_result = query($sql);
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="filter-bed-amount">Bed amount (optional)</label>
-                                    <select class="form-control" name="filter-bed-amount" id="filter-bed-amount" class="form-control">
+                                    <select class="form-control" name="filter-bed-amount" id="filter-bed-amount">
                                         <option value="">None selected</option>
                                         <?php while($row = mysqli_fetch_array($beds_result)) { echo '
                                             <option value="'.htmlspecialchars($row[0]).'">'.htmlspecialchars($row[0]).'</option>';
@@ -56,7 +56,7 @@ $amenities_result = query($sql);
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="filter-amenities">Amenities (optional)</label>
-                                    <select class="form-control" name="filter-amenities" id="filter-amenities" class="form-control" multiple="multiple">
+                                    <select class="form-control" name="filter-amenities" id="filter-amenities" multiple="multiple">
                                         <?php while($row = mysqli_fetch_array($amenities_result)) { echo '
                                             <option value="'.htmlspecialchars($row[0]).'">'.htmlspecialchars($row[1]).'</option>';
                                         } ?>
