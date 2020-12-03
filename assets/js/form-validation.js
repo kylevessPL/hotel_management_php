@@ -9,7 +9,7 @@ $.validator.addMethod("futuredate", function (value, element) {
 $.validator.addMethod("afterstartdate", function (value, element, date) {
     const startDate = new Date(moment(date, 'DD/MM/YYYY').format());
     const endDate = new Date(moment(value, 'DD/MM/YYYY').format());
-    return this.optional(element) || startDate < endDate || value === "";
+    return this.optional(element) || startDate < endDate || value === "" || date === "";
 });
 $(function() {
     $("form[name='form-register']").validate({
