@@ -203,7 +203,8 @@ $(function() {
     });
 });
 $(function() {
-    $("form[name='booking-form']").validate({
+    const validator = $("form[name='booking-form']").validate({
+        ignore: ':hidden:not(.selectpicker)',
         rules: {
             startDate: {
                 required: true,
@@ -246,9 +247,29 @@ $(function() {
                 required: "Room is mandatory"
             }
         },
+        focusInvalid: false,
+        invalidHandler: () => $(this).find(":input.error:first").focus(),
+        highlight: function (element) {
+            $(element).siblings('.dropdown-toggle').removeClass('valid').addClass('error');
+            $(element).closest('input').removeClass('valid').addClass('error');
+        },
+        unhighlight: function (element) {
+            $(element).siblings('.dropdown-toggle').removeClass('error').addClass('valid');
+            $(element).closest('input').removeClass('error').addClass('valid');
+        },
+        errorPlacement: function (error, element) {
+            if (element.hasClass('selectpicker')) {
+                error.insertAfter(element.siblings(".dropdown-toggle"));
+            } else {
+                error.insertAfter(element);
+            }
+        },
         submitHandler : function(form) {
             form.submit();
         }
+    });
+    $('select').on('change', function() {
+        validator.element($(this));
     });
 });
 $(function() {
