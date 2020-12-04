@@ -25,7 +25,7 @@ $(document).ready(function () {
         if (startDate.val() !== '' && startDate.valid() === true && endDate.val() !== '' && endDate.valid() === true && bedAmount.val() !== '' && bedAmount.valid() === true) {
             fetchRooms(startDate, endDate, bedAmount);
         } else {
-            $('#room').html('<option value="">Choose dates and bed amount first</option>');
+            $('#room').html('<option value="">Choose dates and bed amount first</option>').selectpicker('refresh').selectpicker('val', '');
             $('#booking-form-people').remove();
         }
     });
