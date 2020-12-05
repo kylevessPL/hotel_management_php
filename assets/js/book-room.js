@@ -67,18 +67,12 @@ function showPeopleOption(bedAmount) {
         peopleSection.html('<button class="btn btn-outline-success text-right add-person-action" type="button"><i class="las la-plus-circle la-lg mr-2"></i>Add person</button>');
         peopleSection.on('click', '.removePerson', function () {
             const selector = '.booking-person';
+            $(this).closest(selector).find('.first-name').rules("remove");
+            $(this).closest(selector).find('.last-name').rules("remove");
+            $(this).closest(selector).find('.document-id').rules("remove");
             $(this).closest(selector).remove();
             $(selector).each(function(index, currentElement) {
-                const count = index + 1;
-                $(currentElement).find('legend').html('Person ' + count);
-                $(currentElement).find('.label-first-name').attr("for", "first-name-" + count);
-                $(currentElement).find('.label-last-name').attr("for", "last-name-" + count);
-                $(currentElement).find('.label-document-type').attr("for", "document-type-" + count);
-                $(currentElement).find('.label-document-id').attr("for", "document-id-" + count);
-                $(currentElement).find('.first-name').attr("id", "first-name-" + count).attr("name", "first-name-" + count);
-                $(currentElement).find('.last-name').attr("id", "last-name-" + count).attr("name", "last-name-" + count);
-                $(currentElement).find('.document-type').attr("id", "document-type-" + count).attr("name", "document-type-" + count);
-                $(currentElement).find('.document-id').attr("id", "document-id-" + count).attr("name", "document-id-" + count);
+                $(currentElement).find('legend').html('Person ' + (index + 1));
             });
             if ($('.booking-person').length < bedAmount.val() - 1) {
                 $('.add-person-action').show();
@@ -93,6 +87,7 @@ function showPeopleOption(bedAmount) {
                     $('.add-person-action').hide();
                 }
                 const count = bookingPerson.length + 1;
+                const id = Date.now();
                 $('#booking-form-people').append(`
                     <div class="booking-person mt-2">
                         <fieldset class="border p-3 position-relative">
@@ -100,25 +95,25 @@ function showPeopleOption(bedAmount) {
                             <button class="badge badge-danger removePerson position-absolute" type="button" style="top: 0.4em; right: 20px; line-height: 1.2em;"><i class="las la-times mr-1"></i>Remove</button>
                             <div class="form-group row">
                                 <div class="col-sm-6">
-                                    <label class="control-label label-first-name" for="first-name-` + count + `">First name<span style="color: red">*</span></label>
-                                    <input class="form-control first-name" id="first-name-` + count + `" name="first-name-` + count + `" type="text" placeholder="Enter first name">
+                                    <label class="control-label label-first-name" for="first-name-` + id + `">First name<span style="color: red">*</span></label>
+                                    <input class="form-control first-name" id="first-name-` + id + `" name="first-name-` + id + `" type="text" placeholder="Enter first name">
                                 </div>
                                 <div class="col-sm-6">
-                                    <label class="control-label label-last-name" for="last-name-` + count + `">Last name<span style="color: red">*</span></label>
-                                    <input class="form-control last-name" id="last-name-` + count + `" name="last-name-` + count + `" type="text" placeholder="Enter last name">
+                                    <label class="control-label label-last-name" for="last-name-` + id + `">Last name<span style="color: red">*</span></label>
+                                    <input class="form-control last-name" id="last-name-` + id + `" name="last-name-` + id + `" type="text" placeholder="Enter last name">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-6">
-                                    <label class="control-label label-document-type" for="document-type-` + count + `">Document type<span style="color: red">*</span></label>
-                                    <select id="document-type-` + count + `" name="document-type-` + count + `" class="selectpicker form-control document-type">
+                                    <label class="control-label label-document-type" for="document-type-` + id + `">Document type<span style="color: red">*</span></label>
+                                    <select id="document-type-` + id + `" name="document-type-` + id + `" class="selectpicker form-control document-type">
                                         <option value="ID card">ID card</option>
                                         <option value="Passport">Passport</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-6">
-                                    <label class="control-label label-document-id" for="document-id-` + count + `">Document ID<span style="color: red">*</span></label>
-                                    <input class="form-control document-id" id="document-id-` + count + `" name="document-id-` + count + `" type="text" placeholder="Enter document ID">
+                                    <label class="control-label label-document-id" for="document-id-` + id + `">Document ID<span style="color: red">*</span></label>
+                                    <input class="form-control document-id" id="document-id-` + id + `" name="document-id-` + id + `" type="text" placeholder="Enter document ID">
                                 </div>
                             </div>
                         </fieldset>
@@ -127,6 +122,38 @@ function showPeopleOption(bedAmount) {
                 documentType.selectpicker('refresh');
                 documentType.selectpicker('setStyle', 'btn', 'remove');
                 documentType.selectpicker('setStyle', 'form-control');
+                $('.first-name').last().rules( "add", {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 30,
+                    messages: {
+                        required: "First name is mandatory",
+                        minlength: "First name must be at least 8 characters long",
+                        maxlength: "First name must be maximum 30 characters long"
+                    }
+                });
+                $('.last-name').last().rules( "add", {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 30,
+                    messages: {
+                        required: "Last name is mandatory",
+                        minlength: "Last name must be at least 8 characters long",
+                        maxlength: "Last name must be maximum 30 characters long"
+                    }
+                });
+                $('.document-id').last().rules( "add", {
+                    required: true,
+                    minlength: 7,
+                    maxlength: 14,
+                    regex: /^[A-Z0-9 -]*$/,
+                    messages: {
+                        required: "Document ID is mandatory",
+                        minlength: "Document ID must be at least 7 characters long",
+                        maxlength: "Document ID must be maximum 14 characters long",
+                        regex: "Document ID must contain only capital letters, digits or - character"
+                    }
+                });
             }
         });
     }
