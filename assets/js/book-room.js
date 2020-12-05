@@ -81,24 +81,24 @@ function showPeopleOption(bedAmount) {
                             <button class="badge badge-danger removePerson position-absolute" type="button" style="top: 0.4em; right: 20px; line-height: 1.2em;"><i class="las la-times mr-1"></i>Remove</button>
                             <div class="form-group row">
                                 <div class="col-sm-6">
-                                    <label class="control-label" for="first-name-'+count+'">First name<span style="color: red">*</span></label>
+                                    <label class="control-label" for="first-name-` + count + `">First name<span style="color: red">*</span></label>
                                     <input class="form-control first-name" id="first-name-` + count + `" type="text" placeholder="Enter first name">
                                 </div>
                                 <div class="col-sm-6">
-                                    <label class="control-label" for="last-name-'+count+'">Last name<span style="color: red">*</span></label>
+                                    <label class="control-label" for="last-name-` + count + `">Last name<span style="color: red">*</span></label>
                                     <input class="form-control last-name" id="last-name-` + count + `" type="text" placeholder="Enter last name">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-6">
-                                    <label class="control-label" for="document-type-'+count+'">Document type<span style="color: red">*</span></label>
+                                    <label class="control-label" for="document-type-` + count + `">Document type<span style="color: red">*</span></label>
                                     <select id="document-type-` + count + `" class="selectpicker form-control document-type">
                                         <option value="ID card">ID card</option>
                                         <option value="Passport">Passport</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-6">
-                                    <label class="control-label" for="document-id-'+count+'">Document ID<span style="color: red">*</span></label>
+                                    <label class="control-label" for="document-id-` + count + `">Document ID<span style="color: red">*</span></label>
                                     <input class="form-control document-id" id="last-name-` + count + `" type="text" placeholder="Enter document ID">
                                 </div>
                             </div>
