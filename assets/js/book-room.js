@@ -65,17 +65,26 @@ function showPeopleOption(bedAmount) {
         $('#booking-form-main').after('<div id="booking-form-people" class="pt-2 pb-3"></div>');
         peopleSection = $(selector);
         peopleSection.html('<button class="btn btn-outline-success text-right add-person-action" type="button"><i class="las la-plus-circle la-lg mr-2"></i>Add person</button>');
-        const addPerson = $('.add-person-action');
         peopleSection.on('click', '.removePerson', function () {
             const selector = '.booking-person';
             $(this).closest(selector).remove();
             $(selector).each(function(index, currentElement) {
-                $(currentElement).find('legend').html('Person ' + (index + 1));
+                const count = index + 1;
+                $(currentElement).find('legend').html('Person ' + count);
+                $(currentElement).find('.label-first-name').attr("for", "first-name-" + count);
+                $(currentElement).find('.label-last-name').attr("for", "last-name-" + count);
+                $(currentElement).find('.label-document-type').attr("for", "document-type-" + count);
+                $(currentElement).find('.label-document-id').attr("for", "document-id-" + count);
+                $(currentElement).find('.first-name').attr("id", "first-name-" + count).attr("name", "first-name-" + count);
+                $(currentElement).find('.last-name').attr("id", "last-name-" + count).attr("name", "last-name-" + count);
+                $(currentElement).find('.document-type').attr("id", "document-type-" + count).attr("name", "document-type-" + count);
+                $(currentElement).find('.document-id').attr("id", "document-id-" + count).attr("name", "document-id-" + count);
             });
             if ($('.booking-person').length < bedAmount.val() - 1) {
                 $('.add-person-action').show();
             }
         });
+        const addPerson = $('.add-person-action');
         addPerson.on('click', function() {
             const bookingPerson = $('.booking-person');
             const bedAmount = $('#bedAmount');
@@ -91,25 +100,25 @@ function showPeopleOption(bedAmount) {
                             <button class="badge badge-danger removePerson position-absolute" type="button" style="top: 0.4em; right: 20px; line-height: 1.2em;"><i class="las la-times mr-1"></i>Remove</button>
                             <div class="form-group row">
                                 <div class="col-sm-6">
-                                    <label class="control-label" for="first-name-` + count + `">First name<span style="color: red">*</span></label>
-                                    <input class="form-control first-name" id="first-name-` + count + `" type="text" placeholder="Enter first name">
+                                    <label class="control-label label-first-name" for="first-name-` + count + `">First name<span style="color: red">*</span></label>
+                                    <input class="form-control first-name" id="first-name-` + count + `" name="first-name-` + count + `" type="text" placeholder="Enter first name">
                                 </div>
                                 <div class="col-sm-6">
-                                    <label class="control-label" for="last-name-` + count + `">Last name<span style="color: red">*</span></label>
-                                    <input class="form-control last-name" id="last-name-` + count + `" type="text" placeholder="Enter last name">
+                                    <label class="control-label label-last-name" for="last-name-` + count + `">Last name<span style="color: red">*</span></label>
+                                    <input class="form-control last-name" id="last-name-` + count + `" name="last-name-` + count + `" type="text" placeholder="Enter last name">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-6">
-                                    <label class="control-label" for="document-type-` + count + `">Document type<span style="color: red">*</span></label>
-                                    <select id="document-type-` + count + `" class="selectpicker form-control document-type">
+                                    <label class="control-label label-document-type" for="document-type-` + count + `">Document type<span style="color: red">*</span></label>
+                                    <select id="document-type-` + count + `" name="document-type-` + count + `" class="selectpicker form-control document-type">
                                         <option value="ID card">ID card</option>
                                         <option value="Passport">Passport</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-6">
-                                    <label class="control-label" for="document-id-` + count + `">Document ID<span style="color: red">*</span></label>
-                                    <input class="form-control document-id" id="last-name-` + count + `" type="text" placeholder="Enter document ID">
+                                    <label class="control-label label-document-id" for="document-id-` + count + `">Document ID<span style="color: red">*</span></label>
+                                    <input class="form-control document-id" id="document-id-` + count + `" name="document-id-` + count + `" type="text" placeholder="Enter document ID">
                                 </div>
                             </div>
                         </fieldset>

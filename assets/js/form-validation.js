@@ -1,3 +1,36 @@
+const firstNameRule = {
+    required: true,
+    minlength: 2,
+    maxlength: 30
+};
+const lastNameRule = {
+    required: true,
+    minlength: 2,
+    maxlength: 30
+};
+const documentIdRule = {
+    required: true,
+    minlength: 7,
+    maxlength: 14,
+    regex: /^[A-Z0-9 -]*$/
+};
+const firstNameMsg = {
+    required: "First name is mandatory",
+    minlength: "First name must be at least 8 characters long",
+    maxlength: "First name must be maximum 30 characters long"
+};
+const lastNameMsg = {
+    required: "Last name is mandatory",
+    minlength: "Last name must be at least 8 characters long",
+    maxlength: "Last name must be maximum 30 characters long"
+};
+const documentIdMsg = {
+    required: "Document ID is mandatory",
+    minlength: "Document ID must be at least 7 characters long",
+    maxlength: "Document ID must be maximum 14 characters long",
+    regex: "Document ID must contain only capital letters, digits or - character",
+};
+
 $.validator.addMethod("regex", function(value, element, regexp) {
     return this.optional(element) || regexp.test(value);
 });
@@ -109,40 +142,14 @@ $(function() {
 $(function() {
     $("form[name='form-customer-details']").validate({
         rules: {
-            'first-name': {
-                required: true,
-                minlength: 2,
-                maxlength: 30
-            },
-            'last-name': {
-                required: true,
-                minlength: 2,
-                maxlength: 30
-            },
-            'document-id': {
-                required: true,
-                minlength: 7,
-                maxlength: 14,
-                regex: /^[A-Z0-9 -]*$/
-            }
+            'first-name': firstNameRule,
+            'last-name': lastNameRule,
+            'document-id': documentIdRule
         },
         messages: {
-            'first-name': {
-                required: "First name is mandatory",
-                minlength: "First name must be at least 8 characters long",
-                maxlength: "First name must be maximum 30 characters long"
-            },
-            'last-name': {
-                required: "Last name is mandatory",
-                minlength: "Last name must be at least 8 characters long",
-                maxlength: "Last name must be maximum 30 characters long"
-            },
-            'document-id': {
-                required: "Document ID is mandatory",
-                minlength: "Document ID must be at least 7 characters long",
-                maxlength: "Document ID must be maximum 14 characters long",
-                regex: "Document ID must contain only capital letters, digits or - character",
-            }
+            'first-name': firstNameMsg,
+            'last-name': lastNameMsg,
+            'document-id': documentIdMsg
         },
         submitHandler : function(form) {
             form.submit();
@@ -225,7 +232,16 @@ $(function() {
             },
             room: {
                 required: true
-            }
+            },
+            'first-name-1': firstNameRule,
+            'first-name-2': firstNameRule,
+            'first-name-3': firstNameRule,
+            'last-name-1': lastNameRule,
+            'last-name-2': lastNameRule,
+            'last-name-3': lastNameRule,
+            'document-id-1': documentIdRule,
+            'document-id-2': documentIdRule,
+            'document-id-3': documentIdRule
         },
         messages: {
             startDate: {
@@ -245,7 +261,16 @@ $(function() {
             },
             room: {
                 required: "Room is mandatory"
-            }
+            },
+            'first-name-1': firstNameMsg,
+            'first-name-2': firstNameMsg,
+            'first-name-3': firstNameMsg,
+            'last-name-1': lastNameMsg,
+            'last-name-2': lastNameMsg,
+            'last-name-3': lastNameMsg,
+            'document-id-1': documentIdMsg,
+            'document-id-2': documentIdMsg,
+            'document-id-3': documentIdMsg
         },
         focusInvalid: false,
         invalidHandler: () => $(this).find(":input.error:first").focus(),
