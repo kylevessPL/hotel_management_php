@@ -65,19 +65,20 @@ function showPeopleOption(bedAmount) {
         $('#booking-form-main').after('<div id="booking-form-people" class="pt-2 pb-3"></div>');
         peopleSection = $(selector);
         peopleSection.html('<button class="btn btn-outline-success text-right add-person-action" type="button"><i class="las la-plus-circle la-lg mr-2"></i>Add person</button>');
-        $('.add-person-action').on('click', function () {
+        const addPerson = $('.add-person-action');
+        addPerson.on('click', function () {
             const bookingPerson = $('.booking-person');
             const bedAmount = $('#bedAmount');
             if (bookingPerson.length < bedAmount.val() - 1) {
                 if (bookingPerson.length === bedAmount.val() - 2) {
-                    $('.add-person-action').remove();
+                    $('.add-person-action').hide();
                 }
                 const count = bookingPerson.length + 1;
                 $('#booking-form-people').append(`
                     <div class="booking-person mt-2">
                         <fieldset class="border p-3 position-relative">
                             <legend class="w-auto pb-1" style="font-size: 20px;">Person ` + count + `</legend>
-                            <button class="badge badge-danger position-absolute" type="button" style="top: 0.2em; right: 20px; line-height: 1.2em;">Remove</button>
+                            <button class="badge badge-danger removePerson position-absolute" type="button" style="top: 0.4em; right: 20px; line-height: 1.2em;"><i class="las la-times mr-1"></i>Remove</button>
                             <div class="form-group row">
                                 <div class="col-sm-6">
                                     <label class="control-label" for="first-name-'+count+'">First name<span style="color: red">*</span></label>
@@ -107,6 +108,12 @@ function showPeopleOption(bedAmount) {
                 documentType.selectpicker('refresh');
                 documentType.selectpicker('setStyle', 'btn', 'remove');
                 documentType.selectpicker('setStyle', 'form-control');
+                $('.removePerson').on('click', function () {
+                    $(this).closest('.booking-person').remove();
+                    if ($('.booking-person').length < bedAmount.val() - 1) {
+                        $('.add-person-action').show();
+                    }
+                });
             }
         });
     }
