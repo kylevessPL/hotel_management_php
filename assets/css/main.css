@@ -13,7 +13,7 @@ label.error {
     margin-left: 5px;
 }
 
-input.error {
+input.error, .dropdown-toggle.error {
     border: 2px solid red;
     color: red;
 }

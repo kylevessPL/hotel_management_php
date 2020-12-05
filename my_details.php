@@ -119,8 +119,8 @@ if (isset($_POST["customer-details-submit"]))
                                         </div>
                                         <div class="form-group row">
                                             <label for="document-type" class="col-4 col-form-label">Document type<span style="color: red">*</span></label>
-                                            <div class="col-8">
-                                                <select id="document-type" name="document-type" class="custom-select">
+                                            <div class="col-4">
+                                                <select id="document-type" name="document-type" class="selectpicker form-control">
                                                     <option value="ID card"
                                                         <?php if ((isset($_POST["customer-details-submit"]) && $_POST['document-type'] == 'ID card') || (isset($customerData) && $customerData['document_type'] == 'ID card'))
                                                         {
@@ -166,8 +166,10 @@ if (isset($_POST["customer-details-submit"]))
 <?php view('footer.php'); ?>
 
 <?php view('scripts.php'); ?>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
 <script src="../assets/js/form-validation.js"></script>
+<script src="/assets/js/my-details.js"></script>
 
 </body>
 </html>

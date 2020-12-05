@@ -269,7 +269,9 @@ $(function() {
         }
     });
     $('select').on('change', function() {
-        validator.element($(this));
+        if (typeof validator !== 'undefined') {
+            validator.element($(this));
+        }
     });
 });
 $(function() {

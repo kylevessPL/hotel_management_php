@@ -63,7 +63,7 @@ $services_result = query($sql);
                         {?>
                             <p class="alert alert-<?php echo isset($alertType) ? htmlspecialchars($alertType) : 'info'; ?>">
                                 <?php echo isset($alertMsg) ? htmlspecialchars($alertMsg) : 'You can check available room list <a href="/dashboard/available-rooms">here</a>'; ?></p>
-                            <form method="post" id="booking-form" name="booking-form" action="/dashboard/book-room">
+                            <form id="booking-form" name="booking-form">
                                 <div id="booking-form-main">
                                     <div class="form-group row">
                                         <div class="col-sm-6">
@@ -155,6 +155,12 @@ $services_result = query($sql);
     }
 </script>
 <?php } ?>
+
+<script>
+    function getCustomerId() {
+        return '<?php echo htmlspecialchars($customerId); ?>';
+    }
+</script>
 
 </body>
 </html>
