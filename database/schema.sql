@@ -43,6 +43,15 @@ CREATE TABLE `bookings_services` (
 
 
 
+CREATE TABLE `discounts` (
+    `id` int(11) AUTO_INCREMENT,
+    `code` varchar(15) NOT NULL,
+    `discount` int(11) NOT NULL DEFAULT 0,
+    CONSTRAINT `discounts_pk` PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+
+
 CREATE TABLE `customers` (
 	`id` int(11) AUTO_INCREMENT,
 	`first_name` varchar(30) NOT NULL,
@@ -112,16 +121,6 @@ CREATE TABLE `rooms` (
 
 
 
-CREATE TABLE `special_offers` (
-	`id` int(11) AUTO_INCREMENT,
-	`discount` int(11) NOT NULL DEFAULT 0,
-	`bookings_amount` int(11) NOT NULL DEFAULT 0,
-	`description` varchar(100),
-	CONSTRAINT `special_offers_pk` PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
-
-
 CREATE TABLE `customers_bookings` (
 	`id` int(11) AUTO_INCREMENT,
 	`customer_id` int(11) NOT NULL,
@@ -158,7 +157,7 @@ ALTER TABLE `bookings_services` ADD CONSTRAINT `bookings_services_fk1` FOREIGN K
 
 ALTER TABLE `payments` ADD CONSTRAINT `payments_fk0` FOREIGN KEY (`payment_form_id`) REFERENCES `payment_forms`(`id`);
 
-ALTER TABLE `bookings` ADD CONSTRAINT `bookings_fk0` FOREIGN KEY (`offer_id`) REFERENCES `special_offers`(`id`);
+ALTER TABLE `bookings` ADD CONSTRAINT `bookings_fk0` FOREIGN KEY (`offer_id`) REFERENCES `discounts`(`id`);
 
 ALTER TABLE `customers_bookings` ADD CONSTRAINT `customers_bookings_fk0` FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`);
 

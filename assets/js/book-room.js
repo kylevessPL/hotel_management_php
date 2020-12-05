@@ -29,6 +29,16 @@ $(document).ready(function () {
             $('#booking-form-people').remove();
         }
     });
+    $('#promo-code').on('keydown', function() {
+        $(this).closest(".error").removeClass("error");
+        $(this).parent().siblings('label').remove();
+    });
+    $('.redeemCode').on('click', function() {
+        $('#redeem-code-form').valid();
+    });
+    $('.bookingSubmit').on('click', function() {
+        $('#booking-form').valid();
+    });
 });
 
 function fetchRooms(startDate, endDate, bedAmount) {

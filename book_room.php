@@ -47,7 +47,7 @@ $services_result = query($sql);
         <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4">
             <?php view('breadcrumb.php'); ?>
             <p>Please fill in the form to book a room for the period you would like to stay</p>
-            <div class="row mb-4">
+            <div class="row mb-4 d-flex justify-content-between">
                 <div class="col-10 col-xl-7 mb-lg-0">
                     <div class="card">
                         <div class="card-header">
@@ -115,14 +115,63 @@ $services_result = query($sql);
                                         </div>
                                     </div>
                                 </div>
-                                <input class="btn btn-primary text-right float-right" name="booking-submit" value="Submit" type="submit">
                             </form>
                             <?php } ?>
 
                         </div>
                     </div>
                 </div>
-                <?php view('chat.php'); ?>
+                <div class="col-10 col-xl-4 mb-lg-0">
+                    <div style="padding: 0.75rem 0;">
+                        <h4 class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">Summary</span>
+                            <span class="badge badge-secondary badge-pill">0</span>
+                        </h4>
+                    </div>
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <h6 class="my-0">Product name</h6>
+                                <small class="text-muted">Brief description</small>
+                            </div>
+                            <span class="text-muted">$12</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <h6 class="my-0">Second product</h6>
+                                <small class="text-muted">Brief description</small>
+                            </div>
+                            <span class="text-muted">$8</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <h6 class="my-0">Third item</h6>
+                                <small class="text-muted">Brief description</small>
+                            </div>
+                            <span class="text-muted">$5</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between bg-light">
+                            <div class="text-success">
+                                <h6 class="my-0">Promo code</h6>
+                                <small>EXAMPLECODE</small>
+                            </div>
+                            <span class="text-success">-$5</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Total (USD)</span>
+                            <strong>$20</strong>
+                        </li>
+                    </ul>
+                    <div class="card p-2 mb-3">
+                        <form id="redeem-code-form" name="redeem-code-form">
+                            <div class="d-inline-flex w-100 redeem-code">
+                                <input type="text" class="form-control mr-2" id="promo-code" name="promo-code" placeholder="Promo code">
+                                <button type="button" class="btn btn-secondary redeemCode">Redeem</button>
+                            </div>
+                        </form>
+                    </div>
+                    <button class="btn btn-success btn-lg btn-block bookingSubmit" name="booking-submit" type="button">Book</button>
+                </div>
             </div>
         </main>
     </div>

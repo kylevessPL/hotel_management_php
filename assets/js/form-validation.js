@@ -275,6 +275,36 @@ $(function() {
     });
 });
 $(function() {
+    $("form[name='redeem-code-form']").validate({
+        onfocusout: false,
+        onkeyup: false,
+        onclick: false,
+        invalidHandler: function(form, validator) {
+            if (validator.numberOfInvalids()) {
+                validator.errorList[0].element.focus();
+            }
+        },
+        rules: {
+            'promo-code': {
+                required: true,
+                remote: '../process/check_promo_code_availability.php'
+            }
+        },
+        messages: {
+            'promo-code': {
+                required: "Promo code not supplied",
+                remote: "Promo code expired or doesn't exist"
+            }
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element.parent('.redeem-code'));
+        },
+        submitHandler : function(form) {
+            form.submit();
+        }
+    });
+});
+$(function() {
     $("form[name='rooms-search-form']").validate({
         rules: {
             'filter-start-date': {
