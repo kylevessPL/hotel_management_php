@@ -66,7 +66,17 @@ function showPeopleOption(bedAmount) {
         peopleSection = $(selector);
         peopleSection.html('<button class="btn btn-outline-success text-right add-person-action" type="button"><i class="las la-plus-circle la-lg mr-2"></i>Add person</button>');
         const addPerson = $('.add-person-action');
-        addPerson.on('click', function () {
+        peopleSection.on('click', '.removePerson', function () {
+            const selector = '.booking-person';
+            $(this).closest(selector).remove();
+            $(selector).each(function(index, currentElement) {
+                $(currentElement).find('legend').html('Person ' + (index + 1));
+            });
+            if ($('.booking-person').length < bedAmount.val() - 1) {
+                $('.add-person-action').show();
+            }
+        });
+        addPerson.on('click', function() {
             const bookingPerson = $('.booking-person');
             const bedAmount = $('#bedAmount');
             if (bookingPerson.length < bedAmount.val() - 1) {
@@ -108,12 +118,6 @@ function showPeopleOption(bedAmount) {
                 documentType.selectpicker('refresh');
                 documentType.selectpicker('setStyle', 'btn', 'remove');
                 documentType.selectpicker('setStyle', 'form-control');
-                $('.removePerson').on('click', function () {
-                    $(this).closest('.booking-person').remove();
-                    if ($('.booking-person').length < bedAmount.val() - 1) {
-                        $('.add-person-action').show();
-                    }
-                });
             }
         });
     }
