@@ -4,6 +4,13 @@ include 'process/get_customer_id.php';
 
 get_customer_id($alertMsg, $alertType, $customerId);
 
+if (isset($_COOKIE['promo_code'])) {
+    $result = file_get_contents("http://" . $_SERVER['SERVER_NAME'] . "/process/check_promo_code_availability.php?promo-code=" . escape_string($_COOKIE['promo_code']));
+    if ($result == true) {
+        $promo_code = escape_string($_COOKIE['promo_code']);
+    }
+}
+
 if (isset($_GET['id'], $_GET['start-date'], $_GET['end-date']))
 {
     $id = escape_string($_GET['id']);
@@ -126,24 +133,24 @@ $services_result = query($sql);
                         <div style="padding: 0.75rem 0;">
                             <h4 class="d-flex justify-content-between align-items-center">
                                 <span class="text-muted">Summary</span>
-                                <span class="badge badge-secondary badge-pill total-count">0</span>
+                                <span class="badge badge-secondary badge-pill" id="total-count">0</span>
                             </h4>
                         </div>
                         <ul class="list-group mb-3 items">
                             <li class="list-group-item d-flex justify-content-between total">
                                 <span>Total</span>
-                                <strong>0 PLN</strong>
+                                <strong id="total">0 PLN</strong>
                             </li>
                         </ul>
                         <div class="card p-2 mb-3">
                             <form id="redeem-code-form" name="redeem-code-form">
                                 <div class="d-inline-flex w-100 redeem-code">
-                                    <input type="text" class="form-control mr-2" id="promo-code" name="promo-code" placeholder="Promo code">
-                                    <button type="button" class="btn btn-secondary redeemCode">Redeem</button>
+                                    <input type="text" class="form-control mr-2" id="promo-code" name="promo-code" value="<?php echo isset($promo_code) ? htmlspecialchars($promo_code) : ''; ?>" placeholder="Promo code">
+                                    <button type="submit" class="btn btn-secondary redeemCode">Redeem</button>
                                 </div>
                             </form>
                         </div>
-                        <button class="btn btn-success btn-lg btn-block bookingSubmit" name="booking-submit" type="button">Book</button>
+                        <button class="btn btn-success btn-lg btn-block bookingSubmit" name="booking-submit" type="submit">Book</button>
                     </div>
                 </div>
             </div>

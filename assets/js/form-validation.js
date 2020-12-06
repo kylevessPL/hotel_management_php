@@ -299,8 +299,9 @@ $(function() {
         errorPlacement: function (error, element) {
             error.insertAfter(element.parent('.redeem-code'));
         },
-        submitHandler : function(form) {
-            form.submit();
+        submitHandler : function() {
+            setDiscountItem();
+            return false;
         }
     });
 });

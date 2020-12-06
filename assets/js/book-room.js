@@ -51,9 +51,6 @@ function setEvents() {
     $('#room').on('change', function() {
         setRoomItem();
     });
-    $('.redeemCode').on('click', function() {
-        $('#redeem-code-form').valid();
-    });
     $('.bookingSubmit').on('click', function() {
         $('#booking-form').valid();
     });
@@ -163,9 +160,8 @@ function showPeopleOption(bedAmount) {
 function setRoomItem() {
     const roomItem = $('.roomItem');
     if (roomItem.length > 0) {
-        const currentRoomPrice = $('.roomItem span').html();
         roomItem.remove();
-        updateTotal(currentRoomPrice.substring(0, currentRoomPrice.indexOf(' PLN')), '-');
+        updateTotal();
     }
     const room = $('#room');
     if (room.val() !== '' && room.valid() === true) {
@@ -181,25 +177,21 @@ function setRoomItem() {
                     amenities.push(val['name']);
                 });
                 const roomItemObject = getRoomItemObject('Room ' + selectedRoom.substring(13, 16), $('#bedAmount option:selected').text() + ' bed variant, ' + amenities.join(', '), selectedRoom.substring(25, selectedRoom.indexOf(' PLN')))
-                $('.items').prepend('<div class="roomItem">' +roomItemObject+ '</div>')
-                updateTotal(selectedRoom.substring(25, selectedRoom.indexOf(' PLN')), '+');
+                $('.items').prepend(roomItemObject);
+                updateTotal();
             }
         });
     }
 }
 
 function setServiceItem() {
-    const servicesItem = '.servicesItem';
-    if ($(servicesItem).length > 0) {
-        $('.servicesItem .list-group-item').each(function(index, currentElement) {
-            const currentServicePrice = $(currentElement).find('span').html();
-            updateTotal(currentServicePrice.substring(0, currentServicePrice.indexOf(' PLN')), '-');
-        });
-        $(servicesItem).remove();
+    const servicesItem = $('.servicesItem');
+    if (servicesItem.length > 0) {
+        servicesItem.remove();
+        updateTotal();
     }
     const servicesSelected = $('#services option:selected');
     if (servicesSelected.length > 0) {
-        $('.total').before('<div class="servicesItem"></div>');
         servicesSelected.each(function(index, currentElement) {
             $.ajax({
                 url: '../../process/get_service_desc.php',
@@ -208,48 +200,97 @@ function setServiceItem() {
                 dataType: 'JSON',
                 success: function (response) {
                     const serviceItemObject = getServiceItemObject($(currentElement).text(), response[0]['price']);
-                    $(servicesItem).append(serviceItemObject);
-                    updateTotal(response[0]['price'], '+');
+                    const discountItem = '.discountItem';
+                    if ($(discountItem).length > 0) {
+                        $(discountItem).before(serviceItemObject);
+                    } else {
+                        $('.total').before(serviceItemObject);
+                    }
+                    updateTotal();
                 }
             });
         });
     }
 }
 
+function setDiscountItem() {
+    const discountItem = $('.discountItem');
+    if (discountItem.length > 0) {
+        discountItem.remove();
+        updateTotal();
+    }
+    const promoCode = $('#promo-code');
+    if (promoCode.val() !== '' && promoCode.valid() === true) {
+        $.ajax({
+            url: '../../process/get_promo_code_discount.php',
+            type: "GET",
+            data: { 'promo-code': promoCode.val() },
+            dataType: 'JSON',
+            success: function (response) {
+                const discountItemObject = getDiscountItemObject(promoCode.val(), response[0]['discount']);
+                $('.total').before(discountItemObject);
+                $('.discount-price').hide();
+                updateTotal();
+            }
+        });
+    }
+}
+
 function getRoomItemObject(item, desc, price) {
     return `
-        <li class="list-group-item d-flex justify-content-between lh-condensed">
+        <li class="list-group-item d-flex justify-content-between lh-condensed roomItem">
             <div>
                 <h6 class="my-0">` +item+ `</h6>
                 <small class="text-muted">` +desc+ `</small>
             </div>
-            <span class="text-muted">` +price+ ` PLN</span>
+            <span class="text-muted item-price">` +price+ ` PLN</span>
         </li>
     `;
 }
 
 function getServiceItemObject(item, price) {
     return `
-        <li class="list-group-item d-flex justify-content-between lh-condensed">
+        <li class="list-group-item d-flex justify-content-between lh-condensed servicesItem">
             <h6 class="my-0">` +item+ `</h6>
-            <span class="text-muted">` +price+ ` PLN</span>
+            <span class="text-muted item-price">` +price+ ` PLN</span>
         </li>
     `;
 }
 
-function updateTotal(value, op) {
-    const total = $('.total strong');
-    const totalCount = $('.total-count');
-    let currentTotal = total.html();
-    let result;
-    if (op === '+') {
-        result = Number(currentTotal.substring(0, currentTotal.indexOf(' PLN'))) + Number(value);
-        totalCount.html(parseInt(totalCount.html()) + 1);
-    } else {
-        result = Number(currentTotal.substring(0, currentTotal.indexOf(' PLN'))) - Number(value);
-        totalCount.html(parseInt(totalCount.html()) - 1);
+function getDiscountItemObject(code, discount) {
+    return `
+        <li class="list-group-item d-flex justify-content-between bg-light discountItem">
+            <div class="text-success">
+                <h6 class="my-0">Promo code</h6>
+                <small>` +code+ `</small>
+                <small class="d-none discount-value">` +discount+ `</small>
+            </div>
+            <span class="text-success discount-price">0 PLN</span>
+        </li>
+    `;
+}
+
+function updateTotal() {
+    let total = Number(0);
+    const itemPrice = $('.item-price');
+    itemPrice.each(function(index, currentElement) {
+        total += Number($(currentElement).html().substring(0, $(currentElement).html().indexOf(' PLN')));
+    })
+    const discountItem = '.discountItem';
+    if ($(discountItem).length > 0) {
+        if (total === 0) {
+            $('.discount-price').html('0 PLN').hide();
+        } else {
+            const discount = Number($('.discount-value').html()) / 100 * total;
+            if (discount > 0) {
+                $('.discount-price').html('-' + discount.toFixed(2) + ' PLN').show();
+                $(discountItem).show();
+                total -= discount;
+            }
+        }
     }
-    total.html(result === 0 ? result : result.toFixed(2) + ' PLN');
+    $('#total-count').html(itemPrice.length);
+    $('#total').html((total === 0 ? total : total.toFixed(2)) + ' PLN');
 }
 
 function setPeopleSectionClassRules() {
