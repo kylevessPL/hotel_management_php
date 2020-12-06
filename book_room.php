@@ -122,45 +122,17 @@ $services_result = query($sql);
                     </div>
                 </div>
                 <div class="col-10 col-xl-4 mb-lg-0">
-                    <div class="sticky-top">
+                    <div class="sticky-top" style="z-index: 200;">
                         <div style="padding: 0.75rem 0;">
                             <h4 class="d-flex justify-content-between align-items-center">
                                 <span class="text-muted">Summary</span>
-                                <span class="badge badge-secondary badge-pill">0</span>
+                                <span class="badge badge-secondary badge-pill total-count">0</span>
                             </h4>
                         </div>
-                        <ul class="list-group mb-3">
-                            <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                <div>
-                                    <h6 class="my-0">Product name</h6>
-                                    <small class="text-muted">Brief description</small>
-                                </div>
-                                <span class="text-muted">$12</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                <div>
-                                    <h6 class="my-0">Second product</h6>
-                                    <small class="text-muted">Brief description</small>
-                                </div>
-                                <span class="text-muted">$8</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                <div>
-                                    <h6 class="my-0">Third item</h6>
-                                    <small class="text-muted">Brief description</small>
-                                </div>
-                                <span class="text-muted">$5</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between bg-light">
-                                <div class="text-success">
-                                    <h6 class="my-0">Promo code</h6>
-                                    <small>EXAMPLECODE</small>
-                                </div>
-                                <span class="text-success">-$5</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>Total (USD)</span>
-                                <strong>$20</strong>
+                        <ul class="list-group mb-3 items">
+                            <li class="list-group-item d-flex justify-content-between total">
+                                <span>Total</span>
+                                <strong>0 PLN</strong>
                             </li>
                         </ul>
                         <div class="card p-2 mb-3">
@@ -184,7 +156,6 @@ $services_result = query($sql);
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-<script src="https://cdn.rawgit.com/twbs/bootstrap/v3.4.1/js/affix.js"></script>
 <script src="/assets/js/form-validation.js"></script>
 <script src="/assets/js/book-room.js"></script>
 

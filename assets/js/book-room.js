@@ -29,11 +29,15 @@ $(document).ready(function () {
         } else {
             $('#room').html('<option value="">Choose dates and bed amount first</option>').selectpicker('refresh').selectpicker('val', '');
             $('#booking-form-people').remove();
+            addRoomItem();
         }
     });
     $('#promo-code').on('keydown', function() {
         $(this).closest(".error").removeClass("error");
         $(this).parent().siblings('label').remove();
+    });
+    $('#room').on('change', function() {
+        addRoomItem();
     });
     $('.redeemCode').on('click', function() {
         $('#redeem-code-form').valid();
@@ -64,6 +68,7 @@ function fetchRooms(startDate, endDate, bedAmount) {
             if (typeof setChoice === 'function') {
                 setChoice();
             }
+            addRoomItem();
             showPeopleOption(bedAmount);
         }
     });
@@ -169,4 +174,59 @@ function showPeopleOption(bedAmount) {
             }
         });
     }
+}
+
+function addRoomItem() {
+    const roomItem = $('.roomItem');
+    if (roomItem.length > 0) {
+        const currentRoomPrice = $('.roomItem span').html();
+        roomItem.remove();
+        updateTotal(currentRoomPrice.substring(0, currentRoomPrice.indexOf(' PLN')), '-');
+    }
+    const room = $('#room');
+    if (room.val() !== '' && room.valid() === true) {
+        $.ajax({
+            url: '../../process/get_room_amenities.php',
+            type: "GET",
+            data: { id: room.val() },
+            dataType: 'JSON',
+            success: function (response) {
+                const selectedRoom = $('#room option:selected').text();
+                let amenities = [];
+                $.each(response, function(key, val) {
+                    amenities.push(val['name']);
+                });
+                const roomItemObject = getItemObject('Room ' + selectedRoom.substring(13, 16), $('#bedAmount option:selected').text() + ' bed variant, ' + amenities.join(', '), selectedRoom.substring(25, selectedRoom.indexOf(' PLN')))
+                $('.items').prepend('<div class="roomItem">' +roomItemObject+ '</div>')
+                updateTotal(selectedRoom.substring(25, selectedRoom.indexOf(' PLN')), '+');
+            }
+        });
+    }
+}
+
+function getItemObject(item, desc, price) {
+    return `
+        <li class="list-group-item d-flex justify-content-between lh-condensed">
+            <div>
+                <h6 class="my-0">` +item+ `</h6>
+                <small class="text-muted">` +desc+ `</small>
+            </div>
+            <span class="text-muted">` +price+ ` PLN</span>
+        </li>
+    `;
+}
+
+function updateTotal(value, op) {
+    const total = $('.total strong');
+    const totalCount = $('.total-count');
+    let currentTotal = total.html();
+    let result;
+    if (op === '+') {
+        result = Number(currentTotal.substring(0, currentTotal.indexOf(' PLN'))) + Number(value);
+        totalCount.html(parseInt(totalCount.html()) + 1);
+    } else {
+        result = Number(currentTotal.substring(0, currentTotal.indexOf(' PLN'))) - Number(value);
+        totalCount.html(parseInt(totalCount.html()) - 1);
+    }
+    total.html(result === 0 ? result : result.toFixed(2) + ' PLN');
 }
