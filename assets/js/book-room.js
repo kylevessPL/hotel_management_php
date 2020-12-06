@@ -1,4 +1,9 @@
 $(document).ready(function () {
+    init();
+    setEvents();
+});
+
+function init() {
     $('#startDate, #endDate').datepicker({
         clearBtn: true,
         format: "dd/mm/yyyy",
@@ -18,8 +23,15 @@ $(document).ready(function () {
         size: 5
     });
     $.fn.selectpicker.Constructor.BootstrapVersion = '4';
+    setStickySummaryPanel();
+}
+
+function setStickySummaryPanel() {
     const height = $('.navbar').height() + 16;
     $('.sticky-top').css('top', height + 'px');
+}
+
+function setEvents() {
     $('#bedAmount, #startDate, #endDate').on('change', function () {
         const startDate = $('#startDate');
         const endDate = $('#endDate');
@@ -29,7 +41,7 @@ $(document).ready(function () {
         } else {
             $('#room').html('<option value="">Choose dates and bed amount first</option>').selectpicker('refresh').selectpicker('val', '');
             $('#booking-form-people').remove();
-            addRoomItem();
+            setRoomItem();
         }
     });
     $('#promo-code').on('keydown', function() {
@@ -37,7 +49,7 @@ $(document).ready(function () {
         $(this).parent().siblings('label').remove();
     });
     $('#room').on('change', function() {
-        addRoomItem();
+        setRoomItem();
     });
     $('.redeemCode').on('click', function() {
         $('#redeem-code-form').valid();
@@ -45,7 +57,10 @@ $(document).ready(function () {
     $('.bookingSubmit').on('click', function() {
         $('#booking-form').valid();
     });
-});
+    $('#services').on('change', function() {
+        setServiceItem();
+    });
+}
 
 function fetchRooms(startDate, endDate, bedAmount) {
     $.ajax({
@@ -68,7 +83,7 @@ function fetchRooms(startDate, endDate, bedAmount) {
             if (typeof setChoice === 'function') {
                 setChoice();
             }
-            addRoomItem();
+            setRoomItem();
             showPeopleOption(bedAmount);
         }
     });
@@ -145,7 +160,7 @@ function showPeopleOption(bedAmount) {
     }
 }
 
-function addRoomItem() {
+function setRoomItem() {
     const roomItem = $('.roomItem');
     if (roomItem.length > 0) {
         const currentRoomPrice = $('.roomItem span').html();
@@ -165,7 +180,7 @@ function addRoomItem() {
                 $.each(response, function(key, val) {
                     amenities.push(val['name']);
                 });
-                const roomItemObject = getItemObject('Room ' + selectedRoom.substring(13, 16), $('#bedAmount option:selected').text() + ' bed variant, ' + amenities.join(', '), selectedRoom.substring(25, selectedRoom.indexOf(' PLN')))
+                const roomItemObject = getRoomItemObject('Room ' + selectedRoom.substring(13, 16), $('#bedAmount option:selected').text() + ' bed variant, ' + amenities.join(', '), selectedRoom.substring(25, selectedRoom.indexOf(' PLN')))
                 $('.items').prepend('<div class="roomItem">' +roomItemObject+ '</div>')
                 updateTotal(selectedRoom.substring(25, selectedRoom.indexOf(' PLN')), '+');
             }
@@ -173,13 +188,50 @@ function addRoomItem() {
     }
 }
 
-function getItemObject(item, desc, price) {
+function setServiceItem() {
+    const servicesItem = '.servicesItem';
+    if ($(servicesItem).length > 0) {
+        $('.servicesItem .list-group-item').each(function(index, currentElement) {
+            const currentServicePrice = $(currentElement).find('span').html();
+            updateTotal(currentServicePrice.substring(0, currentServicePrice.indexOf(' PLN')), '-');
+        });
+        $(servicesItem).remove();
+    }
+    const servicesSelected = $('#services option:selected');
+    if (servicesSelected.length > 0) {
+        $('.total').before('<div class="servicesItem"></div>');
+        servicesSelected.each(function(index, currentElement) {
+            $.ajax({
+                url: '../../process/get_service_desc.php',
+                type: "GET",
+                data: {id: $(currentElement).val() },
+                dataType: 'JSON',
+                success: function (response) {
+                    const serviceItemObject = getServiceItemObject($(currentElement).text(), response[0]['price']);
+                    $(servicesItem).append(serviceItemObject);
+                    updateTotal(response[0]['price'], '+');
+                }
+            });
+        });
+    }
+}
+
+function getRoomItemObject(item, desc, price) {
     return `
         <li class="list-group-item d-flex justify-content-between lh-condensed">
             <div>
                 <h6 class="my-0">` +item+ `</h6>
                 <small class="text-muted">` +desc+ `</small>
             </div>
+            <span class="text-muted">` +price+ ` PLN</span>
+        </li>
+    `;
+}
+
+function getServiceItemObject(item, price) {
+    return `
+        <li class="list-group-item d-flex justify-content-between lh-condensed">
+            <h6 class="my-0">` +item+ `</h6>
             <span class="text-muted">` +price+ ` PLN</span>
         </li>
     `;
