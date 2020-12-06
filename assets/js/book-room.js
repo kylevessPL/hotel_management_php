@@ -18,6 +18,8 @@ $(document).ready(function () {
         size: 5
     });
     $.fn.selectpicker.Constructor.BootstrapVersion = '4';
+    const height = $('.navbar').height() + 16;
+    $('.sticky-top').css('top', height + 'px');
     $('#bedAmount, #startDate, #endDate').on('change', function () {
         const startDate = $('#startDate');
         const endDate = $('#endDate');
