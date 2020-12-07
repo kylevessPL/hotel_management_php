@@ -263,9 +263,6 @@ $(function() {
             } else {
                 error.insertAfter(element);
             }
-        },
-        submitHandler : function(form) {
-            form.submit();
         }
     });
     $('select').on('change', function() {

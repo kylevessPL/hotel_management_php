@@ -4,33 +4,36 @@ include 'process/get_customer_id.php';
 
 get_customer_id($alertMsg, $alertType, $customerId);
 
-if (isset($_GET['id'], $_GET['start-date'], $_GET['end-date']))
+if (isset($customerId))
 {
-    $id = escape_string($_GET['id']);
-    $start_date = escape_string($_GET['start-date']);
-    $end_date = escape_string($_GET['end-date']);
-    $result = file_get_contents($_SERVER ["REQUEST_SCHEME"].'://'.$_SERVER['SERVER_NAME']."/process/check_room_availability.php?id=$id&start-date=".rawurlencode($start_date)."&end-date=".rawurlencode($end_date)."");
-    if ($result == 'false')
+    if (isset($_GET['id'], $_GET['start-date'], $_GET['end-date']))
     {
-        $alertMsg = "Room not available within $start_date - $end_date period";
-        $alertType = "warning";
+        $id = escape_string($_GET['id']);
+        $start_date = escape_string($_GET['start-date']);
+        $end_date = escape_string($_GET['end-date']);
+        $result = file_get_contents($_SERVER ["REQUEST_SCHEME"].'://'.$_SERVER['SERVER_NAME']."/process/check_room_availability.php?id=$id&start-date=".rawurlencode($start_date)."&end-date=".rawurlencode($end_date)."");
+        if ($result == 'false')
+        {
+            $alertMsg = "Room not available within $start_date - $end_date period";
+            $alertType = "warning";
+        }
+        else
+        {
+            $sql = "SELECT bed_amount FROM rooms where id = '$id'";
+            $result = query($sql);
+            $bed_number = mysqli_fetch_array($result);
+        }
     }
-    else
-    {
-        $sql = "SELECT bed_amount FROM rooms where id = '$id'";
-        $result = query($sql);
-        $bed_number = mysqli_fetch_array($result);
-    }
+
+    $sql = "SELECT id, street_name, house_number, zip_code, city FROM addresses where id IN (SELECT address_id FROM customers_addresses where customer_id = '$customerId') ORDER BY 1";
+    $address_result = query($sql);
+
+    $sql = "SELECT DISTINCT bed_amount FROM rooms ORDER BY 1";
+    $beds_result = query($sql);
+
+    $sql = "SELECT id, name FROM additional_services ORDER BY 1";
+    $services_result = query($sql);
 }
-
-$sql = "SELECT id, street_name, house_number, zip_code, city FROM addresses where id IN (SELECT address_id FROM customers_addresses where customer_id = '$customerId') ORDER BY 1";
-$address_result = query($sql);
-
-$sql = "SELECT DISTINCT bed_amount FROM rooms ORDER BY 1";
-$beds_result = query($sql);
-
-$sql = "SELECT id, name FROM additional_services ORDER BY 1";
-$services_result = query($sql);
 
 ?>
 
@@ -151,6 +154,75 @@ $services_result = query($sql);
     </div>
 </div>
 <?php view('footer.php'); ?>
+
+<div aria-hidden="true" aria-labelledby="confirmBookingModalTitle" class="modal fade" id="confirmBookingModal" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmBookingModalTitle">Booking confirmation</h5><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <p class="alert alert-warning">Please check all the information carefully and process to payment if everything is correct</p>
+                <hr>
+                <div class="row mb-4 confirmation-people-details">
+                </div>
+                <div class="table-responsive-sm">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col" class="text-center">Service</th>
+                            <th scope="col" class="text-center">Description</th>
+                            <th scope="col" class="text-center">Price</th>
+                        </tr>
+                        </thead>
+                        <tbody class="confirmation-items">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-sm-5 ml-auto">
+                        <table class="table table-clear">
+                            <tbody>
+                            <tr>
+                                <td class="left">
+                                    <strong>Period</strong>
+                                </td>
+                                <td class="right confirmation-period"></td>
+                            </tr>
+                            <tr>
+                                <td class="left">
+                                    <strong>Subtotal</strong>
+                                </td>
+                                <td class="right confirmation-subtotal"></td>
+                            </tr>
+                            <tr>
+                                <td class="left">
+                                    <strong class="confirmation-discount-value"></strong>
+                                </td>
+                                <td class="right confirmation-discount-price"></td>
+                            </tr>
+                            <tr>
+                                <td class="left">
+                                    <strong>Total</strong>
+                                </td>
+                                <td class="right">
+                                    <strong class="confirmation-total"></strong>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-dismiss="modal" type="button" id="abortBtn">Abort</button>
+                <button class="btn btn-success" id="confirmBookingAction">Process to payment</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <?php view('scripts.php'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>

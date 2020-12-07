@@ -27,6 +27,10 @@ function init() {
     checkCookie();
 }
 
+function test() {
+    alert('adda');
+}
+
 function setStickySummaryPanel() {
     const height = $('.navbar').height() + 16;
     $('.sticky-top').css('top', height + 'px');
@@ -71,10 +75,50 @@ function setEvents() {
         setRoomItem();
     });
     $('.bookingSubmit').on('click', function() {
-        $('#booking-form').valid();
+        if ($('#booking-form').valid()) {
+            $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').hide();
+            const confirmationPeopleDetails = '.confirmation-people-details';
+            const confirmationItems = '.confirmation-items';
+            $(confirmationPeopleDetails).html('');
+            $(confirmationItems).html('');
+            $.ajax({
+                url: '../../process/get_customer_details.php',
+                type: "GET",
+                data: {'id': getCustomerId() },
+                dataType: 'JSON',
+                success: function (response) {
+                    const selectedAddress = $('#myAddress :selected').text();
+                    $(confirmationPeopleDetails).append(createConfirmationPeopleSection('Your', response[0]['first-name'], response[0]['last-name'], selectedAddress.substring(0, selectedAddress.indexOf(',')), selectedAddress.substring(selectedAddress.indexOf(',') + 2), response[0]['document-type'], response[0]['document-id']));
+                    $('.booking-person').each(function (index, currentElement) {
+                        let firstName = $(currentElement).find('.first-name').val();
+                        let lastName = $(currentElement).find('.last-name').val();
+                        let documentType = $(currentElement).find('.document-type :selected').text();
+                        let documentId = $(currentElement).find('.document-id').val();
+                        $(confirmationPeopleDetails).append(createConfirmationPeopleSection('Person ' + Number(index + 1), firstName, lastName, null, null, documentType, documentId));
+                    });
+                    $(confirmationItems).append(createConfirmationItemsSection(1, $('.roomItem .room-item-name').html(), $('.roomItem .room-item-desc').html(), $('.roomItem .item-price').html()));
+                    $('.servicesItem').each(function(index, currentElement) {
+                        $(confirmationItems).append(createConfirmationItemsSection(index + 2, $(currentElement).find('.item-name').html(), 'Additional service #' + $(currentElement).find('.item-index').html(), $(currentElement).find('.item-price').html()));
+                    });
+                    const total = $('#total').html();
+                    const discountPrice = $('.discount-price').html();
+                    const totalValue = total.substring(0, total.indexOf(' PLN'));
+                    const subTotalValue = (Number(discountPrice.substring(1, discountPrice.indexOf(' PLN'))) + Number(totalValue)).toFixed(2);
+                    $('.confirmation-period').html($('.periodItem').find('small').html());
+                    $('.confirmation-subtotal').html(subTotalValue + ' PLN');
+                    $('.confirmation-discount-value').html('Discount (' + $('.discount-value').html() +'%)');
+                    $('.confirmation-discount-price').html(discountPrice);
+                    $('.confirmation-total').html(totalValue + ' PLN');
+                    $('#confirmBookingModal').modal();
+                }
+            });
+        }
     });
     $('#services').on('change', function() {
         setServiceItem();
+    });
+    $('#confirmBookingModal').on('hide.bs.modal', function () {
+        setTimeout(() => $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show(), 400);
     });
 }
 
@@ -176,6 +220,35 @@ function showPeopleOption(bedAmount) {
     }
 }
 
+function createConfirmationPeopleSection(title, firstName, lastName, addressPart1, addressPart2, documentType, documentId) {
+    let data = '';
+    if (addressPart1 !== null && addressPart2 !== null) {
+        data = '<div>' + addressPart1 + '</div><div>' + addressPart2 + '</div>';
+    }
+    return `
+        <div class="col-sm-3">
+            <h6 class="mb-3">` +title+' details:'+ `</h6>
+            <div>
+                <strong>` +firstName+' '+lastName+ `</strong>
+            </div>`
+            +data+ `
+            <div>` +'Document type: '+documentType+ `</div>
+            <div>` +'Document ID: '+documentId+ `</div>
+        </div>
+    `;
+}
+
+function createConfirmationItemsSection(index, item, desc, price) {
+    return `
+        <tr>
+            <th class='align-middle' scope='row'>` +index+ `</th>
+            <td class='align-middle text-center'>` +item+ `</td>
+            <td class='align-middle text-center'>` +desc+ `</td>
+            <td class='align-middle text-center'>` +price+ `</td>
+        </tr>
+    `;
+}
+
 function setRoomItem() {
     const roomItem = $('.roomItem');
     if (roomItem.length > 0) {
@@ -231,7 +304,7 @@ function getServicesDesc() {
             data: {id: $(currentElement).val() },
             dataType: 'JSON',
             success: function (response) {
-                const serviceItemObject = getServiceItemObject($(currentElement).text(), response[0]['price']);
+                const serviceItemObject = getServiceItemObject($(currentElement).text(), $(currentElement).index() + 1, response[0]['price']);
                 const discountItem = '.discountItem';
                 const periodItem = '.periodItem';
                 if ($(periodItem).length > 0) {
@@ -309,18 +382,19 @@ function getRoomItemObject(item, desc, price) {
     return `
         <li class="list-group-item d-flex justify-content-between lh-condensed roomItem">
             <div>
-                <h6 class="my-0">` +item+ `</h6>
-                <small class="text-muted">` +desc+ `</small>
+                <h6 class="my-0 room-item-name">` +item+ `</h6>
+                <small class="text-muted room-item-desc">` +desc+ `</small>
             </div>
             <span class="text-muted item-price">` +price+ ` PLN</span>
         </li>
     `;
 }
 
-function getServiceItemObject(item, price) {
+function getServiceItemObject(item, selectedIndex, price) {
     return `
         <li class="list-group-item d-flex justify-content-between lh-condensed servicesItem">
-            <h6 class="my-0">` +item+ `</h6>
+            <h6 class="my-0 item-name">` +item+ `</h6>
+            <small class="d-none item-index">` +selectedIndex+ `</small>
             <span class="text-muted item-price">` +price+ ` PLN</span>
         </li>
     `;
