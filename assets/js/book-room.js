@@ -350,7 +350,7 @@ function updateTotal() {
     itemPrice.each(function(index, currentElement) {
         total += Number($(currentElement).html().substring(0, $(currentElement).html().indexOf(' PLN')));
     })
-    if (itemPrice.length > 0) {
+    if ($('.roomItem').length > 0) {
         const startDate = moment($('#startDate').val(), 'DD/MM/YYYY');
         const endDate = moment($('#endDate').val(), 'DD/MM/YYYY');
         const periodDays = endDate.diff(startDate, 'days');
