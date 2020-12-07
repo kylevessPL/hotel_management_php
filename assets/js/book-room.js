@@ -169,6 +169,7 @@ function setRoomItem() {
     const roomItem = $('.roomItem');
     if (roomItem.length > 0) {
         roomItem.remove();
+        setPeriodItem();
         updateTotal();
     }
     const room = $('#room');
@@ -186,6 +187,7 @@ function setRoomItem() {
                 });
                 const roomItemObject = getRoomItemObject('Room ' + selectedRoom.substring(13, 16), $('#bedAmount option:selected').text() + ' bed variant, ' + amenities.join(', '), selectedRoom.substring(25, selectedRoom.indexOf(' PLN')))
                 $('.items').prepend(roomItemObject);
+                setPeriodItem();
                 updateTotal();
             }
         });
@@ -209,8 +211,11 @@ function setServiceItem() {
                 success: function (response) {
                     const serviceItemObject = getServiceItemObject($(currentElement).text(), response[0]['price']);
                     const discountItem = '.discountItem';
+                    const periodItem = '.periodItem';
                     if ($(discountItem).length > 0) {
                         $(discountItem).before(serviceItemObject);
+                    } else if ($(periodItem).length > 0) {
+                        $(periodItem).before(serviceItemObject);
                     } else {
                         $('.total').before(serviceItemObject);
                     }
@@ -237,12 +242,29 @@ function setDiscountItem() {
             dataType: 'JSON',
             success: function (response) {
                 const discountItemObject = getDiscountItemObject(promoCode.val(), response[0]['discount']);
-                $('.total').before(discountItemObject);
+                const periodItem = '.periodItem';
+                if ($(periodItem).length > 0) {
+                    $(periodItem).before(discountItemObject);
+                } else {
+                    $('.total').before(discountItemObject);
+                }
                 $('.discount-price').hide();
                 Cookies.set('promo_code', promoCode.val(), { expires: 30, path: '' });
                 updateTotal();
             }
         });
+    }
+}
+
+function setPeriodItem() {
+    if ($('.roomItem').length === 0) {
+        $('.periodItem').remove();
+    } else {
+        const startDate = moment($('#startDate').val(), 'DD/MM/YYYY');
+        const endDate = moment($('#endDate').val(), 'DD/MM/YYYY');
+        const period = moment.duration(endDate.diff(startDate));
+        const periodItemObject = getPeriodItemObject(startDate.format('DD/MM/YYYY'), endDate.format('DD/MM/YYYY'), period);
+        $('.total').before(periodItemObject);
     }
 }
 
@@ -280,12 +302,55 @@ function getDiscountItemObject(code, discount) {
     `;
 }
 
+function getPeriodItemObject(startDate, endDate, period) {
+    let duration = '';
+    if (period.years() !== 0) {
+        duration += period.years();
+        if (period.years() === 1) {
+            duration += ' years ';
+        } else {
+            duration += ' year ';
+        }
+    }
+    if (period.months() !== 0) {
+        duration += period.months();
+        if (period.months() === 1) {
+            duration += ' months ';
+        } else {
+            duration += ' month ';
+        }
+    }
+    if (period.days() !== 0) {
+        duration += period.days();
+        if (period.days() === 1) {
+            duration += ' days';
+        } else {
+            duration += ' day';
+        }
+    }
+    return `
+        <li class="list-group-item d-flex justify-content-between bg-light periodItem">
+            <div style="color: #0c68f1;">
+                <h6 class="my-0">Period</h6>
+                <small>` +startDate+ ' - ' +endDate+ `</small>
+            </div>
+            <span class="period" style="color: #0c68f1;">` +duration+ `</span>
+        </li>
+    `;
+}
+
 function updateTotal() {
     let total = Number(0);
     const itemPrice = $('.item-price');
     itemPrice.each(function(index, currentElement) {
         total += Number($(currentElement).html().substring(0, $(currentElement).html().indexOf(' PLN')));
     })
+    if (itemPrice.length > 0) {
+        const startDate = moment($('#startDate').val(), 'DD/MM/YYYY');
+        const endDate = moment($('#endDate').val(), 'DD/MM/YYYY');
+        const periodDays = endDate.diff(startDate, 'days');
+        total *= Number(periodDays);
+    }
     const discountItem = '.discountItem';
     if ($(discountItem).length > 0) {
         if (total === 0) {
