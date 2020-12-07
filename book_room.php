@@ -4,10 +4,10 @@ include 'process/get_customer_id.php';
 
 get_customer_id($alertMsg, $alertType, $customerId);
 
-if (isset($_COOKIE['promo_code'])) {
-    $result = file_get_contents("http://" . $_SERVER['SERVER_NAME'] . "/process/check_promo_code_availability.php?promo-code=" . escape_string($_COOKIE['promo_code']));
+if (isset($_COOKIE['promo-code'])) {
+    $result = file_get_contents("http://" . $_SERVER['SERVER_NAME'] . "/process/check_promo_code_availability.php?promo-code=" . escape_string($_COOKIE['promo-code']));
     if ($result == true) {
-        $promo_code = escape_string($_COOKIE['promo_code']);
+        $promo_code = escape_string($_COOKIE['promo-code']);
     }
 }
 
@@ -161,6 +161,7 @@ $services_result = query($sql);
 
 <?php view('scripts.php'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 <script src="/assets/js/form-validation.js"></script>

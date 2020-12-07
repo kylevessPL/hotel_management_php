@@ -24,11 +24,19 @@ function init() {
     });
     $.fn.selectpicker.Constructor.BootstrapVersion = '4';
     setStickySummaryPanel();
+    checkCookie();
 }
 
 function setStickySummaryPanel() {
     const height = $('.navbar').height() + 16;
     $('.sticky-top').css('top', height + 'px');
+}
+
+function checkCookie() {
+    const promoCode = $('#promo-code');
+    if (promoCode.val() !== '') {
+        $('.redeemCode').trigger('click');
+    }
 }
 
 function setEvents() {
@@ -217,6 +225,7 @@ function setDiscountItem() {
     const discountItem = $('.discountItem');
     if (discountItem.length > 0) {
         discountItem.remove();
+        Cookies.remove('promo-code', { path: '' })
         updateTotal();
     }
     const promoCode = $('#promo-code');
@@ -230,6 +239,7 @@ function setDiscountItem() {
                 const discountItemObject = getDiscountItemObject(promoCode.val(), response[0]['discount']);
                 $('.total').before(discountItemObject);
                 $('.discount-price').hide();
+                Cookies.set('promo-code', promoCode.val(), { expires: 7, path: '' });
                 updateTotal();
             }
         });
