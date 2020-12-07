@@ -307,25 +307,25 @@ function getPeriodItemObject(startDate, endDate, period) {
     if (period.years() !== 0) {
         duration += period.years();
         if (period.years() === 1) {
-            duration += ' years ';
-        } else {
             duration += ' year ';
+        } else {
+            duration += ' years ';
         }
     }
     if (period.months() !== 0) {
         duration += period.months();
         if (period.months() === 1) {
-            duration += ' months ';
-        } else {
             duration += ' month ';
+        } else {
+            duration += ' months ';
         }
     }
     if (period.days() !== 0) {
         duration += period.days();
         if (period.days() === 1) {
-            duration += ' days';
-        } else {
             duration += ' day';
+        } else {
+            duration += ' days';
         }
     }
     return `
