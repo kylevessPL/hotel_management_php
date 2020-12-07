@@ -282,6 +282,11 @@ $(function() {
         invalidHandler: function(form, validator) {
             if (validator.numberOfInvalids()) {
                 validator.errorList[0].element.focus();
+                const discountItem = $('.discountItem');
+                if (discountItem.length > 0) {
+                    discountItem.remove();
+                    updateTotal();
+                }
             }
         },
         rules: {
