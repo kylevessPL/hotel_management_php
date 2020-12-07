@@ -225,7 +225,7 @@ function setDiscountItem() {
     const discountItem = $('.discountItem');
     if (discountItem.length > 0) {
         discountItem.remove();
-        Cookies.remove('promo-code', { path: '' })
+        Cookies.remove('promo_code', { path: '' })
         updateTotal();
     }
     const promoCode = $('#promo-code');
@@ -239,7 +239,7 @@ function setDiscountItem() {
                 const discountItemObject = getDiscountItemObject(promoCode.val(), response[0]['discount']);
                 $('.total').before(discountItemObject);
                 $('.discount-price').hide();
-                Cookies.set('promo-code', promoCode.val(), { expires: 7, path: '' });
+                Cookies.set('promo_code', promoCode.val(), { expires: 30, path: '' });
                 updateTotal();
             }
         });

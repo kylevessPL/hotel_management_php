@@ -4,10 +4,12 @@ include 'process/get_customer_id.php';
 
 get_customer_id($alertMsg, $alertType, $customerId);
 
-if (isset($_COOKIE['promo-code'])) {
-    $result = file_get_contents("http://" . $_SERVER['SERVER_NAME'] . "/process/check_promo_code_availability.php?promo-code=" . escape_string($_COOKIE['promo-code']));
+if (isset($_COOKIE['promo_code'])) {
+    $result = file_get_contents("http://" . $_SERVER['SERVER_NAME'] . "/process/check_promo_code_availability.php?promo-code=" . escape_string($_COOKIE['promo_code']));
     if ($result == true) {
-        $promo_code = escape_string($_COOKIE['promo-code']);
+        $promo_code = escape_string($_COOKIE['promo_code']);
+    } else {
+        unset($_COOKIE['promo_code']);
     }
 }
 
