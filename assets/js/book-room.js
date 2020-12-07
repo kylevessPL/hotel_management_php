@@ -101,13 +101,18 @@ function setEvents() {
                         $(confirmationItems).append(createConfirmationItemsSection(index + 2, $(currentElement).find('.item-name').html(), 'Additional service #' + $(currentElement).find('.item-index').html(), $(currentElement).find('.item-price').html()));
                     });
                     const total = $('#total').html();
-                    const discountPrice = $('.discount-price').html();
                     const totalValue = total.substring(0, total.indexOf(' PLN'));
-                    const subTotalValue = (Number(discountPrice.substring(1, discountPrice.indexOf(' PLN'))) + Number(totalValue)).toFixed(2);
                     $('.confirmation-period').html($('.periodItem').find('small').html());
-                    $('.confirmation-subtotal').html(subTotalValue + ' PLN');
-                    $('.confirmation-discount-value').html('Discount (' + $('.discount-value').html() +'%)');
-                    $('.confirmation-discount-price').html(discountPrice);
+                    if ($('.discountItem').length > 0) {
+                        const discountPrice = $('.discount-price').html();
+                        const subTotalValue = (Number(discountPrice.substring(1, discountPrice.indexOf(' PLN'))) + Number(totalValue)).toFixed(2);
+                        $('.confirmation-subtotal').html(subTotalValue + ' PLN');
+                        $('.confirmation-discount-value').html('Discount (' + $('.discount-value').html() +'%)');
+                        $('.confirmation-discount-price').html(discountPrice);
+                        $('.discounted').show();
+                    } else {
+                        $('.discounted').hide();
+                    }
                     $('.confirmation-total').html(totalValue + ' PLN');
                     $('#confirmBookingModal').modal();
                 }

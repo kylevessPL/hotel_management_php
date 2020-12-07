@@ -185,28 +185,28 @@ if (isset($customerId))
                         <table class="table table-clear">
                             <tbody>
                             <tr>
-                                <td class="left">
+                                <td>
                                     <strong>Period</strong>
                                 </td>
-                                <td class="right confirmation-period"></td>
+                                <td class="text-right confirmation-period"></td>
                             </tr>
-                            <tr>
-                                <td class="left">
+                            <tr class="discounted">
+                                <td>
                                     <strong>Subtotal</strong>
                                 </td>
-                                <td class="right confirmation-subtotal"></td>
+                                <td class="text-right confirmation-subtotal"></td>
                             </tr>
-                            <tr>
-                                <td class="left">
+                            <tr class="discounted">
+                                <td>
                                     <strong class="confirmation-discount-value"></strong>
                                 </td>
-                                <td class="right confirmation-discount-price"></td>
+                                <td class="text-right confirmation-discount-price"></td>
                             </tr>
                             <tr>
-                                <td class="left">
+                                <td>
                                     <strong>Total</strong>
                                 </td>
-                                <td class="right">
+                                <td class="text-right">
                                     <strong class="confirmation-total"></strong>
                                 </td>
                             </tr>
