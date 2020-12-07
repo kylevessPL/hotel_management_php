@@ -33,9 +33,20 @@ function setStickySummaryPanel() {
 }
 
 function checkCookie() {
-    const promoCode = $('#promo-code');
-    if (promoCode.val() !== '') {
-        $('.redeemCode').trigger('click');
+    const promoCode = Cookies.get('promo_code');
+    if (promoCode != null) {
+        $.ajax({
+            url: '../../process/check_promo_code_availability.php',
+            type: "GET",
+            data: { 'promo-code': promoCode },
+            success: function (response) {
+                if (response === 'true') {
+                    getDiscountValue();
+                } else {
+                    Cookies.remove('promo_code', { path: '' });
+                }
+            }
+        });
     }
 }
 
@@ -174,24 +185,29 @@ function setRoomItem() {
     }
     const room = $('#room');
     if (room.val() !== '' && room.valid() === true) {
-        $.ajax({
-            url: '../../process/get_room_amenities.php',
-            type: "GET",
-            data: { id: room.val() },
-            dataType: 'JSON',
-            success: function (response) {
-                const selectedRoom = $('#room option:selected').text();
-                let amenities = [];
-                $.each(response, function(key, val) {
-                    amenities.push(val['name']);
-                });
-                const roomItemObject = getRoomItemObject('Room ' + selectedRoom.substring(13, 16), $('#bedAmount option:selected').text() + ' bed variant, ' + amenities.join(', '), selectedRoom.substring(25, selectedRoom.indexOf(' PLN')))
-                $('.items').prepend(roomItemObject);
-                setPeriodItem();
-                updateTotal();
-            }
-        });
+        getRoomAmenities();
     }
+}
+
+function getRoomAmenities() {
+    const room = $('#room');
+    $.ajax({
+        url: '../../process/get_room_amenities.php',
+        type: "GET",
+        data: { id: room.val() },
+        dataType: 'JSON',
+        success: function (response) {
+            const selectedRoom = $('#room option:selected').text();
+            let amenities = [];
+            $.each(response, function(key, val) {
+                amenities.push(val['name']);
+            });
+            const roomItemObject = getRoomItemObject('Room ' + selectedRoom.substring(13, 16), $('#bedAmount option:selected').text() + ' bed variant, ' + amenities.join(', '), selectedRoom.substring(25, selectedRoom.indexOf(' PLN')))
+            $('.items').prepend(roomItemObject);
+            setPeriodItem();
+            updateTotal();
+        }
+    });
 }
 
 function setServiceItem() {
@@ -202,58 +218,74 @@ function setServiceItem() {
     }
     const servicesSelected = $('#services option:selected');
     if (servicesSelected.length > 0) {
-        servicesSelected.each(function(index, currentElement) {
-            $.ajax({
-                url: '../../process/get_service_desc.php',
-                type: "GET",
-                data: {id: $(currentElement).val() },
-                dataType: 'JSON',
-                success: function (response) {
-                    const serviceItemObject = getServiceItemObject($(currentElement).text(), response[0]['price']);
-                    const discountItem = '.discountItem';
-                    const periodItem = '.periodItem';
-                    if ($(periodItem).length > 0) {
-                        $(periodItem).before(serviceItemObject);
-                    } else if ($(discountItem).length > 0) {
-                        $(discountItem).before(serviceItemObject);
-                    } else {
-                        $('.total').before(serviceItemObject);
-                    }
-                    updateTotal();
-                }
-            });
-        });
+        getServicesDesc();
     }
+}
+
+function getServicesDesc() {
+    const servicesSelected = $('#services option:selected');
+    servicesSelected.each(function(index, currentElement) {
+        $.ajax({
+            url: '../../process/get_service_desc.php',
+            type: "GET",
+            data: {id: $(currentElement).val() },
+            dataType: 'JSON',
+            success: function (response) {
+                const serviceItemObject = getServiceItemObject($(currentElement).text(), response[0]['price']);
+                const discountItem = '.discountItem';
+                const periodItem = '.periodItem';
+                if ($(periodItem).length > 0) {
+                    $(periodItem).before(serviceItemObject);
+                } else if ($(discountItem).length > 0) {
+                    $(discountItem).before(serviceItemObject);
+                } else {
+                    $('.total').before(serviceItemObject);
+                }
+                updateTotal();
+            }
+        });
+    });
 }
 
 function setDiscountItem() {
     const discountItem = $('.discountItem');
     if (discountItem.length > 0) {
         discountItem.remove();
-        Cookies.remove('promo_code', { path: '' })
+        Cookies.remove('promo_code', { path: '' });
         updateTotal();
     }
     const promoCode = $('#promo-code');
     if (promoCode.val() !== '' && promoCode.valid() === true) {
-        $.ajax({
-            url: '../../process/get_promo_code_discount.php',
-            type: "GET",
-            data: { 'promo-code': promoCode.val() },
-            dataType: 'JSON',
-            success: function (response) {
-                const discountItemObject = getDiscountItemObject(promoCode.val(), response[0]['discount']);
-                const periodItem = '.periodItem';
-                if ($(periodItem).length > 0) {
-                    $(periodItem).after(discountItemObject);
-                } else {
-                    $('.total').before(discountItemObject);
-                }
-                $('.discount-price').hide();
-                Cookies.set('promo_code', promoCode.val(), { expires: 30, path: '' });
-                updateTotal();
-            }
-        });
+        getDiscountValue();
     }
+}
+
+function getDiscountValue() {
+    const promoCode = $('#promo-code');
+    let value = '';
+    if (promoCode.val() !== '') {
+        value = promoCode.val();
+    } else {
+        value = Cookies.get('promo_code');
+    }
+    $.ajax({
+        url: '../../process/get_promo_code_discount.php',
+        type: "GET",
+        data: { 'promo-code': value },
+        dataType: 'JSON',
+        success: function (response) {
+            const discountItemObject = getDiscountItemObject(value, response[0]['discount']);
+            const periodItem = '.periodItem';
+            if ($(periodItem).length > 0) {
+                $(periodItem).after(discountItemObject);
+            } else {
+                $('.total').before(discountItemObject);
+            }
+            $('.discount-price').hide();
+            Cookies.set('promo_code', value, { expires: 30, path: '' });
+            updateTotal();
+        }
+    });
 }
 
 function setPeriodItem() {
