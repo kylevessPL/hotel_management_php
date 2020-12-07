@@ -212,10 +212,10 @@ function setServiceItem() {
                     const serviceItemObject = getServiceItemObject($(currentElement).text(), response[0]['price']);
                     const discountItem = '.discountItem';
                     const periodItem = '.periodItem';
-                    if ($(discountItem).length > 0) {
-                        $(discountItem).before(serviceItemObject);
-                    } else if ($(periodItem).length > 0) {
+                    if ($(periodItem).length > 0) {
                         $(periodItem).before(serviceItemObject);
+                    } else if ($(discountItem).length > 0) {
+                        $(discountItem).before(serviceItemObject);
                     } else {
                         $('.total').before(serviceItemObject);
                     }
@@ -244,7 +244,7 @@ function setDiscountItem() {
                 const discountItemObject = getDiscountItemObject(promoCode.val(), response[0]['discount']);
                 const periodItem = '.periodItem';
                 if ($(periodItem).length > 0) {
-                    $(periodItem).before(discountItemObject);
+                    $(periodItem).after(discountItemObject);
                 } else {
                     $('.total').before(discountItemObject);
                 }
@@ -264,7 +264,12 @@ function setPeriodItem() {
         const endDate = moment($('#endDate').val(), 'DD/MM/YYYY');
         const period = moment.duration(endDate.diff(startDate));
         const periodItemObject = getPeriodItemObject(startDate.format('DD/MM/YYYY'), endDate.format('DD/MM/YYYY'), period);
-        $('.total').before(periodItemObject);
+        const discountItem = '.discountItem';
+        if ($(discountItem).length > 0) {
+            $(discountItem).before(periodItemObject);
+        } else {
+            $('.total').before(periodItemObject);
+        }
     }
 }
 
