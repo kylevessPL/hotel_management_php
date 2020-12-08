@@ -82,7 +82,6 @@ function setEvents() {
             $.ajax({
                 url: '../../process/get_customer_details.php',
                 type: "GET",
-                data: {'id': getCustomerId() },
                 dataType: 'JSON',
                 success: function (response) {
                     const selectedAddress = $('#myAddress :selected').text();
@@ -112,16 +111,70 @@ function setEvents() {
                         $('.discounted').hide();
                     }
                     $('.confirmation-total').html(totalValue + ' PLN');
-                    $('#confirmBookingModal').modal();
+                    let selector = $('#confirmBookingModal');
+                    selector.modal();
+                    selector.on('hide.bs.modal', function () {
+                        setTimeout(() => $('#confirmBookingModal').remove(), 400);
+                    });
+                    $('#confirmBookingAction').on('click', function () {
+                        let services = [];
+                        $('#services option:selected').each(function (index, currentElement) {
+                            services.push( { "id": $(currentElement).val() } );
+                        });
+                        let people = [];
+                        $('.booking-person').each(function (index, currentElement) {
+                            let firstName = $(currentElement).find('.first-name').val();
+                            let lastName = $(currentElement).find('.last-name').val();
+                            let documentType = $(currentElement).find('.document-type :selected').text();
+                            let documentId = $(currentElement).find('.document-id').val();
+                            people.push( { "first-name": firstName, "last-name": lastName, "document-type": documentType, "document-id": documentId } );
+                        });
+                        let promoCode = '';
+                        if ($('.discountItem').length > 0) {
+                            promoCode = $(this).find('.discount-code').html();
+                        }
+                        $.ajax({
+                            url: '../../process/book_room_and_get_id.php',
+                            type: "POST",
+                            contentType: 'application/json',
+                            data: JSON.stringify( { "start-date": $('#booking-form #startDate').val(), "end-date": $('#booking-form #endDate').val(), "room-id": $('#booking-form #room').val(), "services": services, "people": people, "promo-code": promoCode } ),
+                            processData: false,
+                            dataType: 'JSON',
+                            success: function (response) {
+                                let selector2 = '#paymentModal';
+                                $('#confirmBookingModal').hide();
+                                $('#paymentModalTitle').html('Pay for booking #' + response[0]['id']);
+                                $('#transfer-title').append(response[0]['id']);
+                                $('.payment-total').prepend(Number(response[0]['total']).toFixed(2));
+                                /*$.ajax({
+                                    url: '',
+                                    type: "GET",
+                                    data: '',
+                                    dataType: 'JSON',
+                                    success: function (response) {
+                                        $('.payPalPayAction').attr('href', );
+                                    }
+                                });*/
+                                $(selector2).modal();
+                                $('.creditCardPayAction').on('click', function () {
+                                    $('.creditCardTab').append('<p class="alert alert-success">Thank you. We have successfully processed your payment.</p>');
+                                    setTimeout(() => $('#paymentModal').hide(), 3000);
+                                });
+                                $(selector2).on('hide.bs.modal', function () {
+                                    setTimeout(() => location.reload(), 400);
+                                });
+                            },
+                            error: function () {
+                                $('.booking-confirmation-alert').html('Oops, something went wrong. Please try again later.');
+                            }
+                        });
+                    });
                 }
             });
         }
     });
     $('#services').on('change', function() {
         setServiceItem();
-    });
-    $('body').on('hide.bs.modal', '#confirmBookingModal', function () {
-        setTimeout(() => $('#confirmBookingModal').remove(), 400);
     });
 }
 
@@ -408,7 +461,7 @@ function getDiscountItemObject(code, discount) {
         <li class="list-group-item d-flex justify-content-between bg-light discountItem">
             <div class="text-success">
                 <h6 class="my-0">Promo code</h6>
-                <small>` +code+ `</small>
+                <small class="discount-code">` +code+ `</small>
                 <small class="d-none discount-value">` +discount+ `</small>
             </div>
             <span class="text-success discount-price">0 PLN</span>
@@ -462,7 +515,7 @@ function getBookingConfirmationModal() {
                         <h5 class="modal-title" id="confirmBookingModalTitle">Booking confirmation</h5><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
-                        <p class="alert alert-warning">Please check all the information carefully and process to payment if everything is correct</p>
+                        <p class="alert alert-warning booking-confirmation-alert">Please check all the information carefully and process to payment if everything is correct</p>
                         <hr>
                         <div class="row mb-4 confirmation-people-details">
                         </div>
@@ -518,6 +571,119 @@ function getBookingConfirmationModal() {
                     <div class="modal-footer">
                         <button class="btn btn-danger" data-dismiss="modal" type="button" id="abortBtn">Abort</button>
                         <button class="btn btn-success" id="confirmBookingAction">Process to payment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function getPaymentModal() {
+    return `
+        <div aria-hidden="true" aria-labelledby="paymentModalTitle" class="modal fade" id="paymentModal" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="paymentModalTitle"></h5><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="bg-white rounded-lg shadow-sm p-5">
+                            <ul role="tablist" class="nav bg-light nav-pills rounded-pill nav-fill mb-3">
+                                <li class="nav-item">
+                                    <a data-toggle="pill" href="#nav-tab-card" class="nav-link active rounded-pill"><i class="las la-credit-card"></i>Credit Card</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-toggle="pill" href="#nav-tab-paypal" class="nav-link rounded-pill"><i class="lab la-paypal"></i>Paypal</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-toggle="pill" href="#nav-tab-bank" class="nav-link rounded-pill"><i class="las la-university"></i>Bank Transfer</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="nav-tab-card" class="tab-pane fade show active creditCardTab">
+                                    <form role="form">
+                                        <div class="form-group">
+                                            <label for="fullName">Full name</label>
+                                            <input type="text" name="fullName" id="fullName" placeholder="Enter full name on the card" required class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cardNumber">Card number</label>
+                                            <div class="input-group">
+                                                <input type="text" name="cardNumber" id="cardNumber" placeholder="Enter credit card number (16 digits)" class="form-control">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text text-muted">
+                                                        <i class="lab la-cc-visa"></i>
+                                                        <i class="lab la-cc-mastercard"></i>
+                                                        <i class="lab la-cc-amex"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <div class="form-group">
+                                                    <label><span class="hidden-xs">Expiry date</span></label>
+                                                    <div class="input-group">
+                                                        <input type="number" min="1" max="12" name="expiry-month" id="expiry-month" placeholder="MM" class="form-control">
+                                                        <input type="number" min="1" max="12" name="expiry-year" id="expiry-year" placeholder="YY" class="form-control">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group mb-4">
+                                                    <label data-toggle="tooltip" title="Three-digits code on the back of your card">CVV<i class="las la-question-circle"></i></label>
+                                                    <input class="form-control" type="text" name="cvv" id="cvv">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-primary btn-block rounded-pill shadow-sm creditCardPayAction">Pay</button>
+                                    </form>
+                                    <div class="row">
+                                        <div class="col-lg-4 col-sm-5 ml-auto d-inline-flex">
+                                            <div>
+                                                <strong>Total</strong>
+                                            </div>
+                                            <div class="text-right">
+                                                <strong class="payment-total"> PLN</strong>
+                                            </td>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="nav-tab-paypal" class="tab-pane fade">
+                                    <p>PayPal is the fastest way to pay</p>
+                                    <p><a class="btn btn-primary rounded-pill payPalPayAction" href="" target="_blank"><i class="lab la-paypal"></i>Pay with PayPal</a></p>
+                                    <p class="text-muted">*No account required</p>
+                                    <p class="text-muted">*Additional fees may apply</p>
+                                </div>
+                                <div id="nav-tab-bank" class="tab-pane fade">
+                                    <h6>Pay via traditional bank transfer</h6><br>
+                                    <dl>
+                                        <dt>Bank</dt>
+                                        <dd>ING Bank Śląski</dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>IBAN</dt>
+                                        <dd>PL73 1050 1937 1000 0097 0371 5046</dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>SWIFT</dt>
+                                        <dd>INGBPLPW</dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>Transfer title</dt>
+                                        <dd id="transfer-title">Booking #</dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>Transfer amount</dt>
+                                        <dd class="payment-total"> PLN</dd>
+                                    </dl>
+                                    <p class="text-muted">Please check carefully if the data you've entered is all correct.<br>Please note that the transfer title and amount must be exactly like above.<br>We are not responible for any mistakes from your side.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal" type="button">Pay later</button>
                     </div>
                 </div>
             </div>

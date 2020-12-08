@@ -1,11 +1,8 @@
 <?php
 
 include_once dirname(__DIR__).'/helpers/conn.php';
-include_once dirname(__DIR__).'/helpers/init_session.php';
 
-get_customer_id($alertMsg, $alertType, $customerId);
-
-if (!isset($customerId))
+if (!empty($_GET['id']))
 {
     $id = escape_string($_GET['id']);
     $sql = "SELECT first_name, last_name, document_type, document_id FROM customers WHERE id = '$id'";
@@ -36,5 +33,5 @@ if (!isset($customerId))
 }
 else
 {
-    header("HTTP/1.1 401 Unauthorized");
+    http_response_code(400);
 }

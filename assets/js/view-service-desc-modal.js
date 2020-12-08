@@ -15,13 +15,14 @@ $(document).ready(function() {
         });
         $('#viewServiceDescName').html($(this).closest("tr").find("td.service-name").text());
         $('#viewServiceDescPrice').html('Price: ' + $(this).closest("tr").find("td.service-price").text() + ' PLN');
-        $('#viewServiceDescModal').modal();
-    });
-    $('body').on('hide.bs.modal', '#viewServiceDescModal', function () {
-        setTimeout(function() {
-            $('#viewServiceDescModal').remove();
-            $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show()
-        }, 400);
+        let selector = $('#viewServiceDescModal');
+        selector.modal();
+        selector.on('hide.bs.modal', function () {
+            setTimeout(function() {
+                $('#viewServiceDescModal').remove();
+                $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show()
+            }, 400);
+        });
     });
 });
 
