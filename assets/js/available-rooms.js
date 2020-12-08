@@ -47,9 +47,6 @@ $(document).ready(function () {
         styleBase: 'form-control'
     });
     $.fn.selectpicker.Constructor.BootstrapVersion = '4';
-    $('#viewRoomDescModal').on('hide.bs.modal', function () {
-        setTimeout(() => $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show(), 400);
-    });
 });
 
 function roomsSearchHandler() {
@@ -63,7 +60,8 @@ function roomsSearchHandler() {
     buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice);
     $('#roomsTable tbody').on('click', 'button', function (event) {
         event.preventDefault();
-        $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').hide();
+        const modal = getRoomDescModal();
+        $('.main-container').before(modal);
         $.ajax({
             url: '../../process/get_room_amenities.php',
             type: "GET",
@@ -82,7 +80,11 @@ function roomsSearchHandler() {
         $('#viewRoomDescBedAmount').html('<br>' + 'Bed amount: ' + $(this).closest("tr").find("td.dt-bed-amount").text());
         $('#viewRoomDescStandardPrice').html('<br>' + 'Standard price: ' + $(this).closest("tr").find("td.dt-standard-price").text() + ' USD');
         $('#viewRoomDescAmenities').html('<br>' + 'Amenities: ');
-        $('#viewRoomDescModal').modal();
+        let selector = $('#viewRoomDescModal');
+        selector.modal();
+        selector.on('hide.bs.modal', function () {
+            setTimeout(() => $('#viewRoomDescModal').remove(), 400);
+        });
     });
 }
 
@@ -195,4 +197,27 @@ function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice
         });
     }).draw();
     new $.fn.dataTable.FixedHeader(table);
+}
+
+function getRoomDescModal() {
+    return `
+        <div aria-hidden="true" aria-labelledby="viewRoomDescModalTitle" class="modal fade" id="viewRoomDescModal" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewRoomDescModalTitle"></h5><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="viewRoomDescRoomNumber"></div>
+                        <div id="viewRoomDescBedAmount"></div>
+                        <div id="viewRoomDescStandardPrice"></div>
+                        <div id="viewRoomDescAmenities"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
 }

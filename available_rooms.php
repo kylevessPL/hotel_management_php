@@ -21,8 +21,7 @@ $amenities_result = query($sql);
 
 <body class="min-vh-100 d-flex flex-column">
 <?php view('navbar.php'); ?>
-<?php view('confirmation_modal.php'); ?>
-<div class="container-fluid flex-grow-1">
+<div class="container-fluid main-container flex-grow-1">
     <div class="row">
         <?php view('sidebar.php'); ?>
         <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4">
@@ -116,25 +115,6 @@ $amenities_result = query($sql);
     </div>
 </div>
 <?php view('footer.php'); ?>
-
-<div aria-hidden="true" aria-labelledby="viewRoomDescModalTitle" class="modal fade" id="viewRoomDescModal" role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="viewRoomDescModalTitle"></h5><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
-            </div>
-            <div class="modal-body">
-                <div id="viewRoomDescRoomNumber"></div>
-                <div id="viewRoomDescBedAmount"></div>
-                <div id="viewRoomDescStandardPrice"></div>
-                <div id="viewRoomDescAmenities"></div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <?php view('scripts.php'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>

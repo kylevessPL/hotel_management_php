@@ -27,10 +27,6 @@ function init() {
     checkCookie();
 }
 
-function test() {
-    alert('adda');
-}
-
 function setStickySummaryPanel() {
     const height = $('.navbar').height() + 16;
     $('.sticky-top').css('top', height + 'px');
@@ -77,6 +73,8 @@ function setEvents() {
     $('.bookingSubmit').on('click', function() {
         if ($('#booking-form').valid()) {
             $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').hide();
+            const modal = getBookingConfirmationModal();
+            $('.main-container').before(modal);
             const confirmationPeopleDetails = '.confirmation-people-details';
             const confirmationItems = '.confirmation-items';
             $(confirmationPeopleDetails).html('');
@@ -122,8 +120,8 @@ function setEvents() {
     $('#services').on('change', function() {
         setServiceItem();
     });
-    $('#confirmBookingModal').on('hide.bs.modal', function () {
-        setTimeout(() => $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show(), 400);
+    $('body').on('hide.bs.modal', '#confirmBookingModal', function () {
+        setTimeout(() => $('#confirmBookingModal').remove(), 400);
     });
 }
 
@@ -452,6 +450,78 @@ function getPeriodItemObject(startDate, endDate, period) {
             </div>
             <span class="period" style="color: #0c68f1;">` +duration+ `</span>
         </li>
+    `;
+}
+
+function getBookingConfirmationModal() {
+    return `
+        <div aria-hidden="true" aria-labelledby="confirmBookingModalTitle" class="modal fade" id="confirmBookingModal" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmBookingModalTitle">Booking confirmation</h5><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="alert alert-warning">Please check all the information carefully and process to payment if everything is correct</p>
+                        <hr>
+                        <div class="row mb-4 confirmation-people-details">
+                        </div>
+                        <div class="table-responsive-sm">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="text-center">Service</th>
+                                    <th scope="col" class="text-center">Description</th>
+                                    <th scope="col" class="text-center">Price</th>
+                                </tr>
+                                </thead>
+                                <tbody class="confirmation-items">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-5 ml-auto">
+                                <table class="table table-clear">
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <strong>Period</strong>
+                                        </td>
+                                        <td class="text-right confirmation-period"></td>
+                                    </tr>
+                                    <tr class="discounted">
+                                        <td>
+                                            <strong>Subtotal</strong>
+                                        </td>
+                                        <td class="text-right confirmation-subtotal"></td>
+                                    </tr>
+                                    <tr class="discounted">
+                                        <td>
+                                            <strong class="confirmation-discount-value"></strong>
+                                        </td>
+                                        <td class="text-right confirmation-discount-price"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Total</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <strong class="confirmation-total"></strong>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger" data-dismiss="modal" type="button" id="abortBtn">Abort</button>
+                        <button class="btn btn-success" id="confirmBookingAction">Process to payment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     `;
 }
 
