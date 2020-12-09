@@ -1,11 +1,11 @@
 <?php
 
 include_once dirname(__DIR__).'/helpers/conn.php';
-include_once dirname(__DIR__).'/helpers/init_session.php';
+include_once dirname(__DIR__).'/process/get_customer_id.php';
 
 get_customer_id($alertMsg, $alertType, $customerId);
 
-if (!isset($customerId))
+if (isset($customerId))
 {
     $sql = "SELECT first_name, last_name, document_type, document_id FROM customers WHERE id = '$customerId'";
     $result = query($sql);
