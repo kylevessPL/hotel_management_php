@@ -130,14 +130,23 @@ function setEvents() {
                             people.push( { "first-name": firstName, "last-name": lastName, "document-type": documentType, "document-id": documentId } );
                         });
                         let promoCode = '';
-                        if ($('.discountItem').length > 0) {
-                            promoCode = $(this).find('.discount-code').html();
+                        const discountItem = $('.discountItem');
+                        if (discountItem.length > 0) {
+                            promoCode = $(discountItem).find('.discount-code').html();
                         }
+                        const data = {
+                            "start-date": $('#booking-form #startDate').val(),
+                            "end-date": $('#booking-form #endDate').val(),
+                            "room-id": $('#booking-form #room').val(),
+                            "services": services,
+                            "people": people,
+                            "promo-code": promoCode
+                        };
                         $.ajax({
                             url: '../../process/book_room_and_get_id.php',
                             type: "POST",
-                            contentType: 'application/json',
-                            data: JSON.stringify( { "start-date": $('#booking-form #startDate').val(), "end-date": $('#booking-form #endDate').val(), "room-id": $('#booking-form #room').val(), "services": services, "people": people, "promo-code": promoCode } ),
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(data),
                             processData: false,
                             dataType: 'JSON',
                             success: function (response) {
@@ -157,7 +166,7 @@ function setEvents() {
                                 });
                             },
                             error: function () {
-                                $('.booking-confirmation-alert').html('Oops, something went wrong. Please try again later.');
+                                $('.booking-confirmation-alert').html('Oops, something went wrong. Please try again later.').removeClass('alert-warning').addClass('alert-danger');
                             }
                         });
                     });
@@ -712,11 +721,12 @@ function updateTotal() {
         if (total === 0) {
             $('.discount-price').html('0 PLN').hide();
         } else {
-            const discount = Number($('.discount-value').html()) / 100 * total;
+            const discountValue = $('.discount-value');
+            const discount = (Number(discountValue.html()) / 100 * total).toFixed(2);
             if (discount > 0) {
-                $('.discount-price').html('-' + discount.toFixed(2) + ' PLN').show();
+                $('.discount-price').html('-' + discount + ' PLN').show();
                 $(discountItem).show();
-                total -= discount;
+                total *= (1 - Number(discountValue.html()) / 100);
             }
         }
     }

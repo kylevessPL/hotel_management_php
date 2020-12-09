@@ -23,12 +23,12 @@ CREATE TABLE `amenities` (
 
 CREATE TABLE `bookings` (
 	`id` int(11) AUTO_INCREMENT,
-	`book_date` DATETIME NOT NULL,
+	`book_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`start_date` DATE NOT NULL,
 	`end_date` DATE NOT NULL,
-	`offer_id` int(11),
-	`final_price` numeric(10,2),
-	`status` varchar(15) NOT NULL,
+	`discount_id` int(11),
+	`final_price` numeric(10,2) NOT NULL,
+	`status` varchar(15) NOT NULL DEFAULT 'Unpaid',
 	CONSTRAINT `bookings_pk` PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -157,7 +157,7 @@ ALTER TABLE `bookings_services` ADD CONSTRAINT `bookings_services_fk1` FOREIGN K
 
 ALTER TABLE `payments` ADD CONSTRAINT `payments_fk0` FOREIGN KEY (`payment_form_id`) REFERENCES `payment_forms`(`id`);
 
-ALTER TABLE `bookings` ADD CONSTRAINT `bookings_fk0` FOREIGN KEY (`offer_id`) REFERENCES `discounts`(`id`);
+ALTER TABLE `bookings` ADD CONSTRAINT `bookings_fk0` FOREIGN KEY (`discount_id`) REFERENCES `discounts`(`id`);
 
 ALTER TABLE `customers_bookings` ADD CONSTRAINT `customers_bookings_fk0` FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`);
 

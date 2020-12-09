@@ -25,7 +25,7 @@ if (isset($_GET['id']))
         }
         else
         {
-            header("HTTP/1.1 403 Forbidden");
+            http_response_code(403);
         }
     }
 }
