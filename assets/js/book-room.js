@@ -146,15 +146,7 @@ function setEvents() {
                                 $('#paymentModalTitle').html('Pay for booking #' + response[0]['id']);
                                 $('#transfer-title').append(response[0]['id']);
                                 $('.payment-total').prepend(Number(response[0]['total']).toFixed(2));
-                                /*$.ajax({
-                                    url: '',
-                                    type: "GET",
-                                    data: '',
-                                    dataType: 'JSON',
-                                    success: function (response) {
-                                        $('.payPalPayAction').attr('href', );
-                                    }
-                                });*/
+                                $('.payPalPayAction').attr('href', getPayPalUrl());
                                 $(selector2).modal();
                                 $('.creditCardPayAction').on('click', function () {
                                     $('.creditCardTab').append('<p class="alert alert-success">Thank you. We have successfully processed your payment.</p>');
@@ -176,6 +168,18 @@ function setEvents() {
     $('#services').on('change', function() {
         setServiceItem();
     });
+}
+
+function getPayPalUrl() {
+    const roomItemPrice = $('.roomItem .item-price').html();
+    let url = 'https://www.paypal.com/cgi-bin/webscr?cmd=_cart&add=1&business=' + encodeURIComponent('kacperpiasta@gmail.com');
+    url += '&item_name=' + encodeURIComponent($('.roomItem .room-item-name').html()) + '&item_number=1' + '&amount=' + encodeURIComponent(roomItemPrice.substring(0, roomItemPrice.indexOf(' PLN')));
+    $('.servicesItem').each(function(index, currentElement) {
+        let servicesItemPrice = $(currentElement).find('.item-price').html();
+        url += '&item_name=' + encodeURIComponent($(currentElement).find('.item-name').html()) + '&item_number=' + (index + 2) + '&amount=' + encodeURIComponent(servicesItemPrice.substring(0, servicesItemPrice.indexOf(' PLN')));
+    });
+    url += '&return=' + window.location.href + '&cancel_return=' + window.location.href;
+    return url;
 }
 
 function fetchRooms(startDate, endDate, bedAmount) {

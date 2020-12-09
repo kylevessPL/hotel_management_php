@@ -7,8 +7,7 @@ get_customer_id($alertMsg, $alertType, $customerId);
 
 if (!isset($customerId))
 {
-    $id = escape_string($_GET['id']);
-    $sql = "SELECT first_name, last_name, document_type, document_id FROM customers WHERE id = '$id'";
+    $sql = "SELECT first_name, last_name, document_type, document_id FROM customers WHERE id = '$customerId'";
     $result = query($sql);
     if (mysqli_num_rows($result) > 0)
     {
