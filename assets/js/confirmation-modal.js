@@ -4,7 +4,7 @@ $(document).ready(function() {
         $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').hide();
         const href = $(this).attr('href');
         const modal = getConfirmationModal();
-        $('.main-container').before(modal);
+        $('.main-container').after(modal);
         $('#confirmationModal #confirmationModalTitle').html('Sign out');
         $('#confirmationModal #modalMsg').html('Are you sure you want to sign out?');
         $('#confirmationModal #abortBtn').html('Stay');
@@ -16,7 +16,7 @@ $(document).ready(function() {
         $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').hide();
         const href = $(this).attr('href');
         const modal = getConfirmationModal();
-        $('.main-container').before(modal);
+        $('.main-container').after(modal);
         $('#confirmationModal #confirmationModalTitle').html('Delete address');
         $('#confirmationModal #modalMsg').html('Are you sure you want to delete this address?');
         $('#confirmationModal #abortBtn').html('Close');

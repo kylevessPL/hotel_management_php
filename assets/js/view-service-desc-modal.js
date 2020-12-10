@@ -3,7 +3,7 @@ $(document).ready(function() {
         event.preventDefault();
         $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').hide();
         const modal = getServiceDescModal();
-        $('.main-container').before(modal);
+        $('.main-container').after(modal);
         $.ajax({
             url: '../../process/get_service_desc.php',
             type: "GET",

@@ -54,9 +54,9 @@ if (mysqli_num_rows($result) == 0)
 $room_price = mysqli_fetch_assoc($result)['standard_price'];
 
 $services_price = 0;
+$service_list = [];
 if (isset($data['services']) && !empty($data['services']))
 {
-    $service_list = [];
     foreach ($data['services'] as &$value) {
         $service_list[] = $value['id'];
     }

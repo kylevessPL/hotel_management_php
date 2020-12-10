@@ -61,7 +61,7 @@ function roomsSearchHandler() {
     $('#roomsTable tbody').on('click', 'button', function (event) {
         event.preventDefault();
         const modal = getRoomDescModal();
-        $('.main-container').before(modal);
+        $('.main-container').after(modal);
         $.ajax({
             url: '../../process/get_room_amenities.php',
             type: "GET",

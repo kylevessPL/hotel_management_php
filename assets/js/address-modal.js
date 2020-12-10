@@ -3,7 +3,7 @@ $(document).ready(function() {
         event.preventDefault();
         $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').hide();
         const modal = getAddressModal();
-        $('.main-container').before(modal);
+        $('.main-container').after(modal);
         $('.addressRequest #addressModalLabel').html('Add new address');
         $('.addressRequest #addressSubmitBtn').attr('value', 'Add');
         $('.addressRequest #addressModal').modal();
@@ -12,7 +12,7 @@ $(document).ready(function() {
         event.preventDefault();
         $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').hide();
         const modal = getAddressModal();
-        $('.main-container').before(modal);
+        $('.main-container').after(modal);
         $('.addressRequest #addressModalLabel').html('Edit address');
         $('.addressRequest #addressNum').val($(this).closest("tr").find("th.address-num").text());
         $('.addressRequest #streetName').val($(this).closest("tr").find("td.address-street-name").text());

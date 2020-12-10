@@ -74,7 +74,7 @@ function setEvents() {
         if ($('#booking-form').valid()) {
             $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').hide();
             const modal = getBookingConfirmationModal();
-            $('.main-container').before(modal);
+            $('.main-container').after(modal);
             const confirmationPeopleDetails = '.confirmation-people-details';
             const confirmationItems = '.confirmation-items';
             $(confirmationPeopleDetails).html('');
@@ -151,7 +151,9 @@ function setEvents() {
                             dataType: 'JSON',
                             success: function (response) {
                                 let selector2 = '#paymentModal';
-                                $('#confirmBookingModal').hide();
+                                $('#confirmBookingModal .close').click();
+                                const modal2 = getPaymentModal();
+                                $('.main-container').after(modal2);
                                 $('#paymentModalTitle').html('Pay for booking #' + response[0]['id']);
                                 $('#transfer-title').append(response[0]['id']);
                                 $('.payment-total').prepend(Number(response[0]['total']).toFixed(2));
@@ -159,7 +161,7 @@ function setEvents() {
                                 $(selector2).modal();
                                 $('.creditCardPayAction').on('click', function () {
                                     $('.creditCardTab').append('<p class="alert alert-success">Thank you. We have successfully processed your payment.</p>');
-                                    setTimeout(() => $('#paymentModal').hide(), 3000);
+                                    setTimeout(() => $('#paymentModal .close').click(), 3000);
                                 });
                                 $(selector2).on('hide.bs.modal', function () {
                                     setTimeout(() => location.reload(), 400);
@@ -594,7 +596,7 @@ function getBookingConfirmationModal() {
 function getPaymentModal() {
     return `
         <div aria-hidden="true" aria-labelledby="paymentModalTitle" class="modal fade" id="paymentModal" role="dialog" tabindex="-1">
-            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="paymentModalTitle"></h5><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
