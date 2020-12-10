@@ -154,17 +154,24 @@ function setEvents() {
                                 $('#confirmBookingModal .close').click();
                                 const modal2 = getPaymentModal();
                                 $('.main-container').after(modal2);
+                                $('[data-toggle="tooltip"]').tooltip();
                                 $('#paymentModalTitle').html('Pay for booking #' + response[0]['id']);
                                 $('#transfer-title').append(response[0]['id']);
-                                $('.payment-total').prepend(Number(response[0]['total']).toFixed(2));
+                                const creditCardAction = $('.creditCardPayAction');
+                                creditCardAction.append(Number(response[0]['total']).toFixed(2) + ' PLN');
                                 $('.payPalPayAction').attr('href', getPayPalUrl());
                                 $(selector2).modal();
-                                $('.creditCardPayAction').on('click', function () {
-                                    $('.creditCardTab').append('<p class="alert alert-success">Thank you. We have successfully processed your payment.</p>');
+                                $('.paymentFormRadio').click(function () {
+                                    $(this).tab('show');
+                                    $('.paymentFormRadio.selected').removeClass('selected');
+                                    $(this).removeClass('active').addClass('selected');
+                                });
+                                creditCardAction.on('click', function () {
+                                    $('.creditCardTab').prepend('<p class="alert alert-success">Thank you. We have successfully processed your payment.</p>');
                                     setTimeout(() => $('#paymentModal .close').click(), 3000);
                                 });
-                                $(selector2).on('hide.bs.modal', function () {
-                                    setTimeout(() => location.reload(), 400);
+                                $(selector2).on('hide.bs.modal', function() {
+                                    setTimeout(() => $(location).attr('href','./my-bookings'), 300);
                                 });
                             },
                             error: function () {
@@ -595,105 +602,98 @@ function getBookingConfirmationModal() {
 
 function getPaymentModal() {
     return `
-        <div aria-hidden="true" aria-labelledby="paymentModalTitle" class="modal fade" id="paymentModal" role="dialog" tabindex="-1">
-            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div aria-hidden="true" aria-labelledby="paymentModalTitle" class="modal fade" id="paymentModal" role="dialog" tabindex="-1" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="paymentModalTitle"></h5><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
-                        <div class="bg-white rounded-lg shadow-sm p-5">
-                            <ul role="tablist" class="nav bg-light nav-pills rounded-pill nav-fill mb-3">
-                                <li class="nav-item">
-                                    <a data-toggle="pill" href="#nav-tab-card" class="nav-link active rounded-pill"><i class="las la-credit-card"></i>Credit Card</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a data-toggle="pill" href="#nav-tab-paypal" class="nav-link rounded-pill"><i class="lab la-paypal"></i>Paypal</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a data-toggle="pill" href="#nav-tab-bank" class="nav-link rounded-pill"><i class="las la-university"></i>Bank Transfer</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content">
-                                <div id="nav-tab-card" class="tab-pane fade show active creditCardTab">
-                                    <form role="form">
-                                        <div class="form-group">
-                                            <label for="fullName">Full name</label>
-                                            <input type="text" name="fullName" id="fullName" placeholder="Enter full name on the card" required class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="cardNumber">Card number</label>
-                                            <div class="input-group">
-                                                <input type="text" name="cardNumber" id="cardNumber" placeholder="Enter credit card number (16 digits)" class="form-control">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text text-muted">
-                                                        <i class="lab la-cc-visa"></i>
-                                                        <i class="lab la-cc-mastercard"></i>
-                                                        <i class="lab la-cc-amex"></i>
-                                                    </span>
-                                                </div>
+                        <div role="tablist" class="row justify-content-center mb-4 radio-group">
+                            <div class="col-sm-3 col-5">
+                                <a class='radio selected mx-auto paymentFormRadio' href="#nav-tab-card"><img class="fit-image" src="/assets/images/visa_mastercard.png" width="105px" height="55px" alt="Credit card"></a>
+                            </div>
+                            <div class="col-sm-3 col-5">
+                                <a class='radio mx-auto paymentFormRadio' href="#nav-tab-paypal"><img class="fit-image" src="/assets/images/paypal.png" width="105px" height="55px" alt="Credit card"></a>
+                            </div>
+                            <div class="col-sm-3 col-5">
+                                <a class='radio mx-auto paymentFormRadio' href="#nav-tab-bitcoin"><img class="fit-image" src="/assets/images/bitcoin.png" width="105px" height="55px" alt=""></a>
+                            </div>
+                            <div class="col-sm-3 col-5">
+                                <a class='radio mx-auto paymentFormRadio' href="#nav-tab-bank"><img class="fit-image" src="/assets/images/bank_transfer.png" width="105px" height="55px" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="tab-content">
+                            <div id="nav-tab-card" class="tab-pane fade show active creditCardTab">
+                                <form role="form">
+                                    <div class="form-group">
+                                        <label for="fullName">Full name</label>
+                                        <input type="text" name="fullName" id="fullName" placeholder="Enter full name on the card" required class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cardNumber">Card number</label>
+                                        <div class="input-group">
+                                            <input type="text" name="cardNumber" id="cardNumber" placeholder="0000 0000 0000 0000" class="form-control">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text text-muted">
+                                                    <i class="lab la-cc-visa la-lg pr-2"></i>
+                                                    <i class="lab la-cc-mastercard la-lg pr-2"></i>
+                                                    <i class="lab la-cc-amex la-lg"></i>
+                                                </span>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-8">
-                                                <div class="form-group">
-                                                    <label><span class="hidden-xs">Expiry date</span></label>
-                                                    <div class="input-group">
-                                                        <input type="number" min="1" max="12" name="expiry-month" id="expiry-month" placeholder="MM" class="form-control">
-                                                        <input type="number" min="1" max="12" name="expiry-year" id="expiry-year" placeholder="YY" class="form-control">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="form-group mb-4">
-                                                    <label data-toggle="tooltip" title="Three-digits code on the back of your card">CVV<i class="las la-question-circle"></i></label>
-                                                    <input class="form-control" type="text" name="cvv" id="cvv">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button type="button" class="btn btn-primary btn-block rounded-pill shadow-sm creditCardPayAction">Pay</button>
-                                    </form>
-                                    <div class="row">
-                                        <div class="col-lg-4 col-sm-5 ml-auto d-inline-flex">
-                                            <div>
-                                                <strong>Total</strong>
-                                            </div>
-                                            <div class="text-right">
-                                                <strong class="payment-total"> PLN</strong>
-                                            </td>
                                         </div>
                                     </div>
-                                </div>
-                                <div id="nav-tab-paypal" class="tab-pane fade">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <div class="form-group">
+                                                <label><span class="hidden-xs">Expiry date</span></label>
+                                                <div class="input-group">
+                                                    <input type="number" min="1" max="12" value="01" name="expiry-month" id="expiry-month" placeholder="MM" class="form-control">
+                                                    <input type="number" min="1" max="12" value="12" name="expiry-year" id="expiry-year" placeholder="YY" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group mb-4">
+                                                <label data-toggle="tooltip" title="Three-digits code on the back of your card">CVV<i class="las la-question-circle ml-1"></i></label>
+                                                <input class="form-control" type="password" name="cvv" id="cvv" maxlength="3" placeholder="Enter CVV code">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-success btn-block rounded-pill shadow-sm creditCardPayAction"><i class="las la-lock la-lg mr-2"></i>Pay </button>
+                                </form>
+                            </div>
+                            <div id="nav-tab-paypal" class="tab-pane fade">
+                                <div class="text-center my-3">
                                     <p>PayPal is the fastest way to pay</p>
-                                    <p><a class="btn btn-primary rounded-pill payPalPayAction" href="" target="_blank"><i class="lab la-paypal"></i>Pay with PayPal</a></p>
-                                    <p class="text-muted">*No account required</p>
-                                    <p class="text-muted">*Additional fees may apply</p>
+                                    <a class="btn btn-primary rounded-pill payPalPayAction" href="" target="_blank"><i class="lab la-paypal la-lg mr-2"></i>Pay with PayPal</a>
                                 </div>
-                                <div id="nav-tab-bank" class="tab-pane fade">
-                                    <h6>Pay via traditional bank transfer</h6><br>
-                                    <dl>
-                                        <dt>Bank</dt>
-                                        <dd>ING Bank Śląski</dd>
-                                    </dl>
-                                    <dl>
-                                        <dt>IBAN</dt>
-                                        <dd>PL73 1050 1937 1000 0097 0371 5046</dd>
-                                    </dl>
-                                    <dl>
-                                        <dt>SWIFT</dt>
-                                        <dd>INGBPLPW</dd>
-                                    </dl>
-                                    <dl>
-                                        <dt>Transfer title</dt>
-                                        <dd id="transfer-title">Booking #</dd>
-                                    </dl>
-                                    <dl>
-                                        <dt>Transfer amount</dt>
-                                        <dd class="payment-total"> PLN</dd>
-                                    </dl>
-                                    <p class="text-muted">Please check carefully if the data you've entered is all correct.<br>Please note that the transfer title and amount must be exactly like above.<br>We are not responible for any mistakes from your side.</p>
-                                </div>
+                                <p class="text-muted">*No account required</p>
+                                <p class="text-muted">*Additional fees may apply</p>
+                            </div>
+                            <div id="nav-tab-bank" class="tab-pane fade">
+                                <h6>Pay via traditional bank transfer</h6><br>
+                                <dl>
+                                    <dt>Bank</dt>
+                                    <dd>ING Bank Śląski</dd>
+                                </dl>
+                                <dl>
+                                    <dt>IBAN</dt>
+                                    <dd>PL73 1050 1937 1000 0097 0371 5046</dd>
+                                </dl>
+                                <dl>
+                                    <dt>SWIFT</dt>
+                                    <dd>INGBPLPW</dd>
+                                </dl>
+                                <dl>
+                                    <dt>Transfer title</dt>
+                                    <dd id="transfer-title">Booking #</dd>
+                                </dl>
+                                <dl>
+                                    <dt>Transfer amount</dt>
+                                    <dd class="payment-total"> PLN</dd>
+                                </dl>
+                                <p class="text-muted">Please check carefully if the data you've entered is all correct.<br>Please note that the transfer title and amount must be exactly like above.<br>We are not responsible for any mistakes from your side.</p>
                             </div>
                         </div>
                     </div>

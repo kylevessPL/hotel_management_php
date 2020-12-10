@@ -9,6 +9,15 @@
     border-color: #5c8ff3;
 }
 
+.rounded-pill .nav-link.active {
+    background-color: #0c68f1;
+    color: white;
+}
+
+.nav-item > a {
+    color: #0c68f1;
+}
+
 .sidebar {
     position: fixed;
     top: 0;
@@ -72,3 +81,30 @@
     border: none !important;
 }
 
+.radio {
+    display: inline-block;
+    border-radius: 6px;
+    box-sizing: border-box;
+    border: 2px solid lightgrey;
+    cursor: pointer;
+    margin: 12px 25px 12px 0
+}
+
+.radio:hover {
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2)
+}
+
+.radio.selected {
+    box-shadow: 0 0 0 1px rgba(0, 0, 155, 0.4);
+    border: 2px solid #0c68f1;
+}
+
+.fit-image {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.tooltip {
+    z-index: 100000000;
+}
