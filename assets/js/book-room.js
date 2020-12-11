@@ -168,30 +168,24 @@ function setEvents() {
                                 paymentFormRadio.first().addClass('selected');
                                 $('#nav-tab-card').addClass('active');
                                 $('#cardNumber').on('keyup keydown', function() {
-                                    $(this).val(function (index, value) {
-                                        const selectionStart = $(this).get(0).selectionStart;
-                                        let trimmedCardNum = value.replace(/\s+/g, '');
-                                        if (trimmedCardNum.length > 16) {
-                                            trimmedCardNum = trimmedCardNum.substr(0, 16);
+                                    if (this.value === this.lastValue) {
+                                        return;
+                                    }
+                                    let caretPosition = this.selectionStart;
+                                    const sanitizedValue = this.value.replace(/[^0-9]/gi, '');
+                                    const parts = [];
+                                    for (let i = 0, len = sanitizedValue.length; i < len; i += 4) {
+                                        parts.push(sanitizedValue.substring(i, i + 4));
+                                    }
+                                    for (let i = caretPosition - 1; i >= 0; i--) {
+                                        const c = this.value[i];
+                                        if (c < '0' || c > '9') {
+                                            caretPosition--;
                                         }
-                                        const partitions = trimmedCardNum.startsWith('34') || trimmedCardNum.startsWith('37')
-                                            ? [4,6,5]
-                                            : [4,4,4,4];
-                                        const numbers = [];
-                                        let position = 0;
-                                        partitions.forEach(partition => {
-                                            const part = trimmedCardNum.substr(position, partition);
-                                            if (part) numbers.push(part);
-                                            position += partition;
-                                        });
-                                        const formattedCardNum = numbers.join(' ');
-                                        if (selectionStart < formattedCardNum.length - 1) {
-                                            setTimeout(() => {
-                                                $(this).get(0).setSelectionRange(selectionStart, selectionStart, 'none');
-                                            });
-                                        }
-                                        return formattedCardNum;
-                                    })
+                                    }
+                                    caretPosition += Math.floor(caretPosition / 4);
+                                    this.value = this.lastValue = parts.join(' ');
+                                    this.selectionStart = this.selectionEnd = caretPosition;
                                 });
                                 paymentFormRadio.click(function () {
                                     $(this).tab('show');
@@ -200,6 +194,9 @@ function setEvents() {
                                 });
                                 creditCardAction.on('click', function () {
                                     $('.creditCardTab').prepend('<p class="alert alert-danger">Unfortunately, we can\'t process your payment.</p>');
+                                });
+                                $(selector2).on('hide.bs.modal', function() {
+                                    setTimeout(() => $(location).attr('href','./my-bookings'), 300);
                                 });
                             },
                             error: function () {
@@ -653,7 +650,7 @@ function getPaymentModal() {
                         </div>
                         <div class="tab-content">
                             <div id="nav-tab-card" class="tab-pane fade show creditCardTab">
-                                <form role="form">
+                                <form role="form" id="credit-card-form" name="credit-card-form">
                                     <div class="form-group">
                                         <label for="fullName">Full name</label>
                                         <input type="text" name="fullName" id="fullName" placeholder="Enter card holder full name" required class="form-control">
@@ -661,7 +658,7 @@ function getPaymentModal() {
                                     <div class="form-group">
                                         <label for="cardNumber">Card number</label>
                                         <div class="input-group">
-                                            <input type="text" name="cardNumber" id="cardNumber" placeholder="0000 0000 0000 0000" class="form-control">
+                                            <input type="text" name="cardNumber" id="cardNumber" placeholder="0000 0000 0000 0000" class="form-control" minlength="19" maxlength="19">
                                             <div class="input-group-append">
                                                 <span class="input-group-text text-muted">
                                                     <i class="lab la-cc-visa la-lg pr-2"></i>
@@ -676,9 +673,9 @@ function getPaymentModal() {
                                             <div class="form-group">
                                                 <label><span class="hidden-xs">Expiry date</span></label>
                                                 <div class="input-group">
-                                                    <input type="number" min="1" max="12" value="`+addLeadingZeros(getCurrentMonth())+`" name="expiry-month" id="expiry-month" placeholder="MM" class="form-control" oninput='formatNumberInput(this)'>
+                                                    <input type="number" min="1" max="12" value="`+addLeadingZeros(getCurrentMonth())+`" name="expiryMonth" id="expiryMonth" placeholder="MM" class="form-control" oninput='formatNumberInput(this)'>
                                                     <span class="exp-separator">/</span>
-                                                    <input type="number" min="`+addLeadingZeros(getCurrentYear())+`" max="`+addLeadingZeros(Number(getCurrentYear()) + 10)+`" value="`+addLeadingZeros(getCurrentYear())+`" name="expiry-year" id="expiry-year" placeholder="YY" class="form-control" oninput='formatNumberInput(this)'>
+                                                    <input type="number" min="`+addLeadingZeros(getCurrentYear())+`" max="`+addLeadingZeros(Number(getCurrentYear()) + 10)+`" value="`+addLeadingZeros(getCurrentYear())+`" name="expiryYear" id="expiryYear" placeholder="YY" class="form-control" oninput='formatNumberInput(this)'>
                                                 </div>
                                             </div>
                                         </div>
@@ -689,7 +686,7 @@ function getPaymentModal() {
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-success btn-block rounded-pill shadow-sm creditCardPayAction"><i class="las la-lock la-lg mr-2"></i>Pay </button>
+                                    <button type="submit" class="btn btn-success btn-block rounded-pill shadow-sm creditCardPayAction"><i class="las la-lock la-lg mr-2"></i>Pay </button>
                                 </form>
                             </div>
                             <div id="nav-tab-paypal" class="tab-pane fade">

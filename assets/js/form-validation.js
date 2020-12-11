@@ -339,3 +339,42 @@ $(function() {
         }
     });
 });
+$(function() {
+    $("form[name='credit-card-form']").validate({
+        rules: {
+            fullName: {
+                required: true,
+                minlength: 15,
+                maxlength: 16
+            },
+            cardNumber: {
+                required: true,
+                creditcard: true
+            },
+            expiryMonth: {
+                required: true
+            },
+            expiryYear: {
+                required: true
+            },
+            cvv: {
+                required: true
+            }
+        },
+        messages: {
+            'filter-start-date': {
+                required: "Start date is mandatory",
+                futuredate: "Start date must be in the future"
+            },
+            'filter-end-date': {
+                required: "End date is mandatory",
+                futuredate: "End date must be in the future",
+                afterstartdate: "End date cannot be before start date"
+            }
+        },
+        submitHandler: function () {
+            roomsSearchHandler();
+            return false;
+        }
+    });
+});
