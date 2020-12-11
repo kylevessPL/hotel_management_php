@@ -162,7 +162,7 @@ function setEvents() {
                                 creditCardAction.append(total + ' PLN');
                                 $('.payment-total').prepend(total);
                                 setBitcoinDetails(total, response[0]['id']);
-                                $('.payPalPayAction').attr('href', getPayPalUrl());
+                                setPayPalPaymentLink(response[0]['id']);
                                 $(selector2).modal();
                                 const paymentFormRadio = $('.paymentFormRadio');
                                 paymentFormRadio.first().addClass('selected');
@@ -199,11 +199,7 @@ function setEvents() {
                                     $(this).removeClass('active').addClass('selected');
                                 });
                                 creditCardAction.on('click', function () {
-                                    $('.creditCardTab').prepend('<p class="alert alert-success">Thank you. We have successfully processed your payment.</p>');
-                                    setTimeout(() => $('#paymentModal .close').click(), 3000);
-                                });
-                                $(selector2).on('hide.bs.modal', function() {
-                                    setTimeout(() => $(location).attr('href','./my-bookings'), 300);
+                                    $('.creditCardTab').prepend('<p class="alert alert-danger">Unfortunately, we can\'t process your payment.</p>');
                                 });
                             },
                             error: function () {
@@ -220,16 +216,16 @@ function setEvents() {
     });
 }
 
-function getPayPalUrl() {
-    const roomItemPrice = $('.roomItem .item-price').html();
-    let url = 'https://www.paypal.com/cgi-bin/webscr?cmd=_cart&add=1&business=' + encodeURIComponent('kacperpiasta@gmail.com');
-    url += '&item_name=' + encodeURIComponent($('.roomItem .room-item-name').html()) + '&item_number=1' + '&amount=' + encodeURIComponent(roomItemPrice.substring(0, roomItemPrice.indexOf(' PLN')));
-    $('.servicesItem').each(function(index, currentElement) {
-        let servicesItemPrice = $(currentElement).find('.item-price').html();
-        url += '&item_name=' + encodeURIComponent($(currentElement).find('.item-name').html()) + '&item_number=' + (index + 2) + '&amount=' + encodeURIComponent(servicesItemPrice.substring(0, servicesItemPrice.indexOf(' PLN')));
+function setPayPalPaymentLink(bookingId) {
+    $.ajax({
+        url: '../../process/get_paypal_payment_link.php',
+        type: "GET",
+        data: { "booking-id": bookingId },
+        dataType: 'JSON',
+        success: function (response) {
+            $('.payPalPayAction').attr('href', response[0]['payment-link']);
+        }
     });
-    url += '&return=' + window.location.href + '&cancel_return=' + window.location.href;
-    return url;
 }
 
 function fetchRooms(startDate, endDate, bedAmount) {
@@ -699,7 +695,7 @@ function getPaymentModal() {
                             <div id="nav-tab-paypal" class="tab-pane fade">
                                 <div class="text-center my-3">
                                     <p>PayPal is the fastest way to pay</p>
-                                    <a class="btn btn-primary rounded-pill payPalPayAction" href="" target="_blank"><i class="lab la-paypal la-lg mr-2"></i>Pay with PayPal</a>
+                                    <a class="btn btn-primary rounded-pill payPalPayAction" target="_blank"><i class="lab la-paypal la-lg mr-2"></i>Pay with PayPal</a>
                                 </div>
                                 <p class="text-muted">*No account required</p>
                                 <p class="text-muted">*Additional fees may apply</p>
@@ -817,7 +813,8 @@ function setPeopleSectionClassRules() {
 }
 
 function formatNumberInput(input) {
-    if(input.value.length < 2) {
+    input.value = Number(input.value);
+    if (input.value.length < 2) {
         input.value = '0' + input.value;
     }
 }
