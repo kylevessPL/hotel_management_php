@@ -161,7 +161,7 @@ function setEvents() {
                                 const creditCardAction = $('.creditCardPayAction');
                                 creditCardAction.append(total + ' PLN');
                                 $('.payment-total').prepend(total);
-                                setBitcoinTotal(total);
+                                setBitcoinDetails(total, response[0]['id']);
                                 $('.payPalPayAction').attr('href', getPayPalUrl());
                                 $(selector2).modal();
                                 const paymentFormRadio = $('.paymentFormRadio');
@@ -708,7 +708,7 @@ function getPaymentModal() {
                                 <h6>Pay in Bitcoin cryptocurrency</h6><br>
                                 <dl>
                                     <dt>Bitcoin address</dt>
-                                    <dd>1MVidtQ497mUcmMqMRHjUfbNZzisRNmWWY</dd>
+                                    <dd class="bitcoin-address"></dd>
                                 </dl>
                                 <dl>
                                     <dt>Transfer amount</dt>
@@ -837,14 +837,15 @@ function addLeadingZeros(value) {
     return value;
 }
 
-function setBitcoinTotal(total) {
+function setBitcoinDetails(total, bookingId) {
     $.ajax({
-        url: 'https://blockchain.info/tobtc?currency=PLN',
+        url: '../../process/get_bitcoin_details.php',
         type: "GET",
-        data: { value: total },
+        data: { "value": total, "id": bookingId },
+        dataType: 'JSON',
         success: function (response) {
-            $('.payment-total-btc').prepend(response);
+            $('.payment-total-btc').prepend(response[0]['total']);
+            $('.bitcoin-address').html(response[0]['address']);
         }
     });
 }
-
