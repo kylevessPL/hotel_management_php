@@ -157,11 +157,43 @@ function setEvents() {
                                 $('[data-toggle="tooltip"]').tooltip();
                                 $('#paymentModalTitle').html('Pay for booking #' + response[0]['id']);
                                 $('#transfer-title').append(response[0]['id']);
+                                const total = Number(response[0]['total']).toFixed(2);
                                 const creditCardAction = $('.creditCardPayAction');
-                                creditCardAction.append(Number(response[0]['total']).toFixed(2) + ' PLN');
+                                creditCardAction.append(total + ' PLN');
+                                $('.payment-total').prepend(total);
+                                setBitcoinTotal(total);
                                 $('.payPalPayAction').attr('href', getPayPalUrl());
                                 $(selector2).modal();
-                                $('.paymentFormRadio').click(function () {
+                                const paymentFormRadio = $('.paymentFormRadio');
+                                paymentFormRadio.first().addClass('selected');
+                                $('#nav-tab-card').addClass('active');
+                                $('#cardNumber').on('keyup keydown', function() {
+                                    $(this).val(function (index, value) {
+                                        const selectionStart = $(this).get(0).selectionStart;
+                                        let trimmedCardNum = value.replace(/\s+/g, '');
+                                        if (trimmedCardNum.length > 16) {
+                                            trimmedCardNum = trimmedCardNum.substr(0, 16);
+                                        }
+                                        const partitions = trimmedCardNum.startsWith('34') || trimmedCardNum.startsWith('37')
+                                            ? [4,6,5]
+                                            : [4,4,4,4];
+                                        const numbers = [];
+                                        let position = 0;
+                                        partitions.forEach(partition => {
+                                            const part = trimmedCardNum.substr(position, partition);
+                                            if (part) numbers.push(part);
+                                            position += partition;
+                                        });
+                                        const formattedCardNum = numbers.join(' ');
+                                        if (selectionStart < formattedCardNum.length - 1) {
+                                            setTimeout(() => {
+                                                $(this).get(0).setSelectionRange(selectionStart, selectionStart, 'none');
+                                            });
+                                        }
+                                        return formattedCardNum;
+                                    })
+                                });
+                                paymentFormRadio.click(function () {
                                     $(this).tab('show');
                                     $('.paymentFormRadio.selected').removeClass('selected');
                                     $(this).removeClass('active').addClass('selected');
@@ -611,24 +643,24 @@ function getPaymentModal() {
                     <div class="modal-body">
                         <div role="tablist" class="row justify-content-center mb-4 radio-group">
                             <div class="col-sm-3 col-5">
-                                <a class='radio selected mx-auto paymentFormRadio' href="#nav-tab-card"><img class="fit-image" src="/assets/images/visa_mastercard.png" width="105px" height="55px" alt="Credit card"></a>
+                                <a class='radio mx-auto paymentFormRadio' data-target="#nav-tab-card"><img class="fit-image" src="/assets/images/visa_mastercard.png" width="105px" height="55px" alt="Credit card"></a>
                             </div>
                             <div class="col-sm-3 col-5">
-                                <a class='radio mx-auto paymentFormRadio' href="#nav-tab-paypal"><img class="fit-image" src="/assets/images/paypal.png" width="105px" height="55px" alt="Credit card"></a>
+                                <a class='radio mx-auto paymentFormRadio' data-target="#nav-tab-paypal"><img class="fit-image" src="/assets/images/paypal.png" width="105px" height="55px" alt="Credit card"></a>
                             </div>
                             <div class="col-sm-3 col-5">
-                                <a class='radio mx-auto paymentFormRadio' href="#nav-tab-bitcoin"><img class="fit-image" src="/assets/images/bitcoin.png" width="105px" height="55px" alt=""></a>
+                                <a class='radio mx-auto paymentFormRadio' data-target="#nav-tab-bitcoin"><img class="fit-image" src="/assets/images/bitcoin.png" width="105px" height="55px" alt=""></a>
                             </div>
                             <div class="col-sm-3 col-5">
-                                <a class='radio mx-auto paymentFormRadio' href="#nav-tab-bank"><img class="fit-image" src="/assets/images/bank_transfer.png" width="105px" height="55px" alt=""></a>
+                                <a class='radio mx-auto paymentFormRadio' data-target="#nav-tab-bank"><img class="fit-image" src="/assets/images/bank_transfer.png" width="105px" height="55px" alt=""></a>
                             </div>
                         </div>
                         <div class="tab-content">
-                            <div id="nav-tab-card" class="tab-pane fade show active creditCardTab">
+                            <div id="nav-tab-card" class="tab-pane fade show creditCardTab">
                                 <form role="form">
                                     <div class="form-group">
                                         <label for="fullName">Full name</label>
-                                        <input type="text" name="fullName" id="fullName" placeholder="Enter full name on the card" required class="form-control">
+                                        <input type="text" name="fullName" id="fullName" placeholder="Enter card holder full name" required class="form-control">
                                     </div>
                                     <div class="form-group">
                                         <label for="cardNumber">Card number</label>
@@ -643,13 +675,14 @@ function getPaymentModal() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-8">
+                                    <div class="row d-flex justify-content-between">
+                                        <div class="col-sm-5">
                                             <div class="form-group">
                                                 <label><span class="hidden-xs">Expiry date</span></label>
                                                 <div class="input-group">
-                                                    <input type="number" min="1" max="12" value="01" name="expiry-month" id="expiry-month" placeholder="MM" class="form-control">
-                                                    <input type="number" min="1" max="12" value="12" name="expiry-year" id="expiry-year" placeholder="YY" class="form-control">
+                                                    <input type="number" min="1" max="12" value="`+addLeadingZeros(getCurrentMonth())+`" name="expiry-month" id="expiry-month" placeholder="MM" class="form-control" oninput='formatNumberInput(this)'>
+                                                    <span class="exp-separator">/</span>
+                                                    <input type="number" min="`+addLeadingZeros(getCurrentYear())+`" max="`+addLeadingZeros(Number(getCurrentYear()) + 10)+`" value="`+addLeadingZeros(getCurrentYear())+`" name="expiry-year" id="expiry-year" placeholder="YY" class="form-control" oninput='formatNumberInput(this)'>
                                                 </div>
                                             </div>
                                         </div>
@@ -670,6 +703,18 @@ function getPaymentModal() {
                                 </div>
                                 <p class="text-muted">*No account required</p>
                                 <p class="text-muted">*Additional fees may apply</p>
+                            </div>
+                            <div id="nav-tab-bitcoin" class="tab-pane fade">
+                                <h6>Pay in Bitcoin cryptocurrency</h6><br>
+                                <dl>
+                                    <dt>Bitcoin address</dt>
+                                    <dd>1MVidtQ497mUcmMqMRHjUfbNZzisRNmWWY</dd>
+                                </dl>
+                                <dl>
+                                    <dt>Transfer amount</dt>
+                                    <dd class="payment-total-btc"> BTC</dd>
+                                </dl>
+                                <p class="text-muted">Please note that the above wallet address will be valid for the next 48 hours only.<br>Therefore you have to complete your payment within that time.</p>
                             </div>
                             <div id="nav-tab-bank" class="tab-pane fade">
                                 <h6>Pay via traditional bank transfer</h6><br>
@@ -693,7 +738,7 @@ function getPaymentModal() {
                                     <dt>Transfer amount</dt>
                                     <dd class="payment-total"> PLN</dd>
                                 </dl>
-                                <p class="text-muted">Please check carefully if the data you've entered is all correct.<br>Please note that the transfer title and amount must be exactly like above.<br>We are not responsible for any mistakes from your side.</p>
+                                <p class="text-muted">Please check carefully if the data you've entered is all correct.<br>Please note that the transfer details must be exactly like above.</p>
                             </div>
                         </div>
                     </div>
@@ -770,3 +815,36 @@ function setPeopleSectionClassRules() {
         }
     });
 }
+
+function formatNumberInput(input) {
+    if(input.value.length < 2) {
+        input.value = '0' + input.value;
+    }
+}
+
+function getCurrentMonth() {
+    return (new Date).getMonth().toString();
+}
+
+function getCurrentYear() {
+    return (new Date).getFullYear().toString().substring(2);
+}
+
+function addLeadingZeros(value) {
+    if(value.length < 2) {
+        value = '0' + value;
+    }
+    return value;
+}
+
+function setBitcoinTotal(total) {
+    $.ajax({
+        url: 'https://blockchain.info/tobtc?currency=PLN',
+        type: "GET",
+        data: { value: total },
+        success: function (response) {
+            $('.payment-total-btc').prepend(response);
+        }
+    });
+}
+

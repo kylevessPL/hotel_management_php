@@ -105,6 +105,12 @@
     border-radius: 5px;
 }
 
+.exp-separator {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
 .tooltip {
     z-index: 100000000;
 }
