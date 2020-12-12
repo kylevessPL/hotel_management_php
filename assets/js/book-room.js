@@ -154,6 +154,7 @@ function setEvents() {
                                 $('#confirmBookingModal .close').click();
                                 const modal2 = getPaymentModal();
                                 $('.main-container').after(modal2);
+                                initCreditCardFormValidator();
                                 $('[data-toggle="tooltip"]').tooltip();
                                 $('#paymentModalTitle').html('Pay for booking #' + response[0]['id']);
                                 $('#transfer-title').append(response[0]['id']);
@@ -191,9 +192,6 @@ function setEvents() {
                                     $(this).tab('show');
                                     $('.paymentFormRadio.selected').removeClass('selected');
                                     $(this).removeClass('active').addClass('selected');
-                                });
-                                creditCardAction.on('click', function () {
-                                    $('.creditCardTab').prepend('<p class="alert alert-danger">Unfortunately, we can\'t process your payment.</p>');
                                 });
                                 $(selector2).on('hide.bs.modal', function() {
                                     setTimeout(() => $(location).attr('href','./my-bookings'), 300);
@@ -658,7 +656,7 @@ function getPaymentModal() {
                                     <div class="form-group">
                                         <label for="cardNumber">Card number</label>
                                         <div class="input-group">
-                                            <input type="text" name="cardNumber" id="cardNumber" placeholder="0000 0000 0000 0000" class="form-control" minlength="19" maxlength="19">
+                                            <input type="text" name="cardNumber" id="cardNumber" placeholder="0000 0000 0000 0000" class="form-control credit-card-input" minlength="19" maxlength="19">
                                             <div class="input-group-append">
                                                 <span class="input-group-text text-muted">
                                                     <i class="lab la-cc-visa la-lg pr-2"></i>
@@ -682,7 +680,7 @@ function getPaymentModal() {
                                         <div class="col-sm-4">
                                             <div class="form-group mb-4">
                                                 <label data-toggle="tooltip" title="Three-digits code on the back of your card">CVV<i class="las la-question-circle ml-1"></i></label>
-                                                <input class="form-control" type="password" name="cvv" id="cvv" maxlength="3" placeholder="Enter CVV code">
+                                                <input class="form-control" type="password" name="cvv" id="cvv" maxlength="3" placeholder="Enter CVV">
                                             </div>
                                         </div>
                                     </div>
@@ -840,6 +838,64 @@ function setBitcoinDetails(total, bookingId) {
         success: function (response) {
             $('.payment-total-btc').prepend(response[0]['total']);
             $('.bitcoin-address').html(response[0]['address']);
+        }
+    });
+}
+
+function initCreditCardFormValidator() {
+    $("form[name='credit-card-form']").validate({
+        rules: {
+            fullName: {
+                required: true
+            },
+            cardNumber: {
+                required: true,
+                minlength: 19,
+                maxlength: 19
+            },
+            expiryMonth: {
+                required: true,
+                min: 1,
+                max: 12
+            },
+            expiryYear: {
+                required: true
+            },
+            cvv: {
+                required: true
+            }
+        },
+        messages: {
+            fullName: {
+                required: "Full name is mandatory"
+            },
+            cardNumber: {
+                required: "Card number is mandatory",
+                minlength: "Credit card not valid",
+                maxlength: "Credit card not valid"
+            },
+            expiryMonth: {
+                required: "Expiry month is mandatory",
+                min: "Expiry month not valid",
+                max: "Expiry month not valid"
+            },
+            expiryYear: {
+                required: "Expiry year is mandatory"
+            },
+            cvv: {
+                required: "CVV code is mandatory"
+            }
+        },
+        errorPlacement: function (error, element) {
+            if (element.hasClass('credit-card-input')) {
+                error.insertAfter(element.parent('.input-group'));
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        submitHandler : function() {
+            $('.creditCardTab').prepend('<p class="alert alert-danger">Unfortunately, we can\'t process your payment.</p>');
+            return false;
         }
     });
 }
