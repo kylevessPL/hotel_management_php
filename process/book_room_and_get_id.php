@@ -8,14 +8,26 @@ get_customer_id($alertMsg, $alertType, $customerId);
 try
 {
     $data = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
-
 }
 catch (JsonException $e)
 {
     http_response_code(400);
     return;
 }
-if (!isset($data['start-date'], $data['end-date']) || empty($data['start-date']) || empty($data['end-date'])) {
+if (!isset($data['start-date'], $data['end-date'], $data['room-id']) || empty($data['start-date']) || empty($data['end-date']) || empty($data['room-id'])) {
+    try
+    {
+        $error[] = array(
+            "status" => 400,
+            "message" => "Room id or booking dates not chosen");
+        header('Content-type: application/json');
+        echo json_encode($error, JSON_THROW_ON_ERROR);
+    }
+    catch (JsonException $e)
+    {
+        http_response_code(500);
+        return;
+    }
     http_response_code(400);
     return;
 }

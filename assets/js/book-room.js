@@ -197,8 +197,14 @@ function setEvents() {
                                     setTimeout(() => $(location).attr('href','./my-bookings'), 300);
                                 });
                             },
-                            error: function () {
-                                $('.booking-confirmation-alert').html('Oops, something went wrong. Please try again later.').removeClass('alert-warning').addClass('alert-danger');
+                            error: function (xhr, status, error) {
+                                let alert = $('.booking-confirmation-alert').removeClass('alert-warning').addClass('alert-danger');
+                                if(xhr.responseText !== '') {
+                                    let data = $.parseJSON(xhr.responseText);
+                                    alert.html(data[0]['message']);
+                                    return;
+                                }
+                                alert.html('Oops, something went wrong. Please try again later.');
                             }
                         });
                     });
