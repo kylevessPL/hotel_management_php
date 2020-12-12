@@ -653,10 +653,13 @@ function getPaymentModal() {
                                         <label for="fullName">Full name</label>
                                         <input type="text" name="fullName" id="fullName" placeholder="Enter card holder full name" required class="form-control">
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group position-relative">
                                         <label for="cardNumber">Card number</label>
                                         <div class="input-group">
-                                            <input type="text" name="cardNumber" id="cardNumber" placeholder="0000 0000 0000 0000" class="form-control credit-card-input" minlength="19" maxlength="19">
+                                            <input type="text" name="cardNumber" id="cardNumber" placeholder="0000 0000 0000 0000" class="form-control credit-card-input" minlength="14" maxlength="19">
+                                            <div class="credit-card-icon position-absolute pt-1" style="right: 110px; z-index: 100000000;">
+                                                <img role="img" style="width:48px;" src="/assets/images/default.svg" alt="Credit card"/>
+                                            </div>
                                             <div class="input-group-append">
                                                 <span class="input-group-text text-muted">
                                                     <i class="lab la-cc-visa la-lg pr-2"></i>
@@ -671,9 +674,9 @@ function getPaymentModal() {
                                             <div class="form-group">
                                                 <label><span class="hidden-xs">Expiry date</span></label>
                                                 <div class="input-group">
-                                                    <input type="number" min="1" max="12" value="`+addLeadingZeros(getCurrentMonth())+`" name="expiryMonth" id="expiryMonth" placeholder="MM" class="form-control" oninput='formatNumberInput(this)'>
+                                                    <input type="number" min="1" max="12" value="`+addLeadingZeros(getCurrentMonth())+`" name="expiryMonth" id="expiryMonth" placeholder="MM" class="form-control expiry-date-input" oninput='formatNumberInput(this)'>
                                                     <span class="exp-separator">/</span>
-                                                    <input type="number" min="`+addLeadingZeros(getCurrentYear())+`" max="`+addLeadingZeros(Number(getCurrentYear()) + 10)+`" value="`+addLeadingZeros(getCurrentYear())+`" name="expiryYear" id="expiryYear" placeholder="YY" class="form-control" oninput='formatNumberInput(this)'>
+                                                    <input type="number" min="`+addLeadingZeros(getCurrentYear())+`" max="`+addLeadingZeros(Number(getCurrentYear()) + 10)+`" value="`+addLeadingZeros(getCurrentYear())+`" name="expiryYear" id="expiryYear" placeholder="YY" class="form-control expiry-date-input" oninput='formatNumberInput(this)'>
                                                 </div>
                                             </div>
                                         </div>
@@ -846,28 +849,43 @@ function initCreditCardFormValidator() {
     $("form[name='credit-card-form']").validate({
         rules: {
             fullName: {
-                required: true
+                required: true,
+                minlength: 8,
+                maxlength: 30
             },
             cardNumber: {
                 required: true,
-                minlength: 19,
-                maxlength: 19
+                minlength: 14,
+                maxlength: 19,
+                creditcard: true
             },
             expiryMonth: {
                 required: true,
                 min: 1,
-                max: 12
+                max: 12,
+                rangelength: [1, 2]
             },
             expiryYear: {
-                required: true
+                required: true,
+                min: function () {
+                    return (new Date).getFullYear().toString().substring(2);
+                },
+                max: function () {
+                    return (Number((new Date).getFullYear().toString().substring(2)) + 10).toString();
+                },
+                rangelength: [2, 2]
             },
             cvv: {
-                required: true
+                required: true,
+                rangelength: [3, 3],
+                number: true
             }
         },
         messages: {
             fullName: {
-                required: "Full name is mandatory"
+                required: "Full name is mandatory",
+                minlength: "Full name must be at least 8 characters long",
+                maxlength: "Full name must be maximum 30 characters long"
             },
             cardNumber: {
                 required: "Card number is mandatory",
@@ -877,17 +895,23 @@ function initCreditCardFormValidator() {
             expiryMonth: {
                 required: "Expiry month is mandatory",
                 min: "Expiry month not valid",
-                max: "Expiry month not valid"
+                max: "Expiry month not valid",
+                rangelength: "Expiry month not valid",
             },
             expiryYear: {
-                required: "Expiry year is mandatory"
+                required: "Expiry year is mandatory",
+                min: "Expiry year not valid",
+                max: "Expiry year not valid",
+                rangelength: "Expiry year not valid",
             },
             cvv: {
-                required: "CVV code is mandatory"
+                required: "CVV code is mandatory",
+                rangelength: "CVV code not valid",
+                number: "CVV code not valid"
             }
         },
         errorPlacement: function (error, element) {
-            if (element.hasClass('credit-card-input')) {
+            if (element.hasClass('credit-card-input') || element.hasClass('expiry-date-input')) {
                 error.insertAfter(element.parent('.input-group'));
             } else {
                 error.insertAfter(element);
@@ -898,4 +922,51 @@ function initCreditCardFormValidator() {
             return false;
         }
     });
+    new Cleave('#cardNumber', {
+        creditCard: true,
+        onCreditCardTypeChanged: function (type) {
+            type = type.split("15")[0];
+            const iconElement = '.credit-card-icon';
+            $(iconElement).html('');
+            $.get('../assets/images/' + type + '.svg')
+                .done(function() {
+                    let el = '<img role="img" style="width:48px;" src="/assets/images/' + type + '.svg" alt="' + type.charAt(0).toUpperCase() + type.slice(1) + '"/>';
+                    $(iconElement).html(el);
+                }).fail(function() {
+                    let el = '<img role="img" style="width:48px;" src="/assets/images/default.svg" alt="Credit card"/>';
+                    $(iconElement).html(el);
+            })
+        }
+    });
 }
+
+$.validator.addMethod( "creditcard", function(value) {
+    if (/[^0-9 \-]+/.test(value)) {
+        return false;
+    }
+    let nCheck = 0,
+        nDigit = 0,
+        bEven = false,
+        n, cDigit;
+
+    value = value.replace(/\D/g, "");
+
+    if (value.length < 12 || value.length > 19) {
+        return false;
+    }
+
+    for (n = value.length - 1; n >= 0; n--) {
+        cDigit = value.charAt(n);
+        nDigit = parseInt(cDigit, 10);
+        if (bEven) {
+            if ((nDigit *= 2) > 9) {
+                nDigit -= 9;
+            }
+        }
+
+        nCheck += nDigit;
+        bEven = !bEven;
+    }
+
+    return (nCheck % 10) === 0;
+}, "Credit card not valid");

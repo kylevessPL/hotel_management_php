@@ -62,7 +62,7 @@ $payload = '{
                 "name": "Booking #' . $_GET['booking-id'] . '",
                 "quantity": "1",
                 "price": "' . $row['final_price'] . '",
-                "sku": "booking' . $_GET['booking-id'] . '",
+                "sku": "' . $_GET['booking-id'] . '",
                 "currency": "PLN"
             }]
         }
