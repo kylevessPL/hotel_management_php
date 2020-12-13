@@ -18,7 +18,7 @@ $result = query($sql);
             <?php view('breadcrumb.php'); ?>
             <p>View available additional services you can order</p>
             <div class="row mb-4">
-                <div class="col-10 col-xl-7 mb-lg-0">
+                <div class="col-12 col-xl-7 mb-lg-0">
                     <div class="card">
                         <div class="card-header">
                             <h5>Additional services list</h5>

@@ -19,7 +19,7 @@ $result = query($sql);
             <?php view('breadcrumb.php'); ?>
             <p>Frequently asked questions</p>
             <div class="row mb-4">
-                <div class="col-10 col-xl-7 mb-lg-0">
+                <div class="col-12 col-xl-7 mb-lg-0">
                     <div class="accordion" id="accordionFaq">
                         <div class="card">
                             <div class="card-header pl-2" id="headingOne">

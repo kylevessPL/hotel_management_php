@@ -83,7 +83,7 @@ if (isset($_POST["customer-details-submit"]))
             <?php view('breadcrumb.php'); ?>
             <p>View your account details and edit</p>
             <div class="row mb-4">
-                <div class="col-10 col-xl-7 mb-lg-0">
+                <div class="col-12 col-xl-7 mb-lg-0">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">

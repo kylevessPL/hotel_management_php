@@ -89,7 +89,7 @@ if (isset($_POST["address-submit"]))
                 <?php view('breadcrumb.php'); ?>
                 <p>View your home addresses and manage them</p>
                 <div class="row">
-                    <div class="col-10 col-xl-8 mb-lg-0">
+                    <div class="col-12 col-xl-8 mb-lg-0">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">

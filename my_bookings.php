@@ -103,7 +103,7 @@ if (isset($customerId))
                             <h4 class="my-0 font-weight-normal">Booking #'.htmlspecialchars($row[0]).'</h4>
                         </div>
                         <div class="card-body">
-                            <h1 class="card-title pricing-card-title">'.htmlspecialchars($row[1]).'<small class="text-muted"> room</small></h1>
+                            <h1 class="card-title booking-number">'.htmlspecialchars($row[1]).'<small class="text-muted"> room</small></h1>
                             <ul class="list-unstyled mt-3 mb-4">
                                 <li>'.htmlspecialchars($row[2]).' <small class="text-muted"> beds</small></li>
                                 <li>'.date('d-m-Y', strtotime(htmlspecialchars($row[3]))).' <small class="text-muted"> book date</small></li>
@@ -111,19 +111,47 @@ if (isset($customerId))
                                 <li>'.date('d-m-Y', strtotime(htmlspecialchars($row[5]))).' <small class="text-muted"> end date</small></li>
                                 <li><span style="color: '; if ($row[6] === "Paid") { echo "forestgreen"; } else if ($row[6] === "Unpaid") { echo "darkorange"; } else if ($row[6] === "Cancelled") { echo "red"; } else { echo "blue"; } echo '">'.htmlspecialchars($row[6]).'</span> <small class="text-muted"> status</small></li>
                             </ul>
-                            <button type="button" class="btn btn-outline-success">View booking details</button>
+                            <button type="button" class="btn btn-outline-success viewBookingDescBtn">View booking details</button>
                         </div>
                     </div>
                 </div>
                 '; } ?>
             </div>
             <?php } ?>
+            <div class="row">
+                <div class="col-12 col-xl-12 mb-lg-0">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5>Booking history</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered w-100" id="bookingsTable">
+                                <thead>
+                                <tr class="text-center">
+                                    <th>#</th>
+                                    <th>Booking id</th>
+                                    <th>Room number</th>
+                                    <th>Bed amount</th>
+                                    <th>Book date</th>
+                                    <th>Start date</th>
+                                    <th>End date</th>
+                                    <th>Status</th>
+                                    <th>Booking details</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 </div>
 <?php view('footer.php'); ?>
 
 <?php view('scripts.php'); ?>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.22/fh-3.1.7/r-2.2.6/datatables.min.js"></script>
+<script src="/assets/js/my-bookings.js"></script>
 
 </body>
 </html>

@@ -46,7 +46,7 @@ if(isset($_POST["contact-submit"]))
             <?php view('breadcrumb.php'); ?>
             <p>Feel free to contact us if you have any any questions regarding our service</p>
             <div class="row mb-4">
-                <div class="col-10 col-xl-7 mb-lg-0">
+                <div class="col-12 col-xl-7 mb-lg-0">
                     <div class="card">
                         <div class="card-header bg-primary text-white"><i class="las la-envelope la-lg mr-2"></i> Contact us</div>
                         <div class="card-body">

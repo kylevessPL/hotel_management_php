@@ -50,7 +50,7 @@ if (isset($customerId))
             <?php view('breadcrumb.php'); ?>
             <p>Please fill in the form to book a room for the period you would like to stay</p>
             <div class="row mb-4 d-flex justify-content-between">
-                <div class="col-10 col-xl-7 mb-lg-0">
+                <div class="col-12 col-xl-7 mb-lg-0">
                     <div class="card">
                         <div class="card-header">
                             <h5>Booking form</h5>
@@ -123,7 +123,7 @@ if (isset($customerId))
                         </div>
                     </div>
                 </div>
-                <div class="col-10 col-xl-4 mb-lg-0">
+                <div class="col-12 col-xl-4 mb-lg-0">
                     <div class="sticky-top" style="z-index: 200;">
                         <div style="padding: 0.75rem 0;">
                             <h4 class="d-flex justify-content-between align-items-center">
