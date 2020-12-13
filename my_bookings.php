@@ -5,69 +5,79 @@ include 'process/get_paypal_token.php';
 
 get_customer_id($alertMsg, $alertType, $customerId);
 
-if (isset($customerId, $_GET['paymentId'], $_GET['token'], $_GET['PayerID']))
+if (isset($customerId))
 {
-    $ch = curl_init("https://api.sandbox.paypal.com/v1/payments/payment/" . rawurlencode($_GET['paymentId']));
-
-    curl_setopt($ch, CURLOPT_POST, false);
-    curl_setopt($ch, CURLOPT_HEADER, false);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Authorization: Bearer ' . $json->access_token,
-        'Accept: application/json',
-        'Content-Type: application/json'
-    ));
-
-    $result = curl_exec($ch);
-
-    try
+    if (isset($_GET['paymentId'], $_GET['token'], $_GET['PayerID']))
     {
-        $data = json_decode($result, true, 512, JSON_THROW_ON_ERROR);
-    }
-    catch (JsonException $e)
-    {
-        return;
-    }
+        $ch = curl_init("https://api.sandbox.paypal.com/v1/payments/payment/" . rawurlencode($_GET['paymentId']));
 
-    curl_close($ch);
+        curl_setopt($ch, CURLOPT_POST, false);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Authorization: Bearer ' . $json->access_token,
+            'Accept: application/json',
+            'Content-Type: application/json'
+        ));
 
-    $booking_id = $data['transactions'][0]['item_list']['items'][0]['sku'];
+        $result = curl_exec($ch);
 
-    $sql = "SELECT id from customers_bookings WHERE customer_id = '$customerId' AND booking_id = '$booking_id'";
-    $result = query($sql);
-    if (mysqli_num_rows($result) > 0) {
-        $array[] = array(
-            "booking-id" => $booking_id,
-            "payment-date" => $data['update_time'],
-            "status" => $data['payer']['status']);
-        $sql = "SELECT id from payment_forms where name = 'PayPal'";
-        $result = query($sql);
-        if (mysqli_num_rows($result) > 0)
+        try
         {
-            $payment_form = mysqli_fetch_assoc($result);
-            autocommit(false);
-            try
+            $data = json_decode($result, true, 512, JSON_THROW_ON_ERROR);
+        }
+        catch (JsonException $e)
+        {
+            return;
+        }
+
+        curl_close($ch);
+
+        $booking_id = $data['transactions'][0]['item_list']['items'][0]['sku'];
+
+        $sql = "SELECT id from customers_bookings WHERE customer_id = '$customerId' AND booking_id = '$booking_id'";
+        $result = query($sql);
+        if (mysqli_num_rows($result) > 0) {
+            $array[] = array(
+                "booking-id" => $booking_id,
+                "payment-date" => $data['update_time'],
+                "status" => $data['payer']['status']);
+            $sql = "SELECT id from payment_forms where name = 'PayPal'";
+            $result = query($sql);
+            if (mysqli_num_rows($result) > 0)
             {
-                $sql = "INSERT INTO payments (booking_id, payment_date, payment_form_id, transaction_id) VALUES ('$booking_id', '".date('Y-m-d H:i:s', strtotime($data['update_time']))."', '".$payment_form['id']."', '".escape_string($_GET['paymentId'])."')";
-                if (!query($sql))
+                $payment_form = mysqli_fetch_assoc($result);
+                autocommit(false);
+                try
                 {
-                    throw new Exception(dbException());
+                    $sql = "INSERT INTO payments (booking_id, payment_date, payment_form_id, transaction_id) VALUES ('$booking_id', '".date('Y-m-d H:i:s', strtotime($data['update_time']))."', '".$payment_form['id']."', '".escape_string($_GET['paymentId'])."')";
+                    if (!query($sql))
+                    {
+                        throw new Exception(dbException());
+                    }
+                    $sql = "UPDATE bookings SET status = 'Paid' where id = '$booking_id'";
+                    if (!query($sql))
+                    {
+                        throw new Exception(dbException());
+                    }
+                    commit_transaction();
+                    autocommit();
                 }
-                $sql = "UPDATE bookings SET status = 'Paid' where id = '$booking_id'";
-                if (!query($sql))
+                catch (Throwable $e)
                 {
-                    throw new Exception(dbException());
+                    rollback_transaction();
+                    autocommit();
                 }
-                commit_transaction();
-                autocommit();
-            }
-            catch (Throwable $e)
-            {
-                rollback_transaction();
-                autocommit();
             }
         }
     }
+
+    $sql = "SELECT b.id, r.room_number, r.bed_amount, b.book_date, b.start_date, b.end_date, b.status FROM bookings b " .
+    "INNER JOIN bookings_rooms br ON b.id = br.booking_id " .
+    "INNER JOIN rooms r on r.id = br.room_id " .
+    "INNER JOIN customers_bookings cb on cb.booking_id = b.id " .
+    "WHERE cb.customer_id = '$customerId' ORDER BY b.book_date DESC LIMIT 4";
+    $result = query($sql);
 }
 
 ?>
@@ -83,7 +93,31 @@ if (isset($customerId, $_GET['paymentId'], $_GET['token'], $_GET['PayerID']))
         <?php view('sidebar.php'); ?>
         <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4">
             <?php view('breadcrumb.php'); ?>
-            <p>View your incoming bookings as well as the ones you made in the past</p>
+            <p>View your latest room bookings and view bookings history</p>
+            <?php if (mysqli_num_rows($result) > 0) { ?>
+            <div class="row mb-4">
+                <?php while($row = mysqli_fetch_array($result)) { echo '
+                <div class="col-12 col-md-6 mb-4 mb-lg-0 col-lg-3">
+                    <div class="card shadow-sm text-center">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal">Booking #'.htmlspecialchars($row[0]).'</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title">'.htmlspecialchars($row[1]).'<small class="text-muted"> room</small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>'.htmlspecialchars($row[2]).' <small class="text-muted"> beds</small></li>
+                                <li>'.date('d-m-Y', strtotime(htmlspecialchars($row[3]))).' <small class="text-muted"> book date</small></li>
+                                <li>'.date('d-m-Y', strtotime(htmlspecialchars($row[4]))).' <small class="text-muted"> start date</small></li>
+                                <li>'.date('d-m-Y', strtotime(htmlspecialchars($row[5]))).' <small class="text-muted"> end date</small></li>
+                                <li><span style="color: '; if ($row[6] === "Paid") { echo "forestgreen"; } else if ($row[6] === "Unpaid") { echo "darkorange"; } else if ($row[6] === "Cancelled") { echo "red"; } else { echo "blue"; } echo '">'.htmlspecialchars($row[6]).'</span> <small class="text-muted"> status</small></li>
+                            </ul>
+                            <button type="button" class="btn btn-outline-success">View booking details</button>
+                        </div>
+                    </div>
+                </div>
+                '; } ?>
+            </div>
+            <?php } ?>
         </main>
     </div>
 </div>
