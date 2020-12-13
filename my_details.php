@@ -23,40 +23,47 @@ if (isset($_POST["customer-details-submit"]))
         $last_name = escape_string($_POST["last-name"]);
         $document_type = escape_string($_POST["document-type"]);
         $document_id = escape_string($_POST["document-id"]);
-        if (!isset($customerId)) {
-            $sql = "INSERT INTO customers (first_name, last_name, document_type, document_id) VALUES('$first_name', '$last_name', '$document_type', '$document_id')";
-        }
-        else
+        autocommit(false);
+        try
         {
-            $sql = "UPDATE customers SET first_name = '$first_name', last_name = '$last_name', document_type = '$document_type', document_id = '$document_id' where id = '$customerId'";
-        }
-        if (query($sql))
-        {
-            if (isset($customerId))
-            {
-                $alertMsg = "Personal data modified successfully";
-                $alertType = "success";
+            if (!isset($customerId)) {
+                $sql = "INSERT INTO customers (first_name, last_name, document_type, document_id) VALUES('$first_name', '$last_name', '$document_type', '$document_id')";
             }
             else
             {
+                $sql = "UPDATE customers SET first_name = '$first_name', last_name = '$last_name', document_type = '$document_type', document_id = '$document_id' where id = '$customerId'";
+            }
+            if (!query($sql))
+            {
+                throw new Exception(dbException());
+            }
+            if (!isset($customerId))
+            {
                 $customer_id = insert_id();
                 $sql = "UPDATE users SET customer_id = '$customer_id' where id = '".$_SESSION['user_id']."'";
-                if (query($sql))
+                if (!query($sql))
                 {
-                    $alertMsg = "Thank you. You have now full access to all features on the site.";
-                    $alertType = "success";
-                }
-                else
-                {
-                    $alertMsg = 'Oops, something went wrong. Please try again later.';
-                    $alertType = "danger";
+                    throw new Exception(dbException());
                 }
             }
+            if (isset($customerId))
+            {
+                $alertMsg = "Personal data modified successfully";
+            }
+            else
+            {
+                $alertMsg = "Thank you. You have now full access to all features on the site.";
+            }
+            $alertType = "success";
+            commit_transaction();
+            autocommit();
         }
-        else
+        catch (Throwable $e)
         {
             $alertMsg = 'Oops, something went wrong. Please try again later.';
             $alertType = "danger";
+            rollback_transaction();
+            autocommit();
         }
     }
 }

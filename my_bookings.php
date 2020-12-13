@@ -45,11 +45,26 @@ if (isset($customerId, $_GET['paymentId'], $_GET['token'], $_GET['PayerID']))
         if (mysqli_num_rows($result) > 0)
         {
             $payment_form = mysqli_fetch_assoc($result);
-            $sql = "INSERT INTO payments (booking_id, payment_date, payment_form_id, transaction_id) VALUES ('$booking_id', '".date('Y-m-d H:i:s', strtotime($data['update_time']))."', '".$payment_form['id']."', '".escape_string($_GET['paymentId'])."')";
-            if (query($sql))
+            autocommit(false);
+            try
             {
-                $sql = "UPDATE bookings SET status = 'Payed' where id = '$booking_id'";
-                query($sql);
+                $sql = "INSERT INTO payments (booking_id, payment_date, payment_form_id, transaction_id) VALUES ('$booking_id', '".date('Y-m-d H:i:s', strtotime($data['update_time']))."', '".$payment_form['id']."', '".escape_string($_GET['paymentId'])."')";
+                if (!query($sql))
+                {
+                    throw new Exception(dbException());
+                }
+                $sql = "UPDATE bookings SET status = 'Paid' where id = '$booking_id'";
+                if (!query($sql))
+                {
+                    throw new Exception(dbException());
+                }
+                commit_transaction();
+                autocommit();
+            }
+            catch (Throwable $e)
+            {
+                rollback_transaction();
+                autocommit();
             }
         }
     }

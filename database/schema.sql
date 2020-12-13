@@ -157,6 +157,8 @@ ALTER TABLE `bookings_services` ADD CONSTRAINT `bookings_services_fk1` FOREIGN K
 
 ALTER TABLE `payments` ADD CONSTRAINT `payments_fk0` FOREIGN KEY (`payment_form_id`) REFERENCES `payment_forms`(`id`);
 
+ALTER TABLE `payments` ADD CONSTRAINT `payments_fk1` FOREIGN KEY (`booking_id`) REFERENCES `bookings`(`id`);
+
 ALTER TABLE `bookings` ADD CONSTRAINT `bookings_fk0` FOREIGN KEY (`discount_id`) REFERENCES `discounts`(`id`);
 
 ALTER TABLE `customers_bookings` ADD CONSTRAINT `customers_bookings_fk0` FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`);

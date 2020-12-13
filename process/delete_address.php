@@ -1,5 +1,6 @@
 <?php
 include_once dirname(__DIR__).'/helpers/conn.php';
+include_once dirname(__DIR__).'/helpers/error_handler.php';
 include_once dirname(__DIR__).'/helpers/init_session.php';
 
 if (isset($_GET['id']))
@@ -15,12 +16,27 @@ if (isset($_GET['id']))
         $userId = mysqli_fetch_assoc($result)['id'];
         if ($userId == $_SESSION['user_id'])
         {
-            $sql = "DELETE FROM customers_addresses where address_id = '$id'";
-            query($sql);
-            if (query($sql))
+            autocommit(false);
+            try
             {
-                $sql = "DELETE FROM addresses where id = '$id'";
+                $sql = "DELETE FROM customers_addresses where address_id = '$id'";
                 query($sql);
+                if (!query($sql))
+                {
+                    throw new Exception(dbException());
+                }
+                $sql = "DELETE FROM addresses where id = '$id'";
+                if (!query($sql))
+                {
+                    throw new Exception(dbException());
+                }
+                commit_transaction();
+                autocommit();
+            }
+            catch (Throwable $e)
+            {
+                rollback_transaction();
+                autocommit();
             }
         }
         else
