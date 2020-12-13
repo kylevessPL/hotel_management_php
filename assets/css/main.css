@@ -4,6 +4,10 @@
     box-shadow: none !important;
 }
 
+img {
+    pointer-events: none;
+}
+
 label.error {
     float: none;
     clear: both;

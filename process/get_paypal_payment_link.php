@@ -6,12 +6,14 @@ include_once dirname(__DIR__).'/process/get_paypal_token.php';
 
 get_customer_id($alertMsg, $alertType, $customerId);
 
-if (!isset($_GET['booking-id'])) {
+if (!isset($_GET['booking-id']))
+{
     http_response_code(400);
     return;
 }
 
-if (!isset($customerId)) {
+if (!isset($customerId))
+{
     http_response_code(401);
     return;
 }

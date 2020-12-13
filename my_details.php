@@ -8,7 +8,10 @@ if (isset($customerId))
 {
     $sql = "SELECT first_name, last_name, document_type, document_id FROM customers WHERE id = '$customerId'";
     $result = query($sql);
-    $customerData = mysqli_fetch_assoc($result);
+    if (mysqli_num_rows($result) > 0)
+    {
+        $customerData = mysqli_fetch_assoc($result);
+    }
 }
 
 if (isset($_POST["customer-details-submit"]))
