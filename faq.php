@@ -1,5 +1,9 @@
 <?php
 include 'helpers/include_all.php';
+
+$sql = "SELECT name FROM payment_forms";
+$result = query($sql);
+
 ?>
 
 <!DOCTYPE html>
@@ -86,6 +90,26 @@ include 'helpers/include_all.php';
                             <div id="faqSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordionFaq">
                                 <div class="card-body">
                                     <p>We offer a huge parking lot on hotel premises. The parking lot is guarded 24h/7 a week to ensure your vehicle will stay safe the whole time you stay there.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header pl-2" id="headingSeven">
+                                <h2 class="mb-0">
+                                    <button type="button" class="btn btn-link text-decoration-none collapsed" data-toggle="collapse" data-target="#faqSeven"><i class="fa fa-plus mr-2"></i> What are the available payment forms?</button>
+                                </h2>
+                            </div>
+                            <div id="faqSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#accordionFaq">
+                                <div class="card-body">
+                                    <ul class="list-unstyled">
+                                        <li>Currently payment forms listed below are supported:
+                                            <ul>
+                                                <?php while($row = mysqli_fetch_array($result)) { echo "
+                                                <li>$row[0]</li>
+                                                "; } ?>
+                                            </ul>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>

@@ -199,7 +199,7 @@ function setEvents() {
                             },
                             error: function (xhr, status, error) {
                                 let alert = $('.booking-confirmation-alert').removeClass('alert-warning').addClass('alert-danger');
-                                if(xhr.responseText !== '') {
+                                if (xhr.responseText !== '') {
                                     let data = $.parseJSON(xhr.responseText);
                                     alert.html(data[0]['message']);
                                     return;
