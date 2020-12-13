@@ -27,9 +27,9 @@ while($row = mysqli_fetch_array($result))
         "booking-id" => $row['id'],
         "room-number" => $row['room_number'],
         "bed-amount" => $row['bed_amount'],
-        "book-date" => $row['book_date'],
-        "start-date" => $row['start_date'],
-        "end-date" => $row['end_date'],
+        "book-date" => date('d-m-Y H:m:s', strtotime($row['book_date'])),
+        "start-date" => date('d-m-Y', strtotime($row['start_date'])),
+        "end-date" => date('d-m-Y', strtotime($row['end_date'])),
         "status" => $row['status']);
 }
 try
