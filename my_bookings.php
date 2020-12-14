@@ -109,7 +109,7 @@ if (isset($customerId))
                                 <li>'.date('d-m-Y', strtotime(htmlspecialchars($row[3]))).' <small class="text-muted"> book date</small></li>
                                 <li>'.date('d-m-Y', strtotime(htmlspecialchars($row[4]))).' <small class="text-muted"> start date</small></li>
                                 <li>'.date('d-m-Y', strtotime(htmlspecialchars($row[5]))).' <small class="text-muted"> end date</small></li>
-                                <li><span style="color: '; if ($row[6] === "Paid") { echo "forestgreen"; } else if ($row[6] === "Unpaid") { echo "darkorange"; } else if ($row[6] === "Cancelled") { echo "red"; } else { echo "blue"; } echo '">'.htmlspecialchars($row[6]).'</span> <small class="text-muted"> status</small></li>
+                                <li><span style="color: '; if ($row[6] === "Paid") { echo "#28a745"; } else if ($row[6] === "Unpaid") { echo "orange"; } else if ($row[6] === "Cancelled") { echo "#dc3545"; } else { echo "#007bff"; } echo '">'.htmlspecialchars($row[6]).'</span> <small class="text-muted"> status</small></li>
                             </ul>
                             <button type="button" class="btn btn-outline-success viewBookingDescBtn">View booking details</button>
                         </div>
