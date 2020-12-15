@@ -156,13 +156,14 @@ function getBookingDescModal() {
                     <div class="modal-body">
                         <div class="mb-4">
                             <h6 class="text-uppercase">Basic information</h6>
-                            <hr class="border-top" style="dashed #999;">
+                            <hr class="border-top">
                             <div id="viewBookingDescBookingId"> <small class="text-muted"> booking id</small></div>
                             <div id="viewBookingDescBookDate"> <small class="text-muted"> book date</small></div>
                             <div id="viewBookingDescStartDate"> <small class="text-muted"> start date</small></div>
                             <div id="viewBookingDescEndDate"> <small class="text-muted"> end date</small></div>
                         </div>
                         <div class="mb-4">
+                            <hr class="border-top">
                             <h6 class="text-uppercase">Booking details</h6>
                             <hr class="border-top" style="dashed #999;">
                             <div id="viewBookingDescRoomNumber"> <small class="text-muted"> room number</small></div>
@@ -171,10 +172,12 @@ function getBookingDescModal() {
                             <div id="viewBookingDescServices"> <small class="text-muted"> additional services</small></div>
                         </div>
                         <div class="mb-4">
+                            <hr class="border-top">
                             <h6 class="text-uppercase">People details</h6>
                             <hr class="border-top" style="dashed #999;">
                         </div>
                         <div>
+                            <hr class="border-top">
                             <h6 class="text-uppercase">Payment information</h6>
                             <hr class="border-top" style="dashed #999;">
                             <div id="viewBookingDescTotal"> <small class="text-muted"> total</small></div>
