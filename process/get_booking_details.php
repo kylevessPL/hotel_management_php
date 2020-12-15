@@ -32,6 +32,10 @@ $sql = "SELECT final_price from bookings WHERE id = '".escape_string($_GET['id']
 $result = query($sql);
 $total = mysqli_fetch_assoc($result)['final_price'];
 
+$sql = "SELECT room_id from bookings_rooms WHERE booking_id = '".escape_string($_GET['id'])."'";
+$result = query($sql);
+$room_id = mysqli_fetch_assoc($result)['room_id'];
+
 $services = [];
 $sql = "SELECT name from additional_services WHERE id IN (SELECT service_id from bookings_services WHERE booking_id = '".escape_string($_GET['id'])."')";
 $result = query($sql);
@@ -62,6 +66,7 @@ if (mysqli_num_rows($result) > 0)
 }
 
 $data[] = array(
+    "room-id" => $room_id,
     "services" => $services,
     "people" => $people,
     "total" => $total,

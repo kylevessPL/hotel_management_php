@@ -41,6 +41,49 @@ $(document).ready(function () {
         }
         $('#viewBookingDescBookingStatus').prepend('<span style="color: '+color+';">'+bookingStatus+'</span>');
         $('#viewBookingDescModal').modal();
+        $.ajax({
+            url: '../../process/get_booking_details.php',
+            type: "GET",
+            data: { 'id': bookingId },
+            dataType: 'JSON',
+            success: function (response) {
+                let totalElement = $('#viewBookingDescTotal');
+                totalElement.prepend(response[0]['total']);
+                if (response[0]['payment-form'] != null) {
+                    totalElement.after('<div id="viewBookingDescPaymentForm" class="mb-2">'+response[0]['payment-form']+' <small class="text-muted"> payment form</small></div>');
+                }
+                let array1 = [];
+                $.each(response[0]['services'], function(key, val) {
+                    array1.push(val['name']);
+                });
+                $('#viewBookingDescServices').prepend(array1.join(', '));
+                $('.modal-body').append('<div class="row" id="people-section"></div>')
+                $.each(response[0]['people'], function(key, val) {
+                    $('#people-section').append(`
+                        <div class="col-sm-3">
+                            <div class="mb-4">
+                                <div class="mb-2"><strong>`+val['first-name']+' '+val['last-name']+`</strong></div>
+                                <div class="mb-2">`+val['document-type']+` <small class="text-muted"> document type</small></div>
+                                <div>`+val['document-id']+` <small class="text-muted"> document id</small></div>
+                            </div>
+                        </div>
+                    `);
+                });
+                $.ajax({
+                    url: '../../process/get_room_amenities.php',
+                    type: "GET",
+                    data: { 'id': response[0]['room-id'] },
+                    dataType: 'JSON',
+                    success: function (response) {
+                        let array2 = [];
+                        $.each(response, function(key, val) {
+                            array2.push(val['name']);
+                        });
+                        $('#viewBookingDescAmenities').prepend(array2.join(', '));
+                    }
+                });
+            }
+        });
     });
     body.on('hide.bs.modal', '#viewBookingDescModal', function () {
         setTimeout(() => $('#viewBookingDescModal').remove(), 400);
@@ -148,40 +191,54 @@ function buildTable() {
 function getBookingDescModal() {
     return `
         <div aria-hidden="true" aria-labelledby="viewBookingDescTitle" class="modal fade" id="viewBookingDescModal" role="dialog" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="viewBookingDescTitle">Booking #</h5><button class="btn btn-sm btn-primary ml-3 printBtn" type="button" onclick="window.print()"><i class="las la-print la-lg mr-2"></i>Print</button><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
-                        <div class="mb-4">
-                            <h6 class="text-uppercase">Basic information</h6>
-                            <hr class="border-top">
-                            <div id="viewBookingDescBookingId"> <small class="text-muted"> booking id</small></div>
-                            <div id="viewBookingDescBookDate"> <small class="text-muted"> book date</small></div>
-                            <div id="viewBookingDescStartDate"> <small class="text-muted"> start date</small></div>
-                            <div id="viewBookingDescEndDate"> <small class="text-muted"> end date</small></div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h6 class="text-uppercase">Basic information</h6>
+                                <hr class="border-top">
+                            </div>
+                            <div class="col-sm-4">
+                                <h6 class="text-uppercase">Booking details</h6>
+                                <hr class="border-top">
+                            </div>
+                            <div class="col-sm-4">
+                                <h6 class="text-uppercase">Payment information</h6>
+                                <hr class="border-top">
+                            </div>
                         </div>
-                        <div class="mb-4">
-                            <hr class="border-top">
-                            <h6 class="text-uppercase">Booking details</h6>
-                            <hr class="border-top" style="dashed #999;">
-                            <div id="viewBookingDescRoomNumber"> <small class="text-muted"> room number</small></div>
-                            <div id="viewBookingDescBedAmount"> <small class="text-muted"> bed amount</small></div>
-                            <div id="viewBookingDescAmenities"> <small class="text-muted"> room amenities</small></div>
-                            <div id="viewBookingDescServices"> <small class="text-muted"> additional services</small></div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="mb-4">
+                                    <div id="viewBookingDescBookingId" class="mb-2"> <small class="text-muted"> booking id</small></div>
+                                    <div id="viewBookingDescBookDate" class="mb-2"> <small class="text-muted"> book date</small></div>
+                                    <div id="viewBookingDescStartDate" class="mb-2"> <small class="text-muted"> start date</small></div>
+                                    <div id="viewBookingDescEndDate"> <small class="text-muted"> end date</small></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="mb-4">
+                                    <div id="viewBookingDescRoomNumber" class="mb-2"> <small class="text-muted"> room number</small></div>
+                                    <div id="viewBookingDescBedAmount" class="mb-2"> <small class="text-muted"> bed amount</small></div>
+                                    <div id="viewBookingDescAmenities" class="mb-2"> <small class="text-muted"> room amenities</small></div>
+                                    <div id="viewBookingDescServices"> <small class="text-muted"> additional services</small></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="mb-4">
+                                    <div id="viewBookingDescTotal" class="mb-2"> PLN <small class="text-muted"> total</small></div>
+                                    <div id="viewBookingDescBookingStatus"> <small class="text-muted"> status</small></div>
+                                </div>
+                            </div>
                         </div>
                         <div class="mb-4">
                             <hr class="border-top">
                             <h6 class="text-uppercase">People details</h6>
-                            <hr class="border-top" style="dashed #999;">
-                        </div>
-                        <div>
                             <hr class="border-top">
-                            <h6 class="text-uppercase">Payment information</h6>
-                            <hr class="border-top" style="dashed #999;">
-                            <div id="viewBookingDescTotal"> <small class="text-muted"> total</small></div>
-                            <div id="viewBookingDescBookingStatus"> <small class="text-muted"> status</small></div>
                         </div>
                     </div>
                     <div class="modal-footer">
