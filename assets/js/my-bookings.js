@@ -61,7 +61,7 @@ $(document).ready(function () {
                 $.each(response[0]['people'], function(key, val) {
                     $('#people-section').append(`
                         <div class="col-sm-3">
-                            <div class="mb-4">
+                            <div class="mb-3">
                                 <div class="mb-2"><strong>`+val['first-name']+' '+val['last-name']+`</strong></div>
                                 <div class="mb-2">`+val['document-type']+` <small class="text-muted"> document type</small></div>
                                 <div>`+val['document-id']+` <small class="text-muted"> document id</small></div>
@@ -213,7 +213,7 @@ function getBookingDescModal() {
                         </div>
                         <div class="row">
                             <div class="col-sm-4">
-                                <div class="mb-4">
+                                <div class="mb-3">
                                     <div id="viewBookingDescBookingId" class="mb-2"> <small class="text-muted"> booking id</small></div>
                                     <div id="viewBookingDescBookDate" class="mb-2"> <small class="text-muted"> book date</small></div>
                                     <div id="viewBookingDescStartDate" class="mb-2"> <small class="text-muted"> start date</small></div>
@@ -221,7 +221,7 @@ function getBookingDescModal() {
                                 </div>
                             </div>
                             <div class="col-sm-4">
-                                <div class="mb-4">
+                                <div class="mb-3">
                                     <div id="viewBookingDescRoomNumber" class="mb-2"> <small class="text-muted"> room number</small></div>
                                     <div id="viewBookingDescBedAmount" class="mb-2"> <small class="text-muted"> bed amount</small></div>
                                     <div id="viewBookingDescAmenities" class="mb-2"> <small class="text-muted"> room amenities</small></div>
@@ -229,13 +229,13 @@ function getBookingDescModal() {
                                 </div>
                             </div>
                             <div class="col-sm-4">
-                                <div class="mb-4">
+                                <div class="mb-3">
                                     <div id="viewBookingDescTotal" class="mb-2"> PLN <small class="text-muted"> total</small></div>
                                     <div id="viewBookingDescBookingStatus"> <small class="text-muted"> status</small></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-4">
+                        <div class="mb-3">
                             <hr class="border-top">
                             <h6 class="text-uppercase">People details</h6>
                             <hr class="border-top">
