@@ -61,6 +61,22 @@
     }
 }
 
+@media print {
+    body.modal-open {
+        visibility: hidden;
+    }
+
+    body.modal-open .modal .modal-header,
+    body.modal-open .modal .modal-body {
+        visibility: visible;
+    }
+
+    body.modal-open .modal .printBtn,
+    body.modal-open .modal .close {
+        visibility: hidden;
+    }
+}
+
 .sidebar .nav-link {
     color: #41516f;
     padding-left: 20px;
