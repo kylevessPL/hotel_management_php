@@ -72,6 +72,8 @@
     }
 
     body.modal-open .modal .printBtn,
+    body.modal-open .modal .cancelBookingBtn,
+    body.modal-open .modal .retryPaymentBtn,
     body.modal-open .modal .close {
         visibility: hidden;
     }

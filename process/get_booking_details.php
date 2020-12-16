@@ -22,7 +22,12 @@ if (mysqli_num_rows($result) == 0)
     http_response_code(400);
     return;
 }
-if (mysqli_fetch_assoc($result)['customer_id'] != $customerId)
+$customer_array = [];
+while($row = mysqli_fetch_array($result))
+{
+    $customer_array[] = $row['customer_id'];
+}
+if (!in_array($customer_array, $customerId, true))
 {
     http_response_code(403);
     return;

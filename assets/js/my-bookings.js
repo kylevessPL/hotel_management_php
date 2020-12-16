@@ -21,13 +21,25 @@ $(document).ready(function () {
         $('#viewBookingDescRoomNumber').prepend($(this).closest(selector).find('.room-number').html());
         $('#viewBookingDescBedAmount').prepend($(this).closest(selector).find('.bed-amount').html());
         let bookingStatus = $(this).closest(selector).find('.booking-status').html();
+        let bookingStatusElement = $('#viewBookingDescBookingStatus');
         let color = '';
         switch (bookingStatus) {
             case 'Paid':
                 color = '#28a745';
+                bookingStatusElement.after('<button class="btn btn-danger btn-block cancelBookingBtn"><i class="las la-times-circle la-lg mr-2"></i>Cancel</button>');
                 break;
             case 'Unpaid':
                 color = 'orange';
+                bookingStatusElement.after(`
+                    <div class="row d-flex justify-content-between">
+                        <div class="col-md-6">
+                            <button class="btn btn-success btn-block retryPaymentBtn mr-2"><i class="las la-check-circle la-lg mr-2"></i>Pay</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-danger btn-block cancelBookingBtn"><i class="las la-times-circle la-lg mr-2"></i>Cancel</button>
+                        </div>
+                    </div>
+                `);
                 break;
             case 'Cancelled':
                 color = '#dc3545';
@@ -39,8 +51,18 @@ $(document).ready(function () {
                 color = 'black';
                 break;
         }
-        $('#viewBookingDescBookingStatus').prepend('<span style="color: '+color+';">'+bookingStatus+'</span>');
+        bookingStatusElement.prepend('<span style="color: '+color+';">'+bookingStatus+'</span>');
         $('#viewBookingDescModal').modal();
+        $('.cancelBookingBtn').on('click', function () {
+            $.ajax({
+                url: '../../process/cancel_booking.php',
+                type: "GET",
+                data: {'id': bookingId},
+                success: function (response) {
+                    location.reload();
+                }
+            })
+        });
         $.ajax({
             url: '../../process/get_booking_details.php',
             type: "GET",
@@ -49,8 +71,26 @@ $(document).ready(function () {
             success: function (response) {
                 let totalElement = $('#viewBookingDescTotal');
                 totalElement.prepend(response[0]['total']);
+                let icon = '';
+                switch (response[0]['payment-form']) {
+                    case 'Credit Card':
+                        icon = 'las la-credit-card';
+                        break
+                    case 'PayPal':
+                        icon = 'lab la-paypal';
+                        break;
+                    case 'Bitcoin':
+                        icon = 'lab la-bitcoin';
+                        break;
+                    case 'Bank transfer':
+                        icon = 'las la-university';
+                        break;
+                    default:
+                        icon = 'las la-money-check-alt';
+                        break;
+                }
                 if (response[0]['payment-form'] != null) {
-                    totalElement.after('<div id="viewBookingDescPaymentForm" class="mb-2">'+response[0]['payment-form']+' <small class="text-muted"> payment form</small></div>');
+                    totalElement.after('<div id="viewBookingDescPaymentForm" class="mb-2"><i class="'+icon+' la-lg mr-1" style="color: #007bff;"></i>'+response[0]['payment-form']+' <small class="text-muted"> payment form</small></div>');
                 }
                 let array1 = [];
                 $.each(response[0]['services'], function(key, val) {
@@ -231,7 +271,7 @@ function getBookingDescModal() {
                             <div class="col-sm-4">
                                 <div class="mb-3">
                                     <div id="viewBookingDescTotal" class="mb-2"> PLN <small class="text-muted"> total</small></div>
-                                    <div id="viewBookingDescBookingStatus"> <small class="text-muted"> status</small></div>
+                                    <div id="viewBookingDescBookingStatus" class="mb-3"> <small class="text-muted"> status</small></div>
                                 </div>
                             </div>
                         </div>
