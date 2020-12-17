@@ -27,7 +27,7 @@ while($row = mysqli_fetch_array($result))
 {
     $customer_array[] = $row['customer_id'];
 }
-if (!in_array($customer_array, $customerId, true))
+if (!in_array($customerId, $customer_array, true))
 {
     http_response_code(403);
     return;
