@@ -245,7 +245,7 @@ function buildTable() {
         order: [[ 1, 'desc' ]],
         initComplete: function () {
             const column = this.api().column(7);
-            const select = $('<select class="selectpicker status-select font-weight-bold" data-width="120px"><optgroup label="Default"><option value="" class="font-weight-bold" title="Status" selected>Status</option></optgroup></select>')
+            const select = $('<select class="selectpicker status-select" data-width="120px"><optgroup label="Default"><option value="" class="font-weight-bold" title="Status" selected>Status</option></optgroup></select>')
                 .appendTo($(column.header()).empty())
                 .on('change', function () {
                     const val = $.fn.dataTable.util.escapeRegex($(this).val());
