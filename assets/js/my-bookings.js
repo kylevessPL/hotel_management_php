@@ -226,26 +226,10 @@ function buildTable() {
             {
                 targets: 7,
                 className: 'align-middle text-center',
+                orderable: false,
                 render: function (data) {
                     const status = data;
-                    let badge = '';
-                    switch (status) {
-                        case 'Paid':
-                            badge = 'success';
-                            break;
-                        case 'Unpaid':
-                            badge = 'warning';
-                            break;
-                        case 'Cancelled':
-                            badge = 'danger';
-                            break;
-                        case 'Completed':
-                            badge = 'primary';
-                            break;
-                        default:
-                            badge = 'secondary';
-                            break;
-                    }
+                    const badge = getBadgeType(data);
                     return '<span class="badge badge-pill badge-'+badge+' booking-status py-1 px-2" style="font-size: 14px;">'+status+'</span>';
                 }
             },
@@ -258,7 +242,28 @@ function buildTable() {
                 defaultContent: '<button class="btn btn-primary py-1 px-2 viewBookingDescBtn">View</button>'
             }
         ],
-        order: [[ 1, 'desc' ]]
+        order: [[ 1, 'desc' ]],
+        initComplete: function () {
+            const column = this.api().column(7);
+            const select = $('<select class="selectpicker status-select font-weight-bold" data-width="120px"><optgroup label="Default"><option value="" class="font-weight-bold" title="Status" selected>Status</option></optgroup></select>')
+                .appendTo($(column.header()).empty())
+                .on('change', function () {
+                    const val = $.fn.dataTable.util.escapeRegex($(this).val());
+                    column
+                        .search(val ? '^' + val + '$' : '', true, false)
+                        .draw();
+                });
+            column.data().unique().sort().each(function (d, j) {
+                const badge = getBadgeType(d);
+                const dataContent = "<span class='badge badge-"+badge+" py-1 px-2'>"+d+"</span>";
+                select.append('<option value="'+d+'" data-content="'+dataContent+'">'+d+'</option>')
+            });
+            select.selectpicker({
+                style: '',
+                styleBase: 'form-control',
+            });
+            $.fn.selectpicker.Constructor.BootstrapVersion = '4';
+        }
     });
     table.on( 'order.dt search.dt', function () {
         table.column(0, { search: 'applied', order: 'applied' }).nodes().each( function (cell, i) {
@@ -266,6 +271,28 @@ function buildTable() {
         });
     }).draw();
     new $.fn.dataTable.FixedHeader(table);
+}
+
+function getBadgeType(status) {
+    let badge = '';
+    switch (status) {
+        case 'Paid':
+            badge = 'success';
+            break;
+        case 'Unpaid':
+            badge = 'warning';
+            break;
+        case 'Cancelled':
+            badge = 'danger';
+            break;
+        case 'Completed':
+            badge = 'primary';
+            break;
+        default:
+            badge = 'secondary';
+            break;
+    }
+    return badge;
 }
 
 function getBookingDescModal() {

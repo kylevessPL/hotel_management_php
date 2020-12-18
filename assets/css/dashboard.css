@@ -95,6 +95,14 @@
     outline: none !important;
 }
 
+.bootstrap-select > .dropdown-toggle[title='Status'],
+.bootstrap-select > .dropdown-toggle[title='Status']:hover,
+.bootstrap-select > .dropdown-toggle[title='Status']:focus,
+.bootstrap-select > .dropdown-toggle[title='Status']:active {
+    color: black;
+    font-weight: bold;
+}
+
 .badge {
     border: none !important;
 }
