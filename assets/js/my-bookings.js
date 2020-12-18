@@ -204,15 +204,24 @@ function buildTable() {
             },
             {
                 targets: 4,
-                className: 'align-middle text-center book-date'
+                className: 'align-middle text-center book-date',
+                render: function (data) {
+                    return moment(data).format('DD/MM/YYYY HH:mm:ss');
+                }
             },
             {
                 targets: 5,
-                className: 'align-middle text-center start-date'
+                className: 'align-middle text-center start-date',
+                render: function (data) {
+                    return moment(data).format('DD/MM/YYYY');
+                }
             },
             {
                 targets: 6,
-                className: 'align-middle text-center end-date'
+                className: 'align-middle text-center end-date',
+                render: function (data) {
+                    return moment(data).format('DD/MM/YYYY');
+                }
             },
             {
                 targets: 7,
