@@ -162,6 +162,7 @@ if (isset($customerId))
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 <script src="/assets/js/form-validation.js"></script>
 <script src="/assets/js/book-room.js"></script>
+<script src="/assets/js/payment-modal.js"></script>
 
 <?php if(isset($bed_number[0])) { ?>
 <script>

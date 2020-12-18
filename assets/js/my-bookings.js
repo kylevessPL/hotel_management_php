@@ -59,7 +59,7 @@ $(document).ready(function () {
                 type: "GET",
                 data: {'id': bookingId},
                 success: function (response) {
-                    location.reload();
+                    $(location).attr('href','./my-bookings');
                 }
             })
         });
@@ -121,6 +121,37 @@ $(document).ready(function () {
                         });
                         $('#viewBookingDescAmenities').prepend(array2.join(', '));
                     }
+                });
+                $('.retryPaymentBtn').on('click', function () {
+                    let selector2 = '#paymentModal';
+                    $('#viewBookingDescModal .close').click();
+                    const modal2 = getPaymentModal(true);
+                    $('.main-container').after(modal2);
+                    initCreditCardFormValidator();
+                    $('[data-toggle="tooltip"]').tooltip();
+                    $('#paymentModalTitle').html('Pay for booking #' + bookingId);
+                    $('#transfer-title').append(bookingId);
+                    const total = Number(response[0]['total']).toFixed(2);
+                    const creditCardAction = $('.creditCardPayAction');
+                    creditCardAction.append(total + ' PLN');
+                    $('.payment-total').prepend(total);
+                    setBitcoinDetails(total, bookingId);
+                    setPayPalPaymentLink(bookingId);
+                    $(selector2).modal();
+                    const paymentFormRadio = $('.paymentFormRadio');
+                    paymentFormRadio.first().addClass('selected');
+                    $('#nav-tab-card').addClass('active');
+                    $('#cardNumber').on('keyup keydown', function() {
+                        handleCreditCardInput(this);
+                    });
+                    paymentFormRadio.click(function () {
+                        $(this).tab('show');
+                        $('.paymentFormRadio.selected').removeClass('selected');
+                        $(this).removeClass('active').addClass('selected');
+                    });
+                    $(selector2).on('hide.bs.modal', function() {
+                        $(location).attr('href','./my-bookings');
+                    });
                 });
             }
         });

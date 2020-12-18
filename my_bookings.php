@@ -58,7 +58,7 @@ if (isset($customerId))
                     }
 
                     $status = mysqli_fetch_assoc($result)['status'];
-                    if ($status == 'Cancelled' || $status == 'Completed')
+                    if ($status != 'Unpaid')
                     {
                         throw new Exception(dbException());
                     }
@@ -164,7 +164,11 @@ if (isset($customerId))
 
 <?php view('scripts.php'); ?>
 <script src="https://cdn.datatables.net/v/bs4/dt-1.10.22/fh-3.1.7/r-2.2.6/datatables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js"></script>
+<script src="/assets/js/form-validation.js"></script>
 <script src="/assets/js/my-bookings.js"></script>
+<script src="/assets/js/payment-modal.js"></script>
 
 </body>
 </html>

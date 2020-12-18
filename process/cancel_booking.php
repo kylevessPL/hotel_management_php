@@ -54,4 +54,3 @@ if (!query($sql))
 {
     http_response_code(500);
 }
-

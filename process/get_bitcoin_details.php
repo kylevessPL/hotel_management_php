@@ -20,7 +20,12 @@ if (!isset($customerId))
 try
 {
     $data1 = file_get_contents("https://blockchain.info/tobtc?currency=PLN&value=" . rawurlencode($_GET['value']));
-    $data2 = json_decode(file_get_contents("https://block.io/api/v2/get_new_address/?api_key=" . rawurlencode("ab29-882b-09ce-9792") . "&label=booking" . rawurlencode($_GET['id'])), true, 512, JSON_THROW_ON_ERROR);
+    $content = @file_get_contents(get_url("get_new_address"));
+    if ($content === FALSE)
+    {
+        $content = file_get_contents(get_url("get_address_by_label"));
+    }
+    $data2 = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
 }
 catch (JsonException $e) {
     http_response_code(500);
@@ -40,4 +45,8 @@ try
 catch (JsonException $e)
 {
     http_response_code(500);
+}
+
+function get_url($method) {
+    return "https://block.io/api/v2/" .$method. "/?api_key=" . rawurlencode("ab29-882b-09ce-9792") . "&label=booking" . rawurlencode($_GET['id']);
 }
