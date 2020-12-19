@@ -1,5 +1,22 @@
 $(document).ready(function () {
-    buildTable();
+    $.ajax({
+        url: '../../process/get_payment_forms.php',
+        type: "GET",
+        dataType: 'JSON',
+        success: function (response) {
+            let paymentFormOptions = [];
+            $.each(response, function (key, val) {
+                let iconType = getIconType(val['name']);
+                paymentFormOptions.push({
+                    "label": '<span title="'+val['name']+'"><i class="'+iconType+' la-lg mr-2" style="color: #007bff;"></i>'+val['name']+'</span>',
+                    "value": function(rowData, rowIdx) {
+                        return rowData['payment-form'] === val['name'];
+                    }
+                });
+            });
+            buildTable(paymentFormOptions);
+        }
+    });
 });
 
 function getIconType(paymentForm) {
@@ -24,7 +41,7 @@ function getIconType(paymentForm) {
     return icon;
 }
 
-function buildTable() {
+function buildTable(paymentFormOptions) {
     const table = $('#paymentsTable').DataTable({
         ajax: {
             url: '../../process/get_customer_payments.php',
@@ -98,6 +115,7 @@ function buildTable() {
                 orderable: false,
                 searchPanes: {
                     show: true,
+                    options: paymentFormOptions,
                     dtOpts: { ordering: false }
                 },
                 render: function (data) {
