@@ -98,7 +98,11 @@
 .bootstrap-select > .dropdown-toggle[title='Status'],
 .bootstrap-select > .dropdown-toggle[title='Status']:hover,
 .bootstrap-select > .dropdown-toggle[title='Status']:focus,
-.bootstrap-select > .dropdown-toggle[title='Status']:active {
+.bootstrap-select > .dropdown-toggle[title='Status']:active,
+.bootstrap-select > .dropdown-toggle[title='Payment form'],
+.bootstrap-select > .dropdown-toggle[title='Payment form']:hover,
+.bootstrap-select > .dropdown-toggle[title='Payment form']:focus,
+.bootstrap-select > .dropdown-toggle[title='Payment form']:active {
     color: black;
     font-weight: bold;
 }

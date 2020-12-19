@@ -43,6 +43,7 @@ include 'helpers/include_all.php';
 
 <?php view('scripts.php'); ?>
 <script src="https://cdn.datatables.net/v/bs4/dt-1.10.22/fh-3.1.7/r-2.2.6/datatables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 <script src="/assets/js/payment-history.js"></script>
 
 </body>
