@@ -26,12 +26,12 @@ while($row = mysqli_fetch_array($result))
         "payment-id" => $row['transaction_id'],
         "payment-date" => $row['payment_date'],
         "payment-form" => $row['name'],
-        "booking-id" => $row['booking-id']);
+        "booking-id" => $row['booking_id']);
 }
 try
 {
     header('Content-type: application/json');
-    echo json_encode($arrray, JSON_THROW_ON_ERROR);
+    echo json_encode($array, JSON_THROW_ON_ERROR);
 }
 catch (JsonException $e)
 {
