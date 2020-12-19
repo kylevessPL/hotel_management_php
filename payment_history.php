@@ -35,6 +35,10 @@ include 'helpers/include_all.php';
                         </div>
                     </div>
                 </div>
+                <div class="col-12 col-xl-3 mb-lg-0">
+                    <div id="searchPaneContainer" style="cursor:pointer">
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -43,7 +47,7 @@ include 'helpers/include_all.php';
 
 <?php view('scripts.php'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script src="https://cdn.datatables.net/v/bs4/dt-1.10.22/fh-3.1.7/r-2.2.6/datatables.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.23/fh-3.1.7/r-2.2.6/sp-1.2.2/sl-1.3.1/datatables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 <script src="/assets/js/payment-history.js"></script>
 

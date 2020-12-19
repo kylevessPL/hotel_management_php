@@ -42,6 +42,7 @@ function buildTable() {
         pageLength: 7,
         responsive: true,
         language: { emptyTable: "You don't have any payment history yet" },
+        searchPane: true,
         columnDefs: [
             {
                 targets: '_all',
@@ -54,6 +55,40 @@ function buildTable() {
             },
             {
                 targets: 1,
+                searchPanes: {
+                    show: true,
+                    options: [
+                        {
+                            label: 'Today',
+                            value: function(rowData, rowIdx) {
+                                return moment(rowData['payment-date'], 'YYYY/MM/DD HH:mm:ss').isSame(moment(), 'day');
+                            }
+                        },
+                        {
+                            label: 'This week',
+                            value: function(rowData, rowIdx) {
+                                return moment(rowData['payment-date'], 'YYYY/MM/DD HH:mm:ss').isSame(moment(), 'week');
+                            }
+                        },
+                        {
+                            label: 'This month',
+                            value: function(rowData, rowIdx) {
+                                return moment(rowData['payment-date'], 'YYYY/MM/DD HH:mm:ss').isSame(moment(), 'month');
+                            }
+                        },
+                        {
+                            label: 'This year',
+                            value: function(rowData, rowIdx) {
+                                return moment(rowData['payment-date'], 'YYYY/MM/DD HH:mm:ss').isSame(moment(), 'year');
+                            }
+                        }
+                    ],
+                    orderable: false,
+                    dtOpts: {
+                        ordering: false,
+                        searching: false
+                    }
+                },
                 render: function (data) {
                     return moment(data).format('DD/MM/YYYY HH:mm:ss');
                 }
@@ -61,6 +96,10 @@ function buildTable() {
             {
                 targets: 3,
                 orderable: false,
+                searchPanes: {
+                    show: true,
+                    dtOpts: { ordering: false }
+                },
                 render: function (data) {
                     const iconType = getIconType(data);
                     return '<i class="'+iconType+' la-lg mr-2" style="color: #007bff;"></i>' + data;
@@ -68,6 +107,8 @@ function buildTable() {
             }
         ],
         order: [[ 1, 'desc' ]],
+        searchPanes: { layout: 'columns-1' },
+        dom: '<"dtsp-verticalContainer"<"dtsp-verticalPanes"P><"dtsp-dataTable"frtip>>',
         initComplete: function () {
             const column = this.api().column(3);
             const select = $('<select class="selectpicker" data-width="170px"><optgroup label="Default"><option value="" class="font-weight-bold" title="Payment form" selected>Payment form</option></optgroup></select>')
@@ -95,5 +136,6 @@ function buildTable() {
             cell.innerHTML = i + 1;
         });
     }).draw();
+    table.searchPanes.container().prependTo('#searchPaneContainer');
     new $.fn.dataTable.FixedHeader(table);
 }
