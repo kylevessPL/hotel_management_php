@@ -58,8 +58,10 @@ function buildTable(paymentFormOptions) {
         lengthMenu: [[7, 15, 25, 50], [7, 15, 25, 50]],
         pageLength: 7,
         responsive: true,
-        language: { emptyTable: "You don't have any payment history yet" },
-        searchPane: true,
+        language: {
+            emptyTable: "You don't have any payment history yet",
+            zeroRecords: "No payments found matching your criteria"
+        },
         columnDefs: [
             {
                 targets: '_all',

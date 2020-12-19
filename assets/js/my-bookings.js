@@ -182,7 +182,10 @@ function buildTable() {
         lengthMenu: [[7, 15, 25, 50], [7, 15, 25, 50]],
         pageLength: 7,
         responsive: true,
-        language: { emptyTable: "It seems like you haven't booked any rooms yet" },
+        language: {
+            emptyTable: "It seems like you haven't booked any rooms yet",
+            zeroRecords: "No bookings found matching your criteria"
+        },
         columnDefs: [
             {
                 searchable: false,

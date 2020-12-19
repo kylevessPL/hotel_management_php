@@ -145,7 +145,10 @@ function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice
         lengthMenu: [[7, 15, 25, 50], [7, 15, 25, 50]],
         pageLength: 7,
         responsive: true,
-        language: { emptyTable: "No rooms found matching the search criteria" },
+        language: {
+            emptyTable: "No rooms found matching the search criteria",
+            zeroRecords: "No rooms found matching your criteria"
+        },
         columnDefs: [
             {
                 targets: [ 0, -1, -2 ],
