@@ -131,7 +131,6 @@ function buildTable(paymentFormOptions) {
         ],
         order: [[ 1, 'desc' ]],
         searchPanes: { layout: 'columns-1' },
-        dom: '<"dtsp-verticalContainer"<"dtsp-verticalPanes"P><"dtsp-dataTable"frtip>>',
         initComplete: function () {
             const column = this.api().column(3);
             const select = $('<select class="selectpicker" data-width="170px"><optgroup label="Default"><option value="" class="font-weight-bold" title="Payment form" selected>Payment form</option></optgroup></select>')
