@@ -86,7 +86,7 @@ function buildTable(paymentFormOptions) {
                         {
                             label: 'This week',
                             value: function(rowData, rowIdx) {
-                                return moment(rowData['payment-date'], 'YYYY/MM/DD HH:mm:ss').isSame(moment(), 'week');
+                                return moment(rowData['payment-date'], 'YYYY/MM/DD HH:mm:ss').isSame(moment(), 'isoWeek');
                             }
                         },
                         {
