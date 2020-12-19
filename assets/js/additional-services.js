@@ -1,4 +1,8 @@
 $(document).ready(function() {
+    $('.service-name').each(function () {
+        let iconType = getIconType($(this).html());
+        $(this).prepend('<i class="'+iconType+' la-lg mr-2"></i>');
+    });
     $('.viewServiceBtn').on('click', function(event) {
         event.preventDefault();
         $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').hide();
@@ -13,7 +17,7 @@ $(document).ready(function() {
                 $('#viewServiceDescDesc').html('<br>' + response[0]['desc']);
             }
         });
-        $('#viewServiceDescName').html($(this).closest("tr").find("td.service-name").text());
+        $('#viewServiceDescName').html($(this).closest("tr").find("td.service-name").html());
         $('#viewServiceDescPrice').html('Price: ' + $(this).closest("tr").find("td.service-price").text() + ' PLN');
         let selector = $('#viewServiceDescModal');
         selector.modal();
@@ -25,6 +29,28 @@ $(document).ready(function() {
         });
     });
 });
+
+function getIconType(service) {
+    let icon = '';
+    switch (service) {
+        case 'Breakfast Pack':
+            icon = 'las la-coffee';
+            break;
+        case 'Lunch &amp; Dinner Pack':
+            icon = 'las la-utensils';
+            break;
+        case 'Cleaning Service':
+            icon = 'las la-broom';
+            break;
+        case 'Additional Bed':
+            icon = 'las la-bed';
+            break;
+        default:
+            icon = 'las la-concierge-bell';
+            break;
+    }
+    return icon;
+}
 
 function getServiceDescModal() {
     return `

@@ -25,29 +25,27 @@ $result = query($sql);
                         </div>
                         <div class="card-body">
                             <div class="card-title">All prices are in PLN</div>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Service name</th>
-                                        <th scope="col" class="text-center">Price per night</th>
-                                        <th scope="col" class="text-center">Description</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php while($row = mysqli_fetch_array($result)) { echo "
-                                    <tr>
-                                        <th class='service-id align-middle' scope='row'>".htmlspecialchars($row[0])."</th>
-                                        <td class='service-name align-middle'>".htmlspecialchars($row[1])."</td>
-                                        <td class='service-price align-middle text-center'>".htmlspecialchars($row[2])."</td>
-                                        <td class='align-middle text-center'><button class='btn btn-primary py-1 px-2 viewServiceBtn'>View</button></td>
-                                    </tr>
-                                    ";}
-                                    ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr class="text-center">
+                                    <th scope="col">#</th>
+                                    <th scope="col">Service name</th>
+                                    <th scope="col">Price per night</th>
+                                    <th scope="col">Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php while($row = mysqli_fetch_array($result)) { echo "
+                                <tr class='text-center'>
+                                    <th class='service-id align-middle' scope='row'>".htmlspecialchars($row[0])."</th>
+                                    <td class='service-name align-middle'>".htmlspecialchars($row[1])."</td>
+                                    <td class='service-price align-middle'>".htmlspecialchars($row[2])."</td>
+                                    <td class='align-middle'><button class='btn btn-primary py-1 px-2 viewServiceBtn'>View</button></td>
+                                </tr>
+                                ";}
+                                ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -59,7 +57,7 @@ $result = query($sql);
 <?php view('footer.php'); ?>
 
 <?php view('scripts.php'); ?>
-<script src="/assets/js/view-service-desc-modal.js"></script>
+<script src="/assets/js/additional-services.js"></script>
 
 </body>
 </html>
