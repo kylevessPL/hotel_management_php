@@ -124,6 +124,7 @@ $result = query($sql);
 
 <?php view('scripts.php'); ?>
 <script src="/assets/js/faq.js"></script>
+<script src="/assets/js/chat.js"></script>
 
 </body>
 </html>

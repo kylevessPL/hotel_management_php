@@ -664,3 +664,110 @@ function setPeopleSectionClassRules() {
         }
     });
 }
+
+$(function() {
+    const validator = $("form[name='booking-form']").validate({
+        ignore: ':hidden:not(.selectpicker)',
+        rules: {
+            startDate: {
+                required: true,
+                futuredate: true
+            },
+            endDate: {
+                required: true,
+                futuredate: true,
+                afterstartdate: function () {
+                    return $('#startDate').val();
+                },
+            },
+            myAddress: {
+                required: true
+            },
+            bedAmount: {
+                required: true
+            },
+            room: {
+                required: true
+            }
+        },
+        messages: {
+            startDate: {
+                required: "Start date is mandatory",
+                futuredate: "Start date must be in the future"
+            },
+            endDate: {
+                required: "End date is mandatory",
+                futuredate: "End date must be in the future",
+                afterstartdate: "End date cannot be before start date"
+            },
+            myAddress: {
+                required: "Address is mandatory"
+            },
+            bedAmount: {
+                required: "Bed amount is mandatory"
+            },
+            room: {
+                required: "Room is mandatory"
+            }
+        },
+        focusInvalid: false,
+        invalidHandler: () => $(this).find(":input.error:first").focus(),
+        highlight: function (element) {
+            $(element).siblings('.dropdown-toggle').removeClass('valid').addClass('error');
+            $(element).closest('input').removeClass('valid').addClass('error');
+        },
+        unhighlight: function (element) {
+            $(element).siblings('.dropdown-toggle').removeClass('error').addClass('valid');
+            $(element).closest('input').removeClass('error').addClass('valid');
+        },
+        errorPlacement: function (error, element) {
+            if (element.hasClass('selectpicker')) {
+                error.insertAfter(element.siblings(".dropdown-toggle"));
+            } else {
+                error.insertAfter(element);
+            }
+        }
+    });
+    $('select').on('change', function() {
+        if (typeof validator !== 'undefined') {
+            validator.element($(this));
+        }
+    });
+});
+
+$(function() {
+    $("form[name='redeem-code-form']").validate({
+        onfocusout: false,
+        onkeyup: false,
+        onclick: false,
+        invalidHandler: function(form, validator) {
+            if (validator.numberOfInvalids()) {
+                validator.errorList[0].element.focus();
+                const discountItem = $('.discountItem');
+                if (discountItem.length > 0) {
+                    discountItem.remove();
+                    updateTotal();
+                }
+            }
+        },
+        rules: {
+            'promo-code': {
+                required: true,
+                remote: '../process/check_promo_code_availability.php'
+            }
+        },
+        messages: {
+            'promo-code': {
+                required: "Promo code not supplied",
+                remote: "Promo code expired or doesn't exist"
+            }
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element.parent('.redeem-code'));
+        },
+        submitHandler : function() {
+            setDiscountItem();
+            return false;
+        }
+    });
+});

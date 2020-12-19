@@ -58,6 +58,7 @@ $result = query($sql);
 
 <?php view('scripts.php'); ?>
 <script src="/assets/js/additional-services.js"></script>
+<script src="/assets/js/chat.js"></script>
 
 </body>
 </html>
