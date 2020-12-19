@@ -123,7 +123,7 @@ $result = query($sql);
 <?php view('footer.php'); ?>
 
 <?php view('scripts.php'); ?>
-<script src="/assets/js/faq-accordion.js"></script>
+<script src="/assets/js/faq.js"></script>
 
 </body>
 </html>
