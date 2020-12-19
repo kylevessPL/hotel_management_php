@@ -1,8 +1,7 @@
 <?php
 include 'helpers/include_all.php';
 
-$sql = "SELECT name FROM payment_forms";
-$result = query($sql);
+$array = json_decode(file_get_contents($_SERVER ["REQUEST_SCHEME"] . '://' . $_SERVER['SERVER_NAME'] . "/process/get_payment_forms.php"), true, 512, JSON_THROW_ON_ERROR);
 
 ?>
 
@@ -104,9 +103,9 @@ $result = query($sql);
                                     <ul class="list-unstyled">
                                         <li>Currently payment forms listed below are supported:
                                             <ul>
-                                                <?php while($row = mysqli_fetch_array($result)) { echo "
-                                                <li>$row[0]</li>
-                                                "; } ?>
+                                                <?php foreach ($array as &$value) { echo "
+                                                <li>".$value['name']."</li>
+                                                "; } unset($value) ?>
                                             </ul>
                                         </li>
                                     </ul>

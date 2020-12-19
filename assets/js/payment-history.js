@@ -116,7 +116,10 @@ function buildTable(paymentFormOptions) {
                 searchPanes: {
                     show: true,
                     options: paymentFormOptions,
-                    dtOpts: { ordering: false }
+                    dtOpts: {
+                        ordering: false,
+                        searching: false
+                    }
                 },
                 render: function (data) {
                     const iconType = getIconType(data);
