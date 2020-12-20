@@ -37,11 +37,11 @@ $amenities_result = query($sql);
                             <form name="rooms-search-form">
                                 <div class="form-group">
                                     <label for="filter-start-date">Start date<span style="color: red">*</span></label>
-                                    <input class="form-control" id="filter-start-date" type="text" placeholder="dd/MM/yyyy" name="filter-start-date">
+                                    <input class="form-control" id="filter-start-date" type="text" placeholder="dd/MM/yyyy" name="filter-start-date" autocomplete="off">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="filter-end-date">End date<span style="color: red">*</span></label>
-                                    <input class="form-control" id="filter-end-date" type="text" placeholder="dd/MM/yyyy" name="filter-end-date">
+                                    <input class="form-control" id="filter-end-date" type="text" placeholder="dd/MM/yyyy" name="filter-end-date" autocomplete="off">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="filter-bed-amount">Bed amount</label>
