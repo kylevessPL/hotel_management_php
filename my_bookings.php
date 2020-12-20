@@ -110,21 +110,20 @@ if (isset($customerId))
             <?php if (mysqli_num_rows($result) > 0) { ?>
             <div class="row mb-4">
                 <?php while($row = mysqli_fetch_array($result)) { echo '
-                <div class="col-12 col-md-6 mb-4 mb-lg-0 col-lg-3">
-                    <div class="card shadow-sm text-center">
+                <div class="col-12 col-md-6 mb-lg-0 col-lg-3">
+                    <div class="card card-animated-1 shadow-sm text-center">
                         <div class="card-header">
                             <h4 class="my-0 font-weight-normal booking-id latest-content">Booking #'.htmlspecialchars($row[0]).'</h4>
                         </div>
                         <div class="card-body">
                             <h1 class="card-title"><span class="room-number">'.htmlspecialchars($row[1]).'</span> <small class="text-muted"> room</small></h1>
-                            <ul class="list-unstyled mt-3 mb-4">
-                                <li><span class="bed-amount">'.htmlspecialchars($row[2]).'</span> <small class="text-muted"> beds</small></li>
-                                <li><span class="book-date">'.date('d-m-Y H:m:s', strtotime(htmlspecialchars($row[3]))).'</span> <small class="text-muted"> book date</small></li>
-                                <li><span class="start-date">'.date('d-m-Y', strtotime(htmlspecialchars($row[4]))).'</span> <small class="text-muted"> start date</small></li>
-                                <li><span class="end-date">'.date('d-m-Y', strtotime(htmlspecialchars($row[5]))).'</span> <small class="text-muted"> end date</small></li>
-                                <li><span class="booking-status" style="color: '; if ($row[6] === "Paid") { echo "#28a745"; } else if ($row[6] === "Unpaid") { echo "orange"; } else if ($row[6] === "Cancelled") { echo "#dc3545"; } else { echo "#007bff"; } echo '">'.htmlspecialchars($row[6]).'</span> <small class="text-muted"> status</small></li>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><span class="bed-amount">'.htmlspecialchars($row[2]).'</span> <small class="text-muted"> beds</small></li>
+                                <li class="mb-2"><span class="book-date">'.date('d-m-Y H:m:s', strtotime(htmlspecialchars($row[3]))).'</span> <small class="text-muted"> book date</small></li>
+                                <li class="mb-2"><span class="start-date">'.date('d-m-Y', strtotime(htmlspecialchars($row[4]))).'</span> <small class="text-muted"> start date</small></li>
+                                <li class="mb-2"><span class="end-date">'.date('d-m-Y', strtotime(htmlspecialchars($row[5]))).'</span> <small class="text-muted"> end date</small></li>
+                                <li class="mb-2"><span class="booking-status" style="color: '; if ($row[6] === "Paid") { echo "#28a745"; } else if ($row[6] === "Unpaid") { echo "orange"; } else if ($row[6] === "Cancelled") { echo "#dc3545"; } else { echo "#007bff"; } echo '">'.htmlspecialchars($row[6]).'</span> <small class="text-muted"> status</small></li>
                             </ul>
-                            <button type="button" class="btn btn-outline-success viewBookingDescBtn latest-content">View booking details</button>
                         </div>
                     </div>
                 </div>

@@ -1,26 +1,26 @@
 $(document).ready(function () {
     buildTable();
     const body = $('body');
-    body.on('click', '.viewBookingDescBtn', function () {
+    body.on('click', '.card-animated-1, .viewBookingDescBtn', function() {
         let modal = getBookingDescModal();
         $('.main-container').after(modal);
-        let selector = 'tr';
+        let selector = $(this).closest('tr');
         let bookingId = '';
-        if ($(this).hasClass('latest-content')) {
-            selector = '.card-body';
-            bookingId = $(this).closest('.card').find('.booking-id').html();
+        if ($(this).hasClass('card')) {
+            selector = $(this);
+            bookingId = selector.find('.booking-id').html();
             bookingId = bookingId.substring(bookingId.indexOf('#') + 1);
         } else {
-            bookingId = $(this).closest(selector).find('.booking-id').html();
+            bookingId = selector.find('.booking-id').html();
         }
         $('#viewBookingDescTitle').append(bookingId + ' details');
         $('#viewBookingDescBookingId').prepend(bookingId);
-        $('#viewBookingDescBookDate').prepend($(this).closest(selector).find('.book-date').html());
-        $('#viewBookingDescStartDate').prepend($(this).closest(selector).find('.start-date').html());
-        $('#viewBookingDescEndDate').prepend($(this).closest(selector).find('.end-date').html());
-        $('#viewBookingDescRoomNumber').prepend($(this).closest(selector).find('.room-number').html());
-        $('#viewBookingDescBedAmount').prepend($(this).closest(selector).find('.bed-amount').html());
-        let bookingStatus = $(this).closest(selector).find('.booking-status').html();
+        $('#viewBookingDescBookDate').prepend(selector.find('.book-date').html());
+        $('#viewBookingDescStartDate').prepend(selector.find('.start-date').html());
+        $('#viewBookingDescEndDate').prepend(selector.find('.end-date').html());
+        $('#viewBookingDescRoomNumber').prepend(selector.find('.room-number').html());
+        $('#viewBookingDescBedAmount').prepend(selector.find('.bed-amount').html());
+        let bookingStatus = selector.find('.booking-status').html();
         let bookingStatusElement = $('#viewBookingDescBookingStatus');
         let color = '';
         switch (bookingStatus) {
