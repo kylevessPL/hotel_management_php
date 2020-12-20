@@ -107,6 +107,10 @@
     font-weight: bold;
 }
 
+.dataTables_scrollBody {
+    height: 135px !important;
+}
+
 .badge {
     border: none !important;
 }

@@ -17,6 +17,7 @@ $(document).ready(function () {
             buildTable(paymentFormOptions);
         }
     });
+    setStickySearchPane();
 });
 
 function getIconType(paymentForm) {
@@ -39,6 +40,11 @@ function getIconType(paymentForm) {
             break;
     }
     return icon;
+}
+
+function setStickySearchPane() {
+    const height = $('.navbar').height() + 27;
+    $('.sticky-top').css('top', height + 'px');
 }
 
 function buildTable(paymentFormOptions) {

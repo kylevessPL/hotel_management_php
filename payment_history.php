@@ -36,7 +36,7 @@ include 'helpers/include_all.php';
                     </div>
                 </div>
                 <div class="col-12 col-xl-3 mb-lg-0">
-                    <div id="searchPaneContainer" style="cursor:pointer">
+                    <div class="sticky-top" id="searchPaneContainer" style="cursor:pointer; z-index: 200;">
                     </div>
                 </div>
             </div>
