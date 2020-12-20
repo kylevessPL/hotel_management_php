@@ -3,7 +3,7 @@ include 'helpers/page_info.php';
 ?>
 
 <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
+    <ol class="breadcrumb breadcrumb-bullet">
         <li class="breadcrumb-item">
             <?php
             if($path == '/dashboard' || $path == '\\')

@@ -68,15 +68,11 @@ $amenities_result = query($sql);
                                         <input type="text" id="filter-price-slider" name="filter-price-slider">
                                     </div>
                                     <div id="filter-price-value" class="row my-4 justify-content-center">
-                                        <div class="col">
+                                        <div class="col col-sm-3">
                                             <input class="form-control text-center" type="text" id="filter-min-price" name="filter-min-price" value="<?php echo htmlspecialchars($min_price); ?>">
                                         </div>
-                                        <div class="input-group-addon">
-                                            <div class="input-group-text">
-                                                <span>-</span>
-                                            </div>
-                                        </div>
-                                        <div class="col">
+                                        <span class="range-separator"><i class="las la-arrows-alt-h"></i></span>
+                                        <div class="col col-sm-3">
                                             <input class="form-control text-center" type="text" id="filter-max-price" name="filter-max-price" value="<?php echo htmlspecialchars($max_price); ?>">
                                         </div>
                                     </div>
