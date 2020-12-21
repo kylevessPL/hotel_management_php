@@ -41,7 +41,7 @@ $rooms_count = (int) mysqli_fetch_assoc($result)['count'];
         <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4">
             <?php view('breadcrumb.php'); ?>
             <p>Check the statistics & get familiar with our offer</p>
-            <div class="row">
+            <div class="row mb-5">
                 <?php if (isset($customerId)) { ?>
                 <div class="col-12 col-md-6 col-lg-3 mb-4 mb-lg-0">
                     <div class="card animated-2 bg-success text-white overflow-hidden">
@@ -101,12 +101,56 @@ $rooms_count = (int) mysqli_fetch_assoc($result)['count'];
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card-deck">
+                        <div class="card">
+                            <div class="meal-packs-img text-white overflow-hidden position-relative">
+                                <img class="card-img-top position-absolute" src="/assets/images/breakfast-1.png" alt="Sample breakfast">
+                                <div class="meal-packs-img-hover position-absolute w-100 h-100"></div>
+                                <div class="meal-packs-img-hover-content px-5 py-4 text-center position-absolute w-100">
+                                    <h3 class="meal-packs-img-hover-title text-uppercase font-weight-bold mb-1"><i class="far fa-images"></i></h3>
+                                    <p class="meal-packs-img-hover-description small text-uppercase mb-0">Show gallery</p>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Our meal packs</h5>
+                                <p class="card-text">We offer two kinds of meal packs: Breakfast Pack and Lunch &amp; Dinner Pack.<br>Both packs are offered in affordable price and available to be purchased as an additional service paid per single day.<br>Breakfast is provided by HealthyMeal Restaurant and all meals are served by our waiters in bed.<br>Purchasing Lunch &amp; Dinner Pack entitles You to order in one of our 5 in-hotel restaurants.</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 </div>
+
+<a class="meal-packs-gallery-toggle" href="assets/images/breakfast-1.png" data-lightbox="meal-packs-gallery" data-title="Sample breakfast 1"></a>
+<a href="assets/images/breakfast-2.png" data-lightbox="meal-packs-gallery" data-title="Sample breakfast 2"></a>
+<a href="assets/images/dinner-1.png" data-lightbox="meal-packs-gallery" data-title="Sample dinner 1"></a>
+<a href="assets/images/dinner-2.png" data-lightbox="meal-packs-gallery" data-title="Sample dinner 2"></a>
+
 <?php view('footer.php'); ?>
 
 <?php view('scripts.php'); ?>
+<script src="/assets/js/dashboard.js"></script>
+<script src="https://rawcdn.githack.com/lokesh/lightbox2/56b06ac5914179d5ffd27d133333230e9b002317/dist/js/lightbox.min.js"></script>
 
 </body>
 </html>
