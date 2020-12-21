@@ -11,13 +11,10 @@ $user_data = mysqli_fetch_assoc($query);
             <img src="/assets/images/favicon.ico" alt="HoteLA logo" width="52" height="52" class="mr-2">
             HoteLA Client Dashboard
         </a>
-        <button class="navbar-toggler d-md-none collapsed mb-3" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
     </div>
     <div class="col-12 col-md-5 col-lg-8 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
         <div class="dropdown navbarDropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-primary dropdown-toggle" type="button" aria-expanded="false">
                 Hello, <?php echo $user_data['username']; ?>
             </button>
             <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">

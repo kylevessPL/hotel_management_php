@@ -6,7 +6,9 @@ get_customer_id($alertMsg, $alertType, $customerId);
 
 if (isset($customerId))
 {
-    $sql = "SELECT COUNT(id) AS count from customers_bookings WHERE customer_id = '$customerId'";
+    $sql = "SELECT COUNT(cb.id) AS count from customers_bookings cb " .
+    "INNER JOIN bookings b ON b.id = cb.booking_id " .
+    "WHERE customer_id = '$customerId' AND book_date >= '".date('Y-m-d', strtotime('first day of january this year'))."'";
     $result = query($sql);
     $bookings_count = mysqli_fetch_assoc($result)['count'];
 
@@ -48,7 +50,11 @@ $rooms_count = (int) mysqli_fetch_assoc($result)['count'];
                                 <i class="fas fa-tags fa-4x"></i>
                             </div>
                             <h6 class="text-uppercase">Bookings</h6>
-                            <h1 class="display-4"><?php echo $bookings_count; ?></h1 class="display-4">
+                            <div>
+                                <h1 class="display-4"><?php echo $bookings_count; ?>
+                                    <lead class="d-inline-block" style="font-size: 20px;">this year</lead>
+                                </h1>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -59,7 +65,11 @@ $rooms_count = (int) mysqli_fetch_assoc($result)['count'];
                                 <i class="fas fa-money-check-alt fa-4x"></i>
                             </div>
                             <h6 class="text-uppercase">Payments</h6>
-                            <h1 class="display-4"><?php echo $payments_count; ?></h1>
+                            <div>
+                                <h1 class="display-4"><?php echo $payments_count; ?>
+                                    <lead class="d-inline-block" style="font-size: 20px;">in total</lead>
+                                </h1>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -71,7 +81,11 @@ $rooms_count = (int) mysqli_fetch_assoc($result)['count'];
                                 <i class="fas fa-bed fa-4x"></i>
                             </div>
                             <h6 class="text-uppercase">Available rooms</h6>
-                            <h1 class="display-4"><?php echo $rooms_count; ?></h1>
+                            <div>
+                                <h1 class="display-4"><?php echo $rooms_count; ?>
+                                    <lead class="d-inline-block" style="font-size: 20px;">for next week</lead>
+                                </h1>
+                            </div>
                         </div>
                     </div>
                 </div>
