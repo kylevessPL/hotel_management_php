@@ -78,21 +78,21 @@ if(isset($_POST["contact-submit"]))
                     </div>
                     <div class="row text-center mt-4">
                         <div class="col-md-4">
-                            <a class="btn btn-circle btn-md mb-3">
+                            <a class="btn btn-circle animated-2 btn-md mb-3" href="https://www.google.com/maps/place/al.+Marszałka+Józefa+Piłsudskiego+75,+90-368+Łódź" target="_blank" style="cursor: pointer;">
                                 <i class="las la-map-marker-alt pt-1 text-white" style="font-size: 26px;"></i>
                             </a>
                             <p>Piłsudskiego 75</p>
                             <p class="mb-md-0">90-368 Łódź</p>
                         </div>
                         <div class="col-md-4">
-                            <a class="btn btn-circle btn-md mb-3">
+                            <a class="btn btn-circle animated-2 btn-md mb-3" href="tel:422530679" target="_blank" style="cursor: pointer;">
                                 <i class="las la-phone pt-1 text-white" style="font-size: 26px;"></i>
                             </a>
                             <p>42 25 30 679</p>
                             <p class="mb-md-0">Mon - Sat, 8:00 - 22:00</p>
                         </div>
                         <div class="col-md-4">
-                            <a class="btn btn-circle btn-md mb-3">
+                            <a class="btn btn-circle animated-2 btn-md mb-3" href="mailto:office@hotela.pl" target="_blank" style="cursor: pointer;">
                                 <i class="las la-envelope pt-1 text-white" style="font-size: 26px;"></i>
                             </a>
                             <p>office@hotela.pl</p>

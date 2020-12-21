@@ -16,7 +16,7 @@ $user_data = mysqli_fetch_assoc($query);
         </button>
     </div>
     <div class="col-12 col-md-5 col-lg-8 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
-        <div class="dropdown">
+        <div class="dropdown navbarDropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
                 Hello, <?php echo $user_data['username']; ?>
             </button>

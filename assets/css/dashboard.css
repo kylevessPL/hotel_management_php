@@ -14,6 +14,10 @@
     color: white;
 }
 
+.navbarDropdown:hover .dropdown-menu {
+    display: block;
+}
+
 .nav-item > a {
     color: #0c68f1;
 }
@@ -61,7 +65,7 @@
     transform: rotate(0deg);
 }
 
-.card-animated-1 {
+.animated-1 {
     box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
     -webkit-transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
     -moz-transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
@@ -70,20 +74,24 @@
     cursor: pointer;
 }
 
-.card-animated-1:hover {
+.animated-1:hover {
     transform: scale(1.05);
     box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
 }
 
-.card-animated-2 {
+.animated-2 {
     -webkit-transition: all 0.2s ease-in;
     -moz-transition: all 0.2s ease-in;
     -o-transition: all 0.2s ease-in;
     transition: all 0.2s ease-in;
 }
 
-.card-animated-2:hover {
+.animated-2:hover {
     box-shadow: 0 15px 26px rgba(0, 0, 0, 0.50);
+}
+
+.display-4 {
+    font-size: 50px !important;
 }
 
 @media (max-width: 992px) {

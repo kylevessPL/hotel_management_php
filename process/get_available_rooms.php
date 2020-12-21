@@ -8,7 +8,7 @@ if (!empty($_GET['start-date']) && !empty($_GET['end-date']))
     $end_date = date('Y-m-d', (strtotime(str_replace('/', '-', escape_string($_GET['end-date'])))));
     $sql = "SELECT * FROM rooms where id NOT IN " .
         "(SELECT room_id from bookings_rooms where booking_id IN " .
-        "(SELECT id from bookings where (status != 'Cancelled' AND '$start_date' < end_date AND '$end_date' > start_date) OR status = 'Cancelled'";
+        "(SELECT id from bookings where status != 'Cancelled' AND '$start_date' <= end_date AND '$end_date' >= start_date";
     $sql .= "))";
     if (!empty($_GET['bed-amount']))
     {

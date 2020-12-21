@@ -111,9 +111,9 @@ if (isset($customerId))
             <div class="row mb-4">
                 <?php while($row = mysqli_fetch_array($result)) { echo '
                 <div class="col-12 col-md-6 mb-lg-0 col-lg-3">
-                    <div class="card card-animated-1 shadow-sm text-center">
+                    <div class="card animated-1 shadow-sm text-center">
                         <div class="card-header">
-                            <h4 class="my-0 font-weight-normal booking-id latest-content">Booking #'.htmlspecialchars($row[0]).'</h4>
+                            <h4 class="my-0 font-weight-normal booking-id latest-content">Booking #' .htmlspecialchars($row[0]).'</h4>
                         </div>
                         <div class="card-body">
                             <h1 class="card-title"><span class="room-number">'.htmlspecialchars($row[1]).'</span> <small class="text-muted"> room</small></h1>

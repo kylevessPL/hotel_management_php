@@ -1,7 +1,7 @@
 $(document).ready(function () {
     buildTable();
     const body = $('body');
-    body.on('click', '.card-animated-1, .viewBookingDescBtn', function() {
+    body.on('click', '.animated-1, .viewBookingDescBtn', function() {
         let modal = getBookingDescModal();
         $('.main-container').after(modal);
         let selector = $(this).closest('tr');

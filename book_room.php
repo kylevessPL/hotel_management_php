@@ -70,11 +70,11 @@ if (isset($customerId))
                                     <div class="form-group row">
                                         <div class="col-sm-6">
                                             <label class="control-label" for="startDate">Start date<span style="color: red">*</span></label>
-                                            <input class="form-control" id="startDate" type="text" name="startDate" value="<?php if(isset($bed_number)) { echo htmlspecialchars($start_date); } ?>" placeholder="dd/MM/yyyy">
+                                            <input class="form-control" id="startDate" type="text" name="startDate" value="<?php if(isset($bed_number)) { echo htmlspecialchars($start_date); } ?>" placeholder="dd/MM/yyyy" autocomplete="off">
                                         </div>
                                         <div class="col-sm-6">
                                             <label class="control-label" for="endDate">End date<span style="color: red">*</span></label>
-                                            <input class="form-control" id="endDate" type="text" name="endDate" value="<?php if(isset($bed_number)) { echo htmlspecialchars($end_date); } ?>" placeholder="dd/MM/yyyy">
+                                            <input class="form-control" id="endDate" type="text" name="endDate" value="<?php if(isset($bed_number)) { echo htmlspecialchars($end_date); } ?>" placeholder="dd/MM/yyyy" autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="form-group row">
