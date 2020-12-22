@@ -115,7 +115,7 @@ $rooms_count = (int) mysqli_fetch_assoc($result)['count'];
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title">Our meal packs</h5>
-                                <p class="card-text">We offer two kinds of meal packs: Breakfast Pack and Lunch &amp; Dinner Pack.<br>Both packs are offered in affordable price and available to be purchased as an additional service paid per single day.<br>Breakfast is provided by HealthyMeal Restaurant and all meals are served by our waiters in bed.<br>Purchasing Lunch &amp; Dinner Pack entitles You to order in one of our 5 in-hotel restaurants.</p>
+                                <p class="card-text">We offer two kinds of meal packs: Breakfast Pack and Lunch &amp; Dinner Pack.<br>Both packs are offered in affordable price and available to be purchased as an additional service paid per single day.<br>Breakfast is provided by HealthyMeal Restaurant and all meals are served in bed by our waiters.<br>Purchasing Lunch &amp; Dinner Pack entitles You to order in one of our 5 in-hotel restaurants.</p>
                             </div>
                         </div>
                         <div class="card">
@@ -150,7 +150,7 @@ $rooms_count = (int) mysqli_fetch_assoc($result)['count'];
 
 <?php view('scripts.php'); ?>
 <script src="/assets/js/dashboard.js"></script>
-<script src="https://rawcdn.githack.com/lokesh/lightbox2/56b06ac5914179d5ffd27d133333230e9b002317/dist/js/lightbox.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 
 </body>
 </html>

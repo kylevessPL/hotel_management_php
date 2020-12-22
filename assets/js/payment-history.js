@@ -124,6 +124,7 @@ function buildTable(paymentFormOptions) {
                 searchPanes: {
                     show: true,
                     options: paymentFormOptions,
+                    orderable: false,
                     dtOpts: {
                         ordering: false,
                         searching: false
