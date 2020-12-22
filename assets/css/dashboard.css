@@ -65,12 +65,12 @@
     transform: rotate(0deg);
 }
 
-.meal-packs-img {
-    padding-bottom: 58%;
+.card-img {
+    padding-bottom: 56%;
     cursor: pointer;
 }
 
-.meal-packs-img img {
+.card-img img {
     transition: all 0.3s;
     width: 110%;
     top: 50%;
@@ -78,37 +78,37 @@
     transform: translate(-50%, -50%);
 }
 
-.meal-packs-img-hover {
+.card-img-hover {
     z-index: 90;
     transition: all 0.4s;
 }
 
-.meal-packs-img-hover-content {
+.card-img-hover-content {
     top: 50%;
     transform: translateY(-50%);
     z-index: 99;
 }
 
-.meal-packs-img-hover-title, .meal-packs-img-hover-description {
+.card-img-hover-icon, .card-img-hover-info {
     opacity: 0;
     transform: scale(1.3);
     transition: all 0.3s;
 }
 
-.meal-packs-img:hover::after {
+.card-img:hover::after {
     opacity: 1;
     transform: none;
 }
 
-.meal-packs-img:hover img {
+.card-img:hover img {
     width: 100%;
 }
 
-.meal-packs-img:hover .meal-packs-img-hover {
+.card-img:hover .card-img-hover {
     background: rgba(0, 0, 0, 0.4);
 }
 
-.meal-packs-img:hover .meal-packs-img-hover-title, .meal-packs-img:hover .meal-packs-img-hover-description {
+.card-img:hover .card-img-hover-icon, .card-img:hover .card-img-hover-info {
     opacity: 1;
     transform: none;
 }

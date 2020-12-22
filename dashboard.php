@@ -105,12 +105,12 @@ $rooms_count = (int) mysqli_fetch_assoc($result)['count'];
                 <div class="col-12">
                     <div class="card-deck">
                         <div class="card">
-                            <div class="meal-packs-img text-white overflow-hidden position-relative">
+                            <div class="card-img card-meals text-white overflow-hidden position-relative">
                                 <img class="card-img-top position-absolute" src="/assets/images/breakfast-1.png" alt="Sample breakfast">
-                                <div class="meal-packs-img-hover position-absolute w-100 h-100"></div>
-                                <div class="meal-packs-img-hover-content px-5 py-4 text-center position-absolute w-100">
-                                    <h3 class="meal-packs-img-hover-title text-uppercase font-weight-bold mb-1"><i class="far fa-images"></i></h3>
-                                    <p class="meal-packs-img-hover-description small text-uppercase mb-0">Show gallery</p>
+                                <div class="card-img-hover position-absolute w-100 h-100"></div>
+                                <div class="card-img-hover-content px-5 py-4 text-center position-absolute w-100">
+                                    <h3 class="card-img-hover-icon mb-1"><i class="far fa-images"></i></h3>
+                                    <p class="card-img-hover-info small text-uppercase">Show gallery</p>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -119,19 +119,31 @@ $rooms_count = (int) mysqli_fetch_assoc($result)['count'];
                             </div>
                         </div>
                         <div class="card">
-                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <div class="card-img card-rooms text-white overflow-hidden position-relative">
+                                <img class="card-img-top position-absolute" src="/assets/images/room-1.png" alt="Sample room 1">
+                                <div class="card-img-hover position-absolute w-100 h-100"></div>
+                                <div class="card-img-hover-content px-5 py-4 text-center position-absolute w-100">
+                                    <h3 class="card-img-hover-icon mb-1"><i class="far fa-images"></i></h3>
+                                    <p class="card-img-hover-info small text-uppercase">Show gallery</p>
+                                </div>
+                            </div>
                             <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                <h5 class="card-title">Our rooms</h5>
+                                <p class="card-text">HoteLA has overall 50 rooms available for our guests. We have 4 variants of rooms: 1-bed, 2-bed, 3-bed and 4-bed types.<br>Most of the rooms come en-suited, however cheaper room variants have shared bathrooms.<br>Each room has different amenities: TV, phone, balcony, radio or A/C.<br>We strongly encourage You to check our full room offer <a href="../dashboard/available-rooms">here</a>.</p>
                             </div>
                         </div>
                         <div class="card">
-                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <div class="card-img card-infrastructure text-white overflow-hidden position-relative">
+                                <img class="card-img-top position-absolute" src="/assets/images/reception.png" alt="Reception desk">
+                                <div class="card-img-hover position-absolute w-100 h-100"></div>
+                                <div class="card-img-hover-content px-5 py-4 text-center position-absolute w-100">
+                                    <h3 class="card-img-hover-icon mb-1"><i class="far fa-images"></i></h3>
+                                    <p class="card-img-hover-info small text-uppercase">Show gallery</p>
+                                </div>
+                            </div>
                             <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                <h5 class="card-title">Hotel infrastructure</h5>
+                                <p class="card-text">HoteLA stands out not only by its convenient location but also by the infrastructure as a whole.<br>Our guests can take advantage of our 5 restaurants, 3 cafes and an underground bar to unwind a little in the evenings.<br>A large swimming pool and one of the biggest gym in the city are completely free for our guests.</p>
                             </div>
                         </div>
                     </div>
@@ -145,6 +157,21 @@ $rooms_count = (int) mysqli_fetch_assoc($result)['count'];
 <a href="assets/images/breakfast-2.png" data-lightbox="meal-packs-gallery" data-title="Sample breakfast 2"></a>
 <a href="assets/images/dinner-1.png" data-lightbox="meal-packs-gallery" data-title="Sample dinner 1"></a>
 <a href="assets/images/dinner-2.png" data-lightbox="meal-packs-gallery" data-title="Sample dinner 2"></a>
+
+<a class="rooms-gallery-toggle" href="assets/images/room-1.png" data-lightbox="rooms-gallery" data-title="Sample room 1"></a>
+<a href="assets/images/room-2.png" data-lightbox="rooms-gallery" data-title="Sample room 2"></a>
+<a href="assets/images/room-3.png" data-lightbox="rooms-gallery" data-title="Sample room 3"></a>
+<a href="assets/images/bathroom.png" data-lightbox="rooms-gallery" data-title="En-suite bathroom"></a>
+<a href="assets/images/corridor.png" data-lightbox="rooms-gallery" data-title="Corridor"></a>
+
+<a class="infrastructure-gallery-toggle" href="assets/images/reception.png" data-lightbox="infrastructure-gallery" data-title="Reception desk"></a>
+<a href="assets/images/lounge.png" data-lightbox="infrastructure-gallery" data-title="Lounge & Guest room"></a>
+<a href="assets/images/cafe.png" data-lightbox="infrastructure-gallery" data-title="One of your 3 cafes"></a>
+<a href="assets/images/bar.png" data-lightbox="infrastructure-gallery" data-title="Our underground bar"></a>
+<a href="assets/images/restaurant.png" data-lightbox="infrastructure-gallery" data-title="One of our 5 restaurants"></a>
+<a href="assets/images/pool.png" data-lightbox="infrastructure-gallery" data-title="Swimming pool"></a>
+<a href="assets/images/gym.png" data-lightbox="infrastructure-gallery" data-title="Gym"></a>
+<a href="assets/images/valet_parking.png" data-lightbox="infrastructure-gallery" data-title="Secured valet parking"></a>
 
 <?php view('footer.php'); ?>
 

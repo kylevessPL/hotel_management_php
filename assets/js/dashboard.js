@@ -4,7 +4,13 @@ $(document).ready(function() {
         wrapAround: true,
         disableScrolling: true
     });
-    $('.meal-packs-img').on('click', function () {
+    $('.card-meals').on('click', function () {
         $('.meal-packs-gallery-toggle').click();
+    });
+    $('.card-rooms').on('click', function () {
+        $('.rooms-gallery-toggle').click();
+    });
+    $('.card-infrastructure').on('click', function () {
+        $('.infrastructure-gallery-toggle').click();
     });
 });
