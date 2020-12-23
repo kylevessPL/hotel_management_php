@@ -12,7 +12,7 @@ if (isset($customerId))
     $result = query($sql);
     $bookings_count = mysqli_fetch_assoc($result)['count'];
 
-    $sql = "SELECT COUNT(id) AS count from payments WHERE booking_id IN (SELECT id from customers_bookings WHERE customer_id = '$customerId')";
+    $sql = "SELECT COUNT(id) AS count from payments WHERE booking_id IN (SELECT booking_id from customers_bookings WHERE customer_id = '$customerId')";
     $result = query($sql);
     $payments_count = mysqli_fetch_assoc($result)['count'];
 }
