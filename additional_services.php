@@ -3,7 +3,6 @@ include 'helpers/include_all.php';
 
 $sql = "SELECT id, name, price FROM additional_services";
 $result = query($sql);
-
 ?>
 
 <!DOCTYPE html>

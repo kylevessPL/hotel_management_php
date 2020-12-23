@@ -2,53 +2,55 @@
 include 'helpers/include_all.php';
 include_once 'process/validate_contact_fields.php';
 
-if(isset($_POST["contact-submit"]))
+if(!isset($_POST["contact-submit"]))
 {
-    validate_contact_fields($_POST, $alertMsg, $alertType);
-    if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response']))
+    return;
+}
+
+validate_contact_fields($_POST, $alertMsg, $alertType);
+if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response']))
+{
+    $alertMsg = "ReCaptcha has to be verified";
+    $alertType = "danger";
+}
+try
+{
+    $secret = '6LeIFREaAAAAALZi0YgONK77yTrQ5lheSQL5Txg7';
+    $response = json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . $secret . '&response=' . rawurlencode($_POST['g-recaptcha-response'])), false, 512, JSON_THROW_ON_ERROR);
+    if (!$response->success)
     {
-        $alertMsg = "ReCaptcha has to be verified";
+        $alertMsg = "ReCaptcha validation error";
         $alertType = "danger";
     }
-    try
+}
+catch (JsonException $e)
+{
+    $alertMsg = 'Oops, something went wrong. Please try again later.';
+    $alertType = "danger";
+}
+if(!isset($alertMsg))
+{
+    $to = 'kacperpiasta@gmail.com';
+    $subject = 'HoteLA: New client contact form message';
+    $name = escape_string($_POST["name"]);
+    $email = escape_string($_POST["email"]);
+    $message = escape_string($_POST["message"]);
+    $headers = [
+        'From' => $name,
+        'Reply-To' => $email,
+        'Content-type' => 'text/html; charset=iso-8859-1'
+    ];
+    $bodyParagraphs = ["Name: {$name}", "<br>Email: {$email}", "<br>Message:", $message];
+    $body = implode(PHP_EOL, $bodyParagraphs);
+    if (mail($to, $subject, $body, $headers))
     {
-        $secret = '6LeIFREaAAAAALZi0YgONK77yTrQ5lheSQL5Txg7';
-        $response = json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . $secret . '&response=' . rawurlencode($_POST['g-recaptcha-response'])), false, 512, JSON_THROW_ON_ERROR);
-        if (!$response->success)
-        {
-            $alertMsg = "ReCaptcha validation error";
-            $alertType = "danger";
-        }
+        $alertMsg = "Message successfully sent. We'll get back to you as soon as possible.";
+        $alertType = "success";
     }
-    catch (JsonException $e)
+    else
     {
         $alertMsg = 'Oops, something went wrong. Please try again later.';
         $alertType = "danger";
-    }
-    if(!isset($alertMsg))
-    {
-        $to = 'kacperpiasta@gmail.com';
-        $subject = 'HoteLA: New client contact form message';
-        $name = escape_string($_POST["name"]);
-        $email = escape_string($_POST["email"]);
-        $message = escape_string($_POST["message"]);
-        $headers = [
-            'From' => $name,
-            'Reply-To' => $email,
-            'Content-type' => 'text/html; charset=iso-8859-1'
-        ];
-        $bodyParagraphs = ["Name: {$name}", "<br>Email: {$email}", "<br>Message:", $message];
-        $body = implode(PHP_EOL, $bodyParagraphs);
-        if (mail($to, $subject, $body, $headers))
-        {
-            $alertMsg = "Message successfully sent. We'll get back to you as soon as possible.";
-            $alertType = "success";
-        }
-        else
-        {
-            $alertMsg = 'Oops, something went wrong. Please try again later.';
-            $alertType = "danger";
-        }
     }
 }
 ?>

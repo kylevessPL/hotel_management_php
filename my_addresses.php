@@ -28,51 +28,51 @@ if (isset($customerId))
 if (isset($_POST["address-submit"]))
 {
     validate_address_fields($_POST, $alertMsg, $alertType);
-    if (!isset($alertMsg) || $alertType == 'info')
+    if (isset($alertMsg) || $alertType != 'info')
     {
-        $address_num = escape_string($_POST["addressNum"]);
-        $street_name = escape_string($_POST["streetName"]);
-        $house_number = escape_string($_POST["houseNumber"]);
-        $zip_code = escape_string($_POST["zipCode"]);
-        $city = escape_string($_POST["city"]);
-        autocommit(false);
-        try
+        return;
+    }
+    $address_num = escape_string($_POST["addressNum"]);
+    $street_name = escape_string($_POST["streetName"]);
+    $house_number = escape_string($_POST["houseNumber"]);
+    $zip_code = escape_string($_POST["zipCode"]);
+    $city = escape_string($_POST["city"]);
+    autocommit(false);
+    try
+    {
+        if (!isset($address_num) || empty($address_num)) {
+            $sql = "INSERT INTO addresses (street_name, house_number, zip_code, city) VALUES('$street_name', '$house_number', '$zip_code', '$city')";
+        }
+        else
         {
-            if (!isset($address_num) || empty($address_num)) {
-                $sql = "INSERT INTO addresses (street_name, house_number, zip_code, city) VALUES('$street_name', '$house_number', '$zip_code', '$city')";
-            }
-            else
-            {
-                $id = $address_list[$address_num - 1];
-                $sql = "UPDATE addresses SET street_name = '$street_name', house_number = '$house_number', zip_code = '$zip_code', city = '$city' where id = '$id'";
-            }
+            $id = $address_list[$address_num - 1];
+            $sql = "UPDATE addresses SET street_name = '$street_name', house_number = '$house_number', zip_code = '$zip_code', city = '$city' where id = '$id'";
+        }
+        if (!query($sql))
+        {
+            throw new Exception(dbException());
+        }
+        if(!isset($address_num) || empty($address_num))
+        {
+            $address_id = insert_id();
+            $sql = "INSERT INTO customers_addresses (customer_id, address_id) VALUES('$customerId', '$address_id')";
             if (!query($sql))
             {
                 throw new Exception(dbException());
             }
-            if(!isset($address_num) || empty($address_num))
-            {
-                $address_id = insert_id();
-                $sql = "INSERT INTO customers_addresses (customer_id, address_id) VALUES('$customerId', '$address_id')";
-                if (!query($sql))
-                {
-                    throw new Exception(dbException());
-                }
-            }
-            header("Refresh:0");
-            commit_transaction();
-            autocommit();
         }
-        catch (Throwable $e)
-        {
-            $alertMsg = 'Oops, something went wrong. Please try again later.';
-            $alertType = "danger";
-            rollback_transaction();
-            autocommit();
-        }
+        header("Refresh:0");
+        commit_transaction();
+        autocommit();
+    }
+    catch (Throwable $e)
+    {
+        $alertMsg = 'Oops, something went wrong. Please try again later.';
+        $alertType = "danger";
+        rollback_transaction();
+        autocommit();
     }
 }
-
 ?>
 
 <!DOCTYPE html>

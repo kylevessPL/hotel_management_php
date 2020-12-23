@@ -26,7 +26,6 @@ $end_date = date('Y-m-d', strtotime($start_date . 'next sunday'));
 $sql = "SELECT COUNT(id) AS count from rooms WHERE id NOT IN (SELECT room_id from bookings_rooms WHERE booking_id IN (SELECT id from bookings WHERE status != 'Cancelled' AND '$start_date' <= end_date AND '$end_date' >= start_date))";
 $result = query($sql);
 $rooms_count = (int) mysqli_fetch_assoc($result)['count'];
-
 ?>
 
 <!DOCTYPE html>

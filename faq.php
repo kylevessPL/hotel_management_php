@@ -2,7 +2,6 @@
 include 'helpers/include_all.php';
 
 $array = json_decode(file_get_contents($_SERVER ["REQUEST_SCHEME"] . '://' . $_SERVER['SERVER_NAME'] . "/process/get_payment_forms.php"), true, 512, JSON_THROW_ON_ERROR);
-
 ?>
 
 <!DOCTYPE html>

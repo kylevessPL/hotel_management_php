@@ -3,7 +3,6 @@ include 'helpers/include_all.php';
 include 'process/get_customer_id.php';
 
 get_customer_id($alertMsg, $alertType, $customerId);
-
 ?>
 
 <!DOCTYPE html>

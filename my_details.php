@@ -4,70 +4,64 @@ include 'process/get_customer_id.php';
 include 'process/validate_customer_details_fields.php';
 
 get_customer_id($alertMsg, $alertType, $customerId);
+
 if (isset($customerId))
 {
     $sql = "SELECT first_name, last_name, document_type, document_id FROM customers WHERE id = '$customerId'";
     $result = query($sql);
-    if (mysqli_num_rows($result) > 0)
-    {
-        $customerData = mysqli_fetch_assoc($result);
-    }
+    $customer_data = mysqli_fetch_assoc($result);
 }
 
 if (isset($_POST["customer-details-submit"]))
 {
     validate_customer_details_fields($_POST, $alertMsg, $alertType);
-    if (!isset($alertMsg) || $alertType == 'info')
+    if (isset($alertMsg) && $alertType != 'info')
     {
-        $first_name = escape_string($_POST["first-name"]);
-        $last_name = escape_string($_POST["last-name"]);
-        $document_type = escape_string($_POST["document-type"]);
-        $document_id = escape_string($_POST["document-id"]);
-        autocommit(false);
-        try
+        return;
+    }
+    $first_name = escape_string($_POST["first-name"]);
+    $last_name = escape_string($_POST["last-name"]);
+    $document_type = escape_string($_POST["document-type"]);
+    $document_id = escape_string($_POST["document-id"]);
+    autocommit(false);
+    try
+    {
+        if (!isset($customerId)) {
+            $sql = "INSERT INTO customers (first_name, last_name, document_type, document_id) VALUES('$first_name', '$last_name', '$document_type', '$document_id')";
+        }
+        else
         {
-            if (!isset($customerId)) {
-                $sql = "INSERT INTO customers (first_name, last_name, document_type, document_id) VALUES('$first_name', '$last_name', '$document_type', '$document_id')";
-            }
-            else
-            {
-                $sql = "UPDATE customers SET first_name = '$first_name', last_name = '$last_name', document_type = '$document_type', document_id = '$document_id' where id = '$customerId'";
-            }
+            $sql = "UPDATE customers SET first_name = '$first_name', last_name = '$last_name', document_type = '$document_type', document_id = '$document_id' where id = '$customerId'";
+        }
+        if (!query($sql))
+        {
+            throw new Exception(dbException());
+        }
+        if (!isset($customerId))
+        {
+            $sql = "UPDATE users SET customer_id = '".insert_id()."' where id = '".$_SESSION['user_id']."'";
             if (!query($sql))
             {
                 throw new Exception(dbException());
             }
-            if (!isset($customerId))
-            {
-                $customer_id = insert_id();
-                $sql = "UPDATE users SET customer_id = '$customer_id' where id = '".$_SESSION['user_id']."'";
-                if (!query($sql))
-                {
-                    throw new Exception(dbException());
-                }
-            }
-            if (isset($customerId))
-            {
-                $alertMsg = "Personal data modified successfully";
-            }
-            else
-            {
-                $alertMsg = "Thank you. You have now full access to all features on the site.";
-            }
-            $alertType = "success";
-            commit_transaction();
-            autocommit();
+            $alertMsg = "Thank you. You have now full access to all features on the site.";
         }
-        catch (Throwable $e)
+        else
         {
-            $alertMsg = 'Oops, something went wrong. Please try again later.';
-            $alertType = "danger";
-            rollback_transaction();
-            autocommit();
+            $alertMsg = "Personal data modified successfully";
         }
+        $alertType = "success";
+        commit_transaction();
+        autocommit();
+    }
+    catch (Throwable $e)
+    {
+        $alertMsg = 'Oops, something went wrong. Please try again later.';
+        $alertType = "danger";
+        rollback_transaction();
+        autocommit();
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -104,9 +98,9 @@ if (isset($_POST["customer-details-submit"]))
                                                     {
                                                         echo 'value="'.htmlspecialchars($_POST['first-name']).'"';
                                                     }
-                                                    else if (isset($customerData))
+                                                    else if (isset($customer_data))
                                                     {
-                                                        echo 'value="'.htmlspecialchars($customerData['first_name']).'"';
+                                                        echo 'value="'.htmlspecialchars($customer_data['first_name']).'"';
                                                     }
                                                     ?>>
                                             </div>
@@ -119,9 +113,9 @@ if (isset($_POST["customer-details-submit"]))
                                                     {
                                                         echo 'value="'.htmlspecialchars($_POST['last-name']).'"';
                                                     }
-                                                    else if (isset($customerData))
+                                                    else if (isset($customer_data))
                                                     {
-                                                        echo 'value="'.htmlspecialchars($customerData['last_name']).'"';
+                                                        echo 'value="'.htmlspecialchars($customer_data['last_name']).'"';
                                                     }
                                                     ?>>
                                             </div>
@@ -131,13 +125,13 @@ if (isset($_POST["customer-details-submit"]))
                                             <div class="col-4">
                                                 <select id="document-type" name="document-type" class="selectpicker form-control">
                                                     <option value="ID card"
-                                                        <?php if ((isset($_POST["customer-details-submit"]) && $_POST['document-type'] == 'ID card') || (isset($customerData) && $customerData['document_type'] == 'ID card'))
+                                                        <?php if ((isset($_POST["customer-details-submit"]) && $_POST['document-type'] == 'ID card') || (isset($customer_data) && $customer_data['document_type'] == 'ID card'))
                                                         {
                                                             echo 'selected';
                                                         }
                                                         ?>>ID card</option>
                                                     <option value="Passport"
-                                                        <?php if ((isset($_POST["customer-details-submit"]) && $_POST['document-type'] == 'Passport') || (isset($customerData) && $customerData['document_type'] == 'Passport'))
+                                                        <?php if ((isset($_POST["customer-details-submit"]) && $_POST['document-type'] == 'Passport') || (isset($customer_data) && $customer_data['document_type'] == 'Passport'))
                                                         {
                                                             echo 'selected';
                                                         }
@@ -153,9 +147,9 @@ if (isset($_POST["customer-details-submit"]))
                                                     {
                                                         echo 'value="'.htmlspecialchars($_POST['document-id']).'"';
                                                     }
-                                                    else if (isset($customerData))
+                                                    else if (isset($customer_data))
                                                     {
-                                                        echo 'value="'.htmlspecialchars($customerData['document_id']).'"';
+                                                        echo 'value="'.htmlspecialchars($customer_data['document_id']).'"';
                                                     }
                                                     ?>>
                                             </div>

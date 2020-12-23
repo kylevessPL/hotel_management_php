@@ -3,12 +3,14 @@ require_once 'helpers/conn.php';
 include_once 'process/validate_reg_fields.php';
 
 session_start();
-if(isset($_SESSION["user_id"]))
+
+if (isset($_SESSION["user_id"]))
 {
     header("location:dashboard");
+    return;
 }
 
-if(isset($_POST["register-submit"]))
+if (isset($_POST["register-submit"]))
 {
     validate_reg_fields($_POST, $alertMsg, $alertType);
     if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response']))
@@ -31,81 +33,78 @@ if(isset($_POST["register-submit"]))
         $alertMsg = 'Oops, something went wrong. Please try again later.';
         $alertType = "danger";
     }
-    if(!isset($alertMsg))
+    if (isset($alertMsg))
     {
-        $username = escape_string($_POST["username"]);
-        $password = escape_string($_POST["password"]);
-        $email = escape_string($_POST["email"]);
-        $password = password_hash($password, PASSWORD_DEFAULT);
-        $sql1 = "SELECT id FROM users WHERE username = '$username'";
-        $sql2 = "SELECT id FROM users WHERE email = '$email'";
-        $result1 = query($sql1);
-        $result2 = query($sql2);
-        if(mysqli_num_rows($result1) > 0)
-        {
-            $alertMsg = "Username not available";
-            $alertType = "danger";
-        }
-        else if(mysqli_num_rows($result2) > 0)
-        {
-            $alertMsg = "There is already a user with this email";
-            $alertType = "danger";
-        }
-        else
-        {
-            $sql = "INSERT INTO users (username, password, email) VALUES('$username', '$password', '$email')";
-            if(query($sql))
-            {
-                $alertMsg = "You have successfully registered";
-                $alertType = "success";
-            }
-        }
+        return;
     }
-}
-if(isset($_POST["login-submit"]))
-{
-    if(count($_POST) != count(array_filter($_POST)))
+    $username = escape_string($_POST["username"]);
+    $password = escape_string($_POST["password"]);
+    $email = escape_string($_POST["email"]);
+    $password = password_hash($password, PASSWORD_DEFAULT);
+    $sql1 = "SELECT id FROM users WHERE username = '$username'";
+    $sql2 = "SELECT id FROM users WHERE email = '$email'";
+    $result1 = query($sql1);
+    $result2 = query($sql2);
+    if (mysqli_num_rows($result1) > 0)
     {
-        $alertMsg = "All fields are required";
+        $alertMsg = "Username not available";
+        $alertType = "danger";
+    }
+    else if (mysqli_num_rows($result2) > 0)
+    {
+        $alertMsg = "There is already a user with this email";
         $alertType = "danger";
     }
     else
     {
-        $login = escape_string($_POST["login"]);
-        $password = escape_string($_POST["password"]);
-        $sql = "SELECT * FROM users WHERE username = '$login' OR email = '$login'";
-        $result = query($sql);
-        if(mysqli_num_rows($result) > 0)
+        $sql = "INSERT INTO users (username, password, email) VALUES('$username', '$password', '$email')";
+        if (query($sql))
         {
-            $row = mysqli_fetch_assoc($result);
-            if(password_verify($password, $row['password']))
-            {
-                if(isset($_POST["remember-me"]))
-                {
-                    setcookie("login_remember", $_POST["login"], time() + 3600 * 24 * 30);
-                }
-                else if(isset($_COOKIE["login_remember"]))
-                {
-                    unset($_COOKIE['login_remember']);
-                    setcookie('login_remember', null, time() - 3600);
-                }
-                $_SESSION['user_id'] = $row['id'];
-                header("location:dashboard");
-            }
-            else
-            {
-                $alertMsg = "Invalid username or password";
-                $alertType = "danger";
-            }
-        }
-        else
-        {
-            $alertMsg = "Invalid username or password";
-            $alertType = "danger";
+            $alertMsg = "You have successfully registered";
+            $alertType = "success";
         }
     }
 }
+
+if (isset($_POST["login-submit"]))
+{
+    if (count($_POST) != count(array_filter($_POST)))
+    {
+        $alertMsg = "All fields are required";
+        $alertType = "danger";
+        return;
+    }
+    $login = escape_string($_POST["login"]);
+    $password = escape_string($_POST["password"]);
+    $sql = "SELECT * FROM users WHERE username = '$login' OR email = '$login'";
+    $result = query($sql);
+    if (mysqli_num_rows($result) == 0)
+    {
+        $alertMsg = "Invalid username or password";
+        $alertType = "danger";
+        return;
+    }
+    $row = mysqli_fetch_assoc($result);
+    if (!password_verify($password, $row['password']))
+    {
+        $alertMsg = "Invalid username or password";
+        $alertType = "danger";
+        return;
+    }
+    if (isset($_POST["remember-me"]))
+    {
+        setcookie("login_remember", $_POST["login"], time() + 3600 * 24 * 30);
+    }
+    else if (isset($_COOKIE["login_remember"]))
+    {
+        unset($_COOKIE['login_remember']);
+        setcookie('login_remember', null, time() - 3600);
+    }
+    $_SESSION['user_id'] = $row['id'];
+    header("location:dashboard");
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>

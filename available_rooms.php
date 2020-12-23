@@ -12,7 +12,6 @@ $beds_result = query($sql);
 
 $sql = "SELECT id, name FROM amenities ORDER BY 1";
 $amenities_result = query($sql);
-
 ?>
 
 <!DOCTYPE html>

@@ -4,37 +4,38 @@ include 'process/get_customer_id.php';
 
 get_customer_id($alertMsg, $alertType, $customerId);
 
-if (isset($customerId))
+if (!isset($customerId))
 {
-    if (isset($_GET['id'], $_GET['start-date'], $_GET['end-date']))
-    {
-        $id = escape_string($_GET['id']);
-        $start_date = escape_string($_GET['start-date']);
-        $end_date = escape_string($_GET['end-date']);
-        $result = file_get_contents($_SERVER ["REQUEST_SCHEME"].'://'.$_SERVER['SERVER_NAME']."/process/check_room_availability.php?id=$id&start-date=".rawurlencode($start_date)."&end-date=".rawurlencode($end_date)."");
-        if ($result == 'false')
-        {
-            $alertMsg = "Room not available within $start_date - $end_date period";
-            $alertType = "warning";
-        }
-        else
-        {
-            $sql = "SELECT bed_amount FROM rooms where id = '$id'";
-            $result = query($sql);
-            $bed_number = mysqli_fetch_array($result);
-        }
-    }
-
-    $sql = "SELECT id, street_name, house_number, zip_code, city FROM addresses where id IN (SELECT address_id FROM customers_addresses where customer_id = '$customerId') ORDER BY 1";
-    $address_result = query($sql);
-
-    $sql = "SELECT DISTINCT bed_amount FROM rooms ORDER BY 1";
-    $beds_result = query($sql);
-
-    $sql = "SELECT id, name FROM additional_services ORDER BY 1";
-    $services_result = query($sql);
+    return;
 }
 
+if (isset($_GET['id'], $_GET['start-date'], $_GET['end-date']))
+{
+    $id = escape_string($_GET['id']);
+    $start_date = escape_string($_GET['start-date']);
+    $end_date = escape_string($_GET['end-date']);
+    $result = file_get_contents($_SERVER ["REQUEST_SCHEME"].'://'.$_SERVER['SERVER_NAME']."/process/check_room_availability.php?id=$id&start-date=".rawurlencode($start_date)."&end-date=".rawurlencode($end_date)."");
+    if ($result == 'false')
+    {
+        $alertMsg = "Room not available within $start_date - $end_date period";
+        $alertType = "warning";
+    }
+    else
+    {
+        $sql = "SELECT bed_amount FROM rooms where id = '$id'";
+        $result = query($sql);
+        $bed_number = mysqli_fetch_array($result);
+    }
+}
+
+$sql = "SELECT id, street_name, house_number, zip_code, city FROM addresses where id IN (SELECT address_id FROM customers_addresses where customer_id = '$customerId') ORDER BY 1";
+$address_result = query($sql);
+
+$sql = "SELECT DISTINCT bed_amount FROM rooms ORDER BY 1";
+$beds_result = query($sql);
+
+$sql = "SELECT id, name FROM additional_services ORDER BY 1";
+$services_result = query($sql);
 ?>
 
 <!DOCTYPE html>
