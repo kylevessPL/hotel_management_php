@@ -5,8 +5,21 @@ include_once 'process/validate_contact_fields.php';
 if(isset($_POST["contact-submit"]))
 {
     validate_contact_fields($_POST, $alertMsg, $alertType);
+    if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response']))
+    {
+        $alertMsg = "ReCaptcha has to be verified";
+        $alertType = "danger";
+    }
     if(!isset($alertMsg))
     {
+        $secret = '6LeIFREaAAAAALZi0YgONK77yTrQ5lheSQL5Txg7';
+        $response = json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . $secret . '&response=' . rawurlencode($_POST['g-recaptcha-response'])), false, 512, JSON_THROW_ON_ERROR);
+        if (!$response->success)
+        {
+            $alertMsg = "ReCaptcha validation error";
+            $alertType = "danger";
+            return;
+        }
         $to = 'kacperpiasta@gmail.com';
         $subject = 'HoteLA: New client contact form message';
         $name = escape_string($_POST["name"]);
@@ -54,16 +67,20 @@ if(isset($_POST["contact-submit"]))
                             <form id="form-contact" name="form-contact" method="post" action="/support/contact">
                                 <div class="form-group">
                                     <label for="name">Full name<span style="color: red">*</span></label>
-                                    <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp" placeholder="Enter full name" minlength="2" required>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter full name">
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email address<span style="color: red">*</span></label>
-                                    <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email" required>
+                                    <input type="text" class="form-control" id="email" name="email" placeholder="Enter email">
                                     <small id="emailHelp" class="form-text text-muted">We never share your email with anyone else.</small>
                                 </div>
                                 <div class="form-group">
                                     <label for="message">Message<span style="color: red">*</span></label>
-                                    <textarea class="form-control" id="message" name="message" rows="6" minlength="10" required></textarea>
+                                    <textarea class="form-control" id="message" name="message" rows="6" placeholder="Enter message"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <div class="g-recaptcha" data-sitekey="6LeIFREaAAAAAGqK6vf8uF1P-dk6QXBFyIgHY0J5" data-callback="handleReCaptchaChange"></div>
+                                    <input class="form-control" type="hidden" name="gRecaptchaResponse" id="gRecaptchaResponse" value="">
                                 </div>
                                 <input class="btn btn-primary text-right" name="contact-submit" value="Submit" type="submit">
                             </form>
@@ -107,6 +124,9 @@ if(isset($_POST["contact-submit"]))
 <?php view('footer.php'); ?>
 
 <?php view('scripts.php'); ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script src="/assets/js/contact.js"></script>
 
 </body>
 </html>

@@ -17,7 +17,7 @@ function validate_contact_fields(array $data, &$alertMsg, &$alertType)
 
 function required_fields(array $data)
 {
-    return count($data) == count(array_filter($data));
+    return count($data) == count(array_filter($data)) + 1;
 }
 
 function valid_email($field)

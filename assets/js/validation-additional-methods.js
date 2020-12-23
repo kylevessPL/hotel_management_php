@@ -1,7 +1,3 @@
-$.validator.addMethod("regex", function(value, element, regexp) {
-    return this.optional(element) || regexp.test(value);
-});
-
 $.validator.addMethod("futuredate", function (value, element) {
     const now = new Date();
     const myDate = new Date(moment(value, 'DD/MM/YYYY').format());
@@ -12,6 +8,10 @@ $.validator.addMethod("afterstartdate", function (value, element, date) {
     const startDate = new Date(moment(date, 'DD/MM/YYYY').format());
     const endDate = new Date(moment(value, 'DD/MM/YYYY').format());
     return this.optional(element) || startDate < endDate || value === "" || date === "";
+});
+
+$.validator.addMethod("recaptcha", function(value, element) {
+    return this.optional(element) || grecaptcha.execute();
 });
 
 $.validator.addMethod( "creditcard", function(value) {
