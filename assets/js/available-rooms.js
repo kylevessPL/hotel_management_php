@@ -63,7 +63,7 @@ function roomsSearchHandler() {
         const modal = getRoomDescModal();
         $('.main-container').after(modal);
         $.ajax({
-            url: '../../process/get_room_amenities.php',
+            url: '../../process/get_room_amenities',
             type: "GET",
             data: { id: $(this).closest("tr").find("td.dt-id").text() },
             dataType: 'JSON',
@@ -121,7 +121,7 @@ function initTable() {
 function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice) {
     const table = $('#roomsTable').DataTable({
         ajax: {
-            url: '../../process/get_available_rooms.php',
+            url: '../../process/get_available_rooms',
             type: 'GET',
             data: {
                 'start-date': startDate,

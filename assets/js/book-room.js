@@ -36,7 +36,7 @@ function checkCookie() {
     const promoCode = Cookies.get('promo_code');
     if (promoCode != null) {
         $.ajax({
-            url: '../../process/check_promo_code_availability.php',
+            url: '../../process/check_promo_code_availability',
             type: "GET",
             data: { 'promo-code': promoCode },
             success: function (response) {
@@ -80,7 +80,7 @@ function setEvents() {
             $(confirmationPeopleDetails).html('');
             $(confirmationItems).html('');
             $.ajax({
-                url: '../../process/get_customer_details.php',
+                url: '../../process/get_customer_details',
                 type: "GET",
                 dataType: 'JSON',
                 success: function (response) {
@@ -143,7 +143,7 @@ function setEvents() {
                             "promo-code": promoCode
                         };
                         $.ajax({
-                            url: '../../process/book_room_and_get_id.php',
+                            url: '../../process/book_room_and_get_id',
                             type: "POST",
                             contentType: "application/json; charset=utf-8",
                             data: JSON.stringify(data),
@@ -202,7 +202,7 @@ function setEvents() {
 
 function fetchRooms(startDate, endDate, bedAmount) {
     $.ajax({
-        url: '../../process/get_available_rooms.php',
+        url: '../../process/get_available_rooms',
         type: "GET",
         data: {
             'start-date': startDate.val(),
@@ -343,7 +343,7 @@ function setRoomItem() {
 function getRoomAmenities() {
     const room = $('#room');
     $.ajax({
-        url: '../../process/get_room_amenities.php',
+        url: '../../process/get_room_amenities',
         type: "GET",
         data: { id: room.val() },
         dataType: 'JSON',
@@ -377,7 +377,7 @@ function getServicesDesc() {
     const servicesSelected = $('#services option:selected');
     servicesSelected.each(function(index, currentElement) {
         $.ajax({
-            url: '../../process/get_service_desc.php',
+            url: '../../process/get_service_desc',
             type: "GET",
             data: {id: $(currentElement).val() },
             dataType: 'JSON',
@@ -420,7 +420,7 @@ function getDiscountValue() {
         value = Cookies.get('promo_code');
     }
     $.ajax({
-        url: '../../process/get_promo_code_discount.php',
+        url: '../../process/get_promo_code_discount',
         type: "GET",
         data: { 'promo-code': value },
         dataType: 'JSON',
@@ -753,7 +753,7 @@ $(function() {
         rules: {
             'promo-code': {
                 required: true,
-                remote: '../process/check_promo_code_availability.php'
+                remote: '../process/check_promo_code_availability'
             }
         },
         messages: {

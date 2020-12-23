@@ -107,7 +107,7 @@ if (isset($customerId))
         <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4">
             <?php view('breadcrumb.php'); ?>
             <p>View your latest room bookings and view bookings history</p>
-            <?php if (mysqli_num_rows($result) > 0) { ?>
+            <?php if (isset($customerId) && mysqli_num_rows($result) > 0) { ?>
             <div class="row mb-4">
                 <?php while($row = mysqli_fetch_array($result)) { echo '
                 <div class="col-12 col-md-6 mb-lg-0 col-lg-3">
@@ -170,6 +170,13 @@ if (isset($customerId))
 <script src="/assets/js/validation-additional-methods.js"></script>
 <script src="/assets/js/my-bookings.js"></script>
 <script src="/assets/js/payment-modal.js"></script>
+
+<script>
+    function isCustomerIdSet() {
+        let value = <?php echo isset($customerId) ? 'true' : 'false'; ?>;
+        return value;
+    }
+</script>
 
 </body>
 </html>

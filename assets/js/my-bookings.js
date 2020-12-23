@@ -55,7 +55,7 @@ $(document).ready(function () {
         $('#viewBookingDescModal').modal();
         $('.cancelBookingBtn').on('click', function () {
             $.ajax({
-                url: '../../process/cancel_booking.php',
+                url: '../../process/cancel_booking',
                 type: "GET",
                 data: {'id': bookingId},
                 success: function (response) {
@@ -64,7 +64,7 @@ $(document).ready(function () {
             })
         });
         $.ajax({
-            url: '../../process/get_booking_details.php',
+            url: '../../process/get_booking_details',
             type: "GET",
             data: { 'id': bookingId },
             dataType: 'JSON',
@@ -110,7 +110,7 @@ $(document).ready(function () {
                     `);
                 });
                 $.ajax({
-                    url: '../../process/get_room_amenities.php',
+                    url: '../../process/get_room_amenities',
                     type: "GET",
                     data: { 'id': response[0]['room-id'] },
                     dataType: 'JSON',
@@ -162,12 +162,7 @@ $(document).ready(function () {
 });
 
 function buildTable() {
-    const table = $('#bookingsTable').DataTable({
-        ajax: {
-            url: '../../process/get_customer_bookings.php',
-            type: 'GET',
-            dataSrc: ''
-        },
+    let data = {
         columns: [
             { data: null },
             { data: 'booking-id' },
@@ -267,7 +262,15 @@ function buildTable() {
             });
             $.fn.selectpicker.Constructor.BootstrapVersion = '4';
         }
-    });
+    }
+    if (isCustomerIdSet()) {
+        data.ajax = {
+            url: '../../process/get_customer_bookings',
+            type: 'GET',
+            dataSrc: ''
+        }
+    }
+    const table = $('#bookingsTable').DataTable(data);
     table.on( 'order.dt search.dt', function () {
         table.column(0, { search: 'applied', order: 'applied' }).nodes().each( function (cell, i) {
             cell.innerHTML = i + 1;

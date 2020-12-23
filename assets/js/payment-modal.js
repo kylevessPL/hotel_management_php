@@ -113,7 +113,7 @@ function handleCreditCardInput(element) {
 
 function setBitcoinDetails(total, bookingId) {
     $.ajax({
-        url: '../../process/get_bitcoin_details.php',
+        url: '../../process/get_bitcoin_details',
         type: "GET",
         data: { "value": total, "id": bookingId },
         dataType: 'JSON',
@@ -126,7 +126,7 @@ function setBitcoinDetails(total, bookingId) {
 
 function setPayPalPaymentLink(bookingId) {
     $.ajax({
-        url: '../../process/get_paypal_payment_link.php',
+        url: '../../process/get_paypal_payment_link',
         type: "GET",
         data: { "booking-id": bookingId },
         dataType: 'JSON',

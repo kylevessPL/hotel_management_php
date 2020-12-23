@@ -9,7 +9,7 @@ $(document).ready(function() {
         const modal = getServiceDescModal();
         $('.main-container').after(modal);
         $.ajax({
-            url: '../../process/get_service_desc.php',
+            url: '../../process/get_service_desc',
             type: "GET",
             data: { id: $(this).closest("tr").find("th.service-id").text() },
             dataType: 'JSON',

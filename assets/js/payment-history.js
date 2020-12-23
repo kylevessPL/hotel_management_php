@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $.ajax({
-        url: '../../process/get_payment_forms.php',
+        url: '../../process/get_payment_forms',
         type: "GET",
         dataType: 'JSON',
         success: function (response) {
@@ -48,12 +48,7 @@ function setStickySearchPane() {
 }
 
 function buildTable(paymentFormOptions) {
-    const table = $('#paymentsTable').DataTable({
-        ajax: {
-            url: '../../process/get_customer_payments.php',
-            type: 'GET',
-            dataSrc: ''
-        },
+    let data = {
         columns: [
             { data: null },
             { data: 'payment-date' },
@@ -159,7 +154,15 @@ function buildTable(paymentFormOptions) {
             });
             $.fn.selectpicker.Constructor.BootstrapVersion = '4';
         }
-    });
+    };
+    if (isCustomerIdSet()) {
+        data.ajax = {
+            url: '../../process/get_customer_payments',
+            type: 'GET',
+            dataSrc: ''
+        }
+    }
+    const table = $('#paymentsTable').DataTable(data);
     table.on( 'order.dt search.dt', function () {
         table.column(0, { search: 'applied', order: 'applied' }).nodes().each( function (cell, i) {
             cell.innerHTML = i + 1;

@@ -1,5 +1,9 @@
 <?php
 include 'helpers/include_all.php';
+include 'process/get_customer_id.php';
+
+get_customer_id($alertMsg, $alertType, $customerId);
+
 ?>
 
 <!DOCTYPE html>
@@ -50,6 +54,13 @@ include 'helpers/include_all.php';
 <script src="https://cdn.datatables.net/v/bs4/dt-1.10.23/fh-3.1.7/r-2.2.6/sp-1.2.2/sl-1.3.1/datatables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 <script src="/assets/js/payment-history.js"></script>
+
+<script>
+    function isCustomerIdSet() {
+        const value = <?php echo isset($customerId) ? 'true' : 'false'; ?>;
+        return value;
+    }
+</script>
 
 </body>
 </html>
