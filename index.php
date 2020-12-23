@@ -116,15 +116,15 @@ if(isset($_POST["login-submit"]))
                         <form id="form-register" name="form-register" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                             <div class="form-group">
                                 <label for="username">Username<span style="color: red">*</span></label>
-                                <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" autofocus>
+                                <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" autocomplete="off" autofocus>
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label" for="password">Password<span style="color: red">*</span></label>
-                                <input type="password" id="password" name="password" class="form-control" placeholder="Enter password">
+                                <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label" for="password2">Repeat password<span style="color: red">*</span></label>
-                                <input type="password" id="password2" name="password2" class="form-control" placeholder="Repeat password">
+                                <input type="password" id="password2" name="password2" class="form-control" placeholder="Repeat password" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label" for="email">E-mail<span style="color: red">*</span></label>
