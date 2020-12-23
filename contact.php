@@ -10,7 +10,7 @@ if(isset($_POST["contact-submit"]))
         $alertMsg = "ReCaptcha has to be verified";
         $alertType = "danger";
     }
-    if(!isset($alertMsg))
+    try
     {
         $secret = '6LeIFREaAAAAALZi0YgONK77yTrQ5lheSQL5Txg7';
         $response = json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . $secret . '&response=' . rawurlencode($_POST['g-recaptcha-response'])), false, 512, JSON_THROW_ON_ERROR);
@@ -18,8 +18,15 @@ if(isset($_POST["contact-submit"]))
         {
             $alertMsg = "ReCaptcha validation error";
             $alertType = "danger";
-            return;
         }
+    }
+    catch (JsonException $e)
+    {
+        $alertMsg = 'Oops, something went wrong. Please try again later.';
+        $alertType = "danger";
+    }
+    if(!isset($alertMsg))
+    {
         $to = 'kacperpiasta@gmail.com';
         $subject = 'HoteLA: New client contact form message';
         $name = escape_string($_POST["name"]);

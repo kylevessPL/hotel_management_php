@@ -17,7 +17,7 @@ label.error {
     margin-left: 5px;
 }
 
-input.error, textarea.error, .dropdown-toggle.error {
+input.error, textarea.error, iframe.error, .dropdown-toggle.error {
     border: 2px solid red;
     color: red;
 }

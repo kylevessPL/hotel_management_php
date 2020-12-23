@@ -39,6 +39,16 @@ $(function() {
                 required: "Please verify reCaptcha",
             }
         },
+        highlight: function (element) {
+            $(element).parent().find('iframe').removeClass('valid').addClass('error');
+            $(element).closest('input').removeClass('valid').addClass('error');
+            $(element).closest('textarea').removeClass('valid').addClass('error');
+        },
+        unhighlight: function (element) {
+            $(element).parent().find('iframe').removeClass('error').addClass('valid');
+            $(element).closest('input').removeClass('error').addClass('valid');
+            $(element).closest('textarea').removeClass('error').addClass('valid');
+        },
         invalidHandler: () => $(this).find(":input.error:first").focus(),
         submitHandler : function(form) {
             form.submit();
