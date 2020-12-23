@@ -11,6 +11,26 @@ if(isset($_SESSION["user_id"]))
 if(isset($_POST["register-submit"]))
 {
     validate_reg_fields($_POST, $alertMsg, $alertType);
+    if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response']))
+    {
+        $alertMsg = "ReCaptcha has to be verified";
+        $alertType = "danger";
+    }
+    try
+    {
+        $secret = '6LeIFREaAAAAALZi0YgONK77yTrQ5lheSQL5Txg7';
+        $response = json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . $secret . '&response=' . rawurlencode($_POST['g-recaptcha-response'])), false, 512, JSON_THROW_ON_ERROR);
+        if (!$response->success)
+        {
+            $alertMsg = "ReCaptcha validation error";
+            $alertType = "danger";
+        }
+    }
+    catch (JsonException $e)
+    {
+        $alertMsg = 'Oops, something went wrong. Please try again later.';
+        $alertType = "danger";
+    }
     if(!isset($alertMsg))
     {
         $username = escape_string($_POST["username"]);
