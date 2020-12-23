@@ -36,7 +36,7 @@ $(function() {
                 minlength: "Message must be at least 10 characters long"
             },
             gRecaptchaResponse: {
-                required: "Please verify reCaptcha",
+                required: "Please verify reCaptcha"
             }
         },
         highlight: function (element) {

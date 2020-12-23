@@ -26,7 +26,8 @@ $(function() {
 });
 
 $(function() {
-    $("form[name='form-register']").validate({
+    const form = $("form[name='form-register']");
+    form.validate({
         rules: {
             username: {
                 required: true,
@@ -63,6 +64,11 @@ $(function() {
                         }
                     }
                 }
+            },
+            gRecaptchaResponse: {
+                required: function () {
+                    return grecaptcha.getResponse() === '';
+                }
             }
         },
         messages: {
@@ -87,10 +93,26 @@ $(function() {
                 required: "E-mail is mandatory",
                 email: "E-mail not valid",
                 remote: "There is already a user with this email"
+            },
+            gRecaptchaResponse: {
+                required: "Please verify reCaptcha"
             }
+        },
+        highlight: function (element) {
+            $(element).parent().find('iframe').removeClass('valid').addClass('error');
+            $(element).closest('input').removeClass('valid').addClass('error');
+        },
+        unhighlight: function (element) {
+            $(element).parent().find('iframe').removeClass('error').addClass('valid');
+            $(element).closest('input').removeClass('error').addClass('valid');
         },
         submitHandler : function(form) {
             form.submit();
         }
     });
+    form.data("validator").settings.ignore = "";
 });
+
+function handleReCaptchaChange() {
+    $("#gRecaptchaResponse").valid();
+}
