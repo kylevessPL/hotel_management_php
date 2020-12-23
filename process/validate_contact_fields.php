@@ -6,6 +6,7 @@ function validate_contact_fields(array $data, &$alertMsg, &$alertType)
     {
         $alertMsg = "All fields are required";
         $alertType = "danger";
+        return;
     }
     $email = $data["email"];
     if(!valid_email($email))

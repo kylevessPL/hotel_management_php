@@ -6,6 +6,7 @@ function validate_customer_details_fields(array $data, &$alertMsg, &$alertType)
     {
         $alertMsg = "All fields are required";
         $alertType = "danger";
+        return;
     }
     $first_name = $data["first-name"];
     $last_name = $data["last-name"];
@@ -15,21 +16,25 @@ function validate_customer_details_fields(array $data, &$alertMsg, &$alertType)
     {
         $alertMsg = "First name must be between 2 and 30 characters long";
         $alertType = "danger";
+        return;
     }
     if(!valid_len(2, 30, $last_name))
     {
         $alertMsg = "Last name must be between 2 and 30 characters long";
         $alertType = "danger";
+        return;
     }
     if(!valid_document_type($document_type))
     {
         $alertMsg = "Document is not a valid type";
         $alertType = "danger";
+        return;
     }
     if(!valid_len(7, 14, $document_id))
     {
         $alertMsg = "Document ID must be between 7 and 14 characters long";
         $alertType = "danger";
+        return;
     }
     if(!valid_regex("/^[A-Z0-9 -]*$/", $document_id))
     {

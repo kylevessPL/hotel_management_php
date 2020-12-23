@@ -6,6 +6,7 @@ function validate_address_fields(array $data, &$alertMsg, &$alertType)
     {
         $alertMsg = "All fields are required";
         $alertType = "danger";
+        return;
     }
     $street_name = $data["streetName"];
     $house_number = $data["houseNumber"];
@@ -15,31 +16,37 @@ function validate_address_fields(array $data, &$alertMsg, &$alertType)
     {
         $alertMsg = "Street name must be between 2 and 30 characters long";
         $alertType = "danger";
+        return;
     }
     if(!valid_regex("/^[0-9a-zA-Z .\/]*$/", $house_number))
     {
         $alertMsg = "House number must contain only letters and numbers";
         $alertType = "danger";
+        return;
     }
     if(!valid_len(1, 10, $house_number))
     {
         $alertMsg = "House number must be maximum 10 characters long";
         $alertType = "danger";
+        return;
     }
     if(!valid_regex("/^[0-9 \-]*$/", $zip_code))
     {
         $alertMsg = "Zip code must contain only numbers, spaces or a dash";
         $alertType = "danger";
+        return;
     }
     if(!valid_len(2, 10, $zip_code))
     {
         $alertMsg = "Zip code must be between 2 and 10 characters long";
         $alertType = "danger";
+        return;
     }
     if(!valid_len(2, 30, $city))
     {
         $alertMsg = "City must be between 2 and 30 characters long";
         $alertType = "danger";
+        return;
     }
 }
 

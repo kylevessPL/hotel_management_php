@@ -1,5 +1,4 @@
 <?php
-
 include_once dirname(__DIR__).'/helpers/conn.php';
 include_once dirname(__DIR__).'/helpers/error_handler.php';
 include_once dirname(__DIR__).'/process/get_customer_id.php';
@@ -33,6 +32,7 @@ if (!isset($data['start-date'], $data['end-date'], $data['room-id']) || empty($d
     http_response_code(400);
     return;
 }
+
 if (!isset($customerId)) {
     http_response_code(401);
     return;
@@ -70,10 +70,12 @@ try
         http_response_code(400);
         throw new Exception(dbException());
     }
+
     $room_price = mysqli_fetch_assoc($result)['standard_price'];
 
     $services_price = 0;
     $service_list = [];
+
     if (isset($data['services']) && !empty($data['services']))
     {
         foreach ($data['services'] as &$value) {
@@ -93,7 +95,9 @@ try
             $services_price += $row[0];
         }
     }
+
     $discount_id = null;
+
     if (isset($data['promo-code']) && !empty($data['promo-code']))
     {
         $promo_code = escape_string($data['promo-code']);
@@ -120,6 +124,7 @@ try
         http_response_code(500);
         throw new Exception(dbException());
     }
+
     $booking_id = insert_id();
 
     $sql = "INSERT INTO bookings_rooms (booking_id, room_id) VALUES ('$booking_id', '$room_id')";

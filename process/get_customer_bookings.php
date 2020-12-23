@@ -1,5 +1,4 @@
 <?php
-
 include_once dirname(__DIR__).'/helpers/conn.php';
 include_once dirname(__DIR__).'/process/get_customer_id.php';
 
@@ -10,17 +9,21 @@ if (!isset($customerId))
     http_response_code(401);
     return;
 }
+
 $sql = "SELECT b.id, r.room_number, r.bed_amount, b.book_date, b.start_date, b.end_date, b.status FROM bookings b " .
     "INNER JOIN bookings_rooms br ON b.id = br.booking_id " .
     "INNER JOIN rooms r on r.id = br.room_id " .
     "INNER JOIN customers_bookings cb on cb.booking_id = b.id " .
     "WHERE cb.customer_id = '$customerId'";
+
 $result = query($sql);
+
 if (mysqli_num_rows($result) == 0)
 {
     echo '[]';
     return;
 }
+
 while($row = mysqli_fetch_array($result))
 {
     $bookings[] = array(
@@ -32,6 +35,7 @@ while($row = mysqli_fetch_array($result))
         "end-date" => $row['end_date'],
         "status" => $row['status']);
 }
+
 try
 {
     header('Content-type: application/json');

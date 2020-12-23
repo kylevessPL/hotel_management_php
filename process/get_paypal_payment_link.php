@@ -1,5 +1,4 @@
 <?php
-
 include_once dirname(__DIR__).'/helpers/conn.php';
 include_once dirname(__DIR__).'/process/get_customer_id.php';
 include_once dirname(__DIR__).'/process/get_paypal_token.php';
@@ -29,15 +28,13 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 $sql = "SELECT final_price, status from bookings where id = '".$_GET['booking-id']."'";
 $booking_result = query($sql);
-if (mysqli_num_rows($booking_result) > 0)
-{
-    $row = mysqli_fetch_array($booking_result);
-}
-else
+if (mysqli_num_rows($booking_result) == 0)
 {
     http_response_code(400);
     return;
 }
+
+$row = mysqli_fetch_array($booking_result);
 
 if ($row['status'] === 'Payed')
 {
@@ -93,6 +90,7 @@ catch (JsonException $e)
 curl_close($ch);
 
 $array[] = array("payment-link" => $data['links'][1]['href']);
+
 try
 {
     header('Content-type: application/json');

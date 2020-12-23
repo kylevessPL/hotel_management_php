@@ -1,5 +1,4 @@
 <?php
-
 include_once dirname(__DIR__).'/helpers/conn.php';
 include_once dirname(__DIR__).'/process/get_customer_id.php';
 
@@ -27,6 +26,7 @@ while($row = mysqli_fetch_array($result))
 {
     $customer_array[] = $row['customer_id'];
 }
+
 if (!in_array($customerId, $customer_array, true))
 {
     http_response_code(403);
@@ -44,6 +44,7 @@ $room_id = mysqli_fetch_assoc($result)['room_id'];
 $services = [];
 $sql = "SELECT name from additional_services WHERE id IN (SELECT service_id from bookings_services WHERE booking_id = '".escape_string($_GET['id'])."')";
 $result = query($sql);
+
 while($row = mysqli_fetch_array($result))
 {
     $services[] = array("name" => $row['name']);
@@ -52,6 +53,7 @@ while($row = mysqli_fetch_array($result))
 $people = [];
 $sql = "SELECT first_name, last_name, document_type, document_id from customers WHERE id IN (SELECT customer_id from customers_bookings WHERE booking_id = '".escape_string($_GET['id'])."')";
 $result = query($sql);
+
 while($row = mysqli_fetch_array($result))
 {
     $people[] = array(
@@ -65,6 +67,7 @@ while($row = mysqli_fetch_array($result))
 $payment_form = null;
 $sql = "SELECT name from payment_forms WHERE id = (SELECT payment_form_id from payments WHERE booking_id = '".escape_string($_GET['id'])."')";
 $result = query($sql);
+
 if (mysqli_num_rows($result) > 0)
 {
     $payment_form = mysqli_fetch_assoc($result)['name'];

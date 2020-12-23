@@ -6,6 +6,7 @@ function validate_reg_fields(array $data, &$alertMsg, &$alertType)
     {
         $alertMsg = "All fields are required";
         $alertType = "danger";
+        return;
     }
     $username = $data["username"];
     $password = $data["password"];
@@ -15,26 +16,31 @@ function validate_reg_fields(array $data, &$alertMsg, &$alertType)
     {
         $alertMsg = "Username must be between 6 and 16 characters long";
         $alertType = "danger";
+        return;
     }
     if(!valid_regex("/^[a-zA-Z0-9.-_]*$/", $username))
     {
         $alertMsg = "Username must may contain only letters, digits or - _ . characters";
         $alertType = "danger";
+        return;
     }
     if(!valid_len(8, 15, $password))
     {
         $alertMsg = "Password must be between 8 and 15 characters long";
         $alertType = "danger";
+        return;
     }
     if(!valid_regex("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/", $password))
     {
         $alertMsg = "Password must contain at least 1 capital letter and 1 digit";
         $alertType = "danger";
+        return;
     }
     if(!valid_equality($password, $password2))
     {
         $alertMsg = "Passwords do not match";
         $alertType = "danger";
+        return;
     }
     if(!valid_email($email))
     {
