@@ -22,7 +22,7 @@ function get_room_choice(&$alert_msg, &$alert_type): array
     $id = escape_string($_GET['id']);
     $start_date = escape_string($_GET['start-date']);
     $end_date = escape_string($_GET['end-date']);
-    $url = $_SERVER ["REQUEST_SCHEME"] . '://' . $_SERVER['SERVER_NAME'] . "/process/check_room_availability.php?id=" . $id . "&start-date=" . rawurlencode($start_date) . "&end-date=" . rawurlencode($end_date);
+    $url = $_SERVER ["REQUEST_SCHEME"] . '://' . $_SERVER['SERVER_NAME'] . "/process/check_room_availability?id=" . $id . "&start-date=" . rawurlencode($start_date) . "&end-date=" . rawurlencode($end_date);
     $result = file_get_contents($url);
     if ($result == 'false')
     {

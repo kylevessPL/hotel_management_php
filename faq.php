@@ -1,7 +1,7 @@
 <?php
 include 'helpers/include_all.php';
 
-$url = $_SERVER ["REQUEST_SCHEME"] . '://' . $_SERVER['SERVER_NAME'] . "/process/get_payment_forms.php";
+$url = $_SERVER ["REQUEST_SCHEME"] . '://' . $_SERVER['SERVER_NAME'] . "/process/get_payment_forms";
 $content = file_get_contents($url);
 $array = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
 

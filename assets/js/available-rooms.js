@@ -58,34 +58,6 @@ function roomsSearchHandler() {
     const minPrice = $("#filter-min-price").val();
     const maxPrice = $("#filter-max-price").val();
     buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice);
-    $('#roomsTable tbody').on('click', 'button', function (event) {
-        event.preventDefault();
-        const modal = getRoomDescModal();
-        $('.main-container').after(modal);
-        $.ajax({
-            url: '../../process/get_room_amenities',
-            type: "GET",
-            data: { id: $(this).closest("tr").find("td.dt-id").text() },
-            dataType: 'JSON',
-            success: function (response) {
-                let list = '';
-                $.each(response, function(key, val) {
-                    list += '<li>' + val['name'] + '</li>';
-                });
-                $('#viewRoomDescAmenities').html('<br><ul class="list-unstyled"><li>Amenities:<ul>' + list + '</ul></li></ul>');
-            }
-        });
-        $('#viewRoomDescModalTitle').html('Room description');
-        $('#viewRoomDescRoomNumber').html('Room number: ' + $(this).closest("tr").find("td.dt-room-number").text());
-        $('#viewRoomDescBedAmount').html('<br>' + 'Bed amount: ' + $(this).closest("tr").find("td.dt-bed-amount").text());
-        $('#viewRoomDescStandardPrice').html('<br>' + 'Standard price: ' + $(this).closest("tr").find("td.dt-standard-price").text() + ' PLN');
-        $('#viewRoomDescAmenities').html('<br>' + 'Amenities: ');
-        let selector = $('#viewRoomDescModal');
-        selector.modal();
-        selector.on('hide.bs.modal', function () {
-            setTimeout(() => $('#viewRoomDescModal').remove(), 400);
-        });
-    });
 }
 
 function initTable() {
@@ -192,7 +164,37 @@ function buildTable(startDate, endDate, bedAmount, amenities, minPrice, maxPrice
                 defaultContent: '<button class="btn btn-primary py-1 px-2 viewRoomAmenitiesBtn">View</button>'
             }
         ],
-        order: [[ 2, 'asc' ]]
+        order: [[ 2, 'asc' ]],
+        initComplete: function () {
+            $('.viewRoomAmenitiesBtn').on('click', function (event) {
+                event.preventDefault();
+                const modal = getRoomDescModal();
+                $('.main-container').after(modal);
+                $.ajax({
+                    url: '../../process/get_room_amenities',
+                    type: "GET",
+                    data: { id: $(this).closest("tr").find("td.dt-id").text() },
+                    dataType: 'JSON',
+                    success: function (response) {
+                        let list = '';
+                        $.each(response, function(key, val) {
+                            list += '<li>' + val['name'] + '</li>';
+                        });
+                        $('#viewRoomDescAmenities').html('<br><ul class="list-unstyled"><li>Amenities:<ul>' + list + '</ul></li></ul>');
+                    }
+                });
+                $('#viewRoomDescModalTitle').html('Room description');
+                $('#viewRoomDescRoomNumber').html('Room number: ' + $(this).closest("tr").find("td.dt-room-number").text());
+                $('#viewRoomDescBedAmount').html('<br>' + 'Bed amount: ' + $(this).closest("tr").find("td.dt-bed-amount").text());
+                $('#viewRoomDescStandardPrice').html('<br>' + 'Standard price: ' + $(this).closest("tr").find("td.dt-standard-price").text() + ' PLN');
+                $('#viewRoomDescAmenities').html('<br>' + 'Amenities: ');
+                let selector = $('#viewRoomDescModal');
+                selector.modal();
+                selector.on('hide.bs.modal', function () {
+                    setTimeout(() => $('#viewRoomDescModal').remove(), 400);
+                });
+            });
+        }
     });
     table.on( 'order.dt search.dt', function () {
         table.column(0, { search: 'applied', order: 'applied' }).nodes().each( function (cell, i) {

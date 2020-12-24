@@ -117,13 +117,13 @@ function set_username_cookie(): void
 
 function check_username_availability(string $username)
 {
-    $url = $_SERVER ["REQUEST_SCHEME"] . '://' . $_SERVER['SERVER_NAME'] . "/process/check_username_availability.php?username=" . rawurlencode($username);
+    $url = $_SERVER ["REQUEST_SCHEME"] . '://' . $_SERVER['SERVER_NAME'] . "/process/check_username_availability?username=" . rawurlencode($username);
     return file_get_contents($url);
 }
 
 function check_email_availability(string $email)
 {
-    $url = $_SERVER ["REQUEST_SCHEME"] . '://' . $_SERVER['SERVER_NAME'] . "/process/check_email_availability.php?email=" . rawurlencode($email);
+    $url = $_SERVER ["REQUEST_SCHEME"] . '://' . $_SERVER['SERVER_NAME'] . "/process/check_email_availability?email=" . rawurlencode($email);
     return file_get_contents($url);
 }
 

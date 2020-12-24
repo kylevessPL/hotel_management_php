@@ -92,6 +92,9 @@ $(document).ready(function () {
                 if (response[0]['payment-form'] != null) {
                     totalElement.after('<div id="viewBookingDescPaymentForm" class="mb-2"><i class="'+icon+' la-lg mr-1" style="color: #007bff;"></i>'+response[0]['payment-form']+' <small class="text-muted"> payment form</small></div>');
                 }
+                if (response[0]['services'].length > 0) {
+                    $('#viewBookingDescAmenities').after('<div id="viewBookingDescServices"><small class="text-muted"> additional services</small></div>');
+                }
                 let array1 = [];
                 $.each(response[0]['services'], function(key, val) {
                     array1.push(val['name']);
@@ -341,7 +344,6 @@ function getBookingDescModal() {
                                     <div id="viewBookingDescRoomNumber" class="mb-2"> <small class="text-muted"> room number</small></div>
                                     <div id="viewBookingDescBedAmount" class="mb-2"> <small class="text-muted"> bed amount</small></div>
                                     <div id="viewBookingDescAmenities" class="mb-2"> <small class="text-muted"> room amenities</small></div>
-                                    <div id="viewBookingDescServices"> <small class="text-muted"> additional services</small></div>
                                 </div>
                             </div>
                             <div class="col-sm-4">
