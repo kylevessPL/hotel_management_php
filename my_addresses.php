@@ -33,7 +33,7 @@ if (isset($_POST["address-submit"]))
         autocommit(false);
         try
         {
-            update_customer_addresses($address_num, $street_name, $house_number, $zip_code, $city, $address_list, $customer_id);
+            update_customer_addresses($street_name, $house_number, $zip_code, $city, $address_list, $address_num, $customer_id);
             header("Refresh:0");
             commit_transaction();
             autocommit();
@@ -50,6 +50,7 @@ if (isset($_POST["address-submit"]))
 
 function get_customer_addresses($customer_id)
 {
+    $address_list = null;
     $sql = "SELECT address_id FROM customers_addresses where customer_id = '$customer_id'";
     $result = query($sql);
     while ($row = mysqli_fetch_array($result))

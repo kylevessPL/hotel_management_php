@@ -28,7 +28,7 @@ if (isset($_POST["register-submit"]))
         $email = escape_string($_POST["email"]);
         $result1 = check_username_availability($username);
         $result2 = check_email_availability($email);
-        if ($result == 'true' && $result2 == 'true')
+        if ($result1 == 'true' && $result2 == 'true')
         {
             register_user($alert_msg, $alert_type, $username, $email);
         }

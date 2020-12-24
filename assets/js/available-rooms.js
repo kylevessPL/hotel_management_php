@@ -78,7 +78,7 @@ function roomsSearchHandler() {
         $('#viewRoomDescModalTitle').html('Room description');
         $('#viewRoomDescRoomNumber').html('Room number: ' + $(this).closest("tr").find("td.dt-room-number").text());
         $('#viewRoomDescBedAmount').html('<br>' + 'Bed amount: ' + $(this).closest("tr").find("td.dt-bed-amount").text());
-        $('#viewRoomDescStandardPrice').html('<br>' + 'Standard price: ' + $(this).closest("tr").find("td.dt-standard-price").text() + ' USD');
+        $('#viewRoomDescStandardPrice').html('<br>' + 'Standard price: ' + $(this).closest("tr").find("td.dt-standard-price").text() + ' PLN');
         $('#viewRoomDescAmenities').html('<br>' + 'Amenities: ');
         let selector = $('#viewRoomDescModal');
         selector.modal();

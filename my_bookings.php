@@ -24,8 +24,9 @@ if (isset($customer_id))
                 if (mysqli_num_rows($result1) > 0)
                 {
                     $payment_form = mysqli_fetch_assoc($result1)['id'];
+                    $payment_date = $data['update_time'];
                     autocommit(false);
-                    set_booking_payment($booking_id, $data, $payment_form);
+                    set_booking_payment($booking_id, $payment_date, $payment_form);
                 }
             }
         }
@@ -66,7 +67,7 @@ function verify_paypal_payment($access_token)
     return $data;
 }
 
-function set_booking_payment($booking_id, $data, string $payment_form)
+function set_booking_payment($booking_id, $payment_date, string $payment_form)
 {
     try
     {
@@ -83,7 +84,7 @@ function set_booking_payment($booking_id, $data, string $payment_form)
             throw new Exception(dbException());
         }
 
-        $sql = "INSERT INTO payments (booking_id, payment_date, payment_form_id, transaction_id) VALUES ('$booking_id', '" . date('Y-m-d H:i:s', strtotime($data)) . "', '" . $payment_form . "', '" . escape_string($_GET['paymentId']) . "')";
+        $sql = "INSERT INTO payments (booking_id, payment_date, payment_form_id, transaction_id) VALUES ('$booking_id', '" .date('Y-m-d H:i:s', strtotime($payment_date)). "', '" . $payment_form . "', '" . escape_string($_GET['paymentId']) . "')";
         if (!query($sql))
         {
             throw new Exception(dbException());
