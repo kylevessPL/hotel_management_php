@@ -12,16 +12,16 @@ if (isset($_POST["contact-submit"]))
     }
     else
     {
-        [$alert_msg, $alert_type] = verify_captcha_response();
+        verify_captcha_response($alert_msg, $alert_type);
     }
     if(!isset($alert_msg))
     {
         [$to, $subject, $headers, $body] = create_mail_body();
-        [$alert_msg, $alert_type] = send_mail($to, $subject, $body, $headers);
+        send_mail($alert_msg, $alert_type, $to, $subject, $body, $headers);
     }
 }
 
-function verify_captcha_response(): array
+function verify_captcha_response(&$alert_msg, &$alert_type)
 {
     try
     {
@@ -40,7 +40,6 @@ function verify_captcha_response(): array
         $alert_msg = 'Oops, something went wrong. Please try again later.';
         $alert_type = "danger";
     }
-    return array($alert_msg, $alert_type);
 }
 
 function create_mail_body(): array
@@ -60,7 +59,7 @@ function create_mail_body(): array
     return array($to, $subject, $headers, $body);
 }
 
-function send_mail($to, $subject, $body, $headers): array
+function send_mail(&$alert_msg, &$alert_type, $to, $subject, $body, $headers)
 {
     if (mail($to, $subject, $body, $headers))
     {
@@ -72,7 +71,6 @@ function send_mail($to, $subject, $body, $headers): array
         $alert_msg = 'Oops, something went wrong. Please try again later.';
         $alert_type = "danger";
     }
-    return array($alert_msg, $alert_type);
 }
 
 ?>

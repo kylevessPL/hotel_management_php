@@ -2,7 +2,8 @@
 include 'helpers/include_all.php';
 include 'process/get_customer_id.php';
 
-get_customer_id($alertMsg, $alertType, $customerId);
+get_customer_id($alert_msg, $alert_type, $customer_id);
+
 ?>
 
 <!DOCTYPE html>
@@ -56,7 +57,7 @@ get_customer_id($alertMsg, $alertType, $customerId);
 
 <script>
     function isCustomerIdSet() {
-        const value = <?php echo isset($customerId) ? 'true' : 'false'; ?>;
+        const value = <?php echo isset($customer_id) ? 'true' : 'false'; ?>;
         return value;
     }
 </script>

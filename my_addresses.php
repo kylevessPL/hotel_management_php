@@ -3,26 +3,26 @@ include 'helpers/include_all.php';
 include 'process/get_customer_id.php';
 include 'process/validate_address_fields.php';
 
-get_customer_id($alertMsg, $alertType, $customerId);
+get_customer_id($alert_msg, $alert_type, $customer_id);
 
-if (isset($customerId))
+if (isset($customer_id))
 {
-    $sql = "SELECT address_id FROM customers_addresses where customer_id = '$customerId'";
-    $result = query($sql);
-    if (mysqli_num_rows($result) > 0)
+    $address_list = get_customer_addresses($customer_id);
+    if (!isset($address_list) || empty($address_list))
     {
-        $address_result = get_customer_addresses($result);
+        $alert_msg = "You need to add at least one address to unlock all site features";
+        $alert_type = "info";
     }
     else
     {
-        $alertMsg = "You need to add at least one address to unlock all site features";
-        $alertType = "info";
+        $sql = "SELECT street_name, house_number, zip_code, city FROM addresses where id IN (".implode(',', $address_list).")";
+        $address_result = query($sql);
     }
 }
 
 if (isset($_POST["address-submit"]))
 {
-    validate_address_fields($_POST, $alertMsg, $alertType);
+    validate_address_fields($_POST, $alert_msg, $alert_type);
     if (!isset($alertMsg) || $alertType == 'info')
     {
         $address_num = escape_string($_POST["addressNum"]);
@@ -33,45 +33,53 @@ if (isset($_POST["address-submit"]))
         autocommit(false);
         try
         {
-            update_customer_addresses($address_num, $street_name, $house_number, $zip_code, $city, $address_list, $customerId);
+            update_customer_addresses($address_num, $street_name, $house_number, $zip_code, $city, $address_list, $customer_id);
             header("Refresh:0");
             commit_transaction();
             autocommit();
         }
         catch (Throwable $e)
         {
-            $alertMsg = 'Oops, something went wrong. Please try again later.';
-            $alertType = "danger";
+            $alert_msg = 'Oops, something went wrong. Please try again later.';
+            $alert_type = "danger";
             rollback_transaction();
             autocommit();
         }
     }
 }
 
-function get_customer_addresses(mysqli_result $result)
+function get_customer_addresses($customer_id)
 {
-    while ($row = mysqli_fetch_array($result)) {
+    $sql = "SELECT address_id FROM customers_addresses where customer_id = '$customer_id'";
+    $result = query($sql);
+    while ($row = mysqli_fetch_array($result))
+    {
         $address_list[] = $row[0];
     }
-    $sql = "SELECT street_name, house_number, zip_code, city FROM addresses where id IN (" . implode(',', $address_list) . ")";
-    return query($sql);
+    return $address_list;
 }
 
-function update_customer_addresses(string $address_num, string $street_name, string $house_number, string $zip_code, string $city, $address_list, $customerId): void
+function update_customer_addresses(string $street_name, string $house_number, string $zip_code, string $city, $address_list, string $address_num, $customer_id): void
 {
-    if (!isset($address_num) || empty($address_num)) {
+    if (!isset($address_num) || empty($address_num))
+    {
         $sql = "INSERT INTO addresses (street_name, house_number, zip_code, city) VALUES('$street_name', '$house_number', '$zip_code', '$city')";
-    } else {
-        $id = $address_list;
+    }
+    else
+    {
+        $id = $address_list[$address_num - 1];
         $sql = "UPDATE addresses SET street_name = '$street_name', house_number = '$house_number', zip_code = '$zip_code', city = '$city' where id = '$id'";
     }
-    if (!query($sql)) {
+    if (!query($sql))
+    {
         throw new Exception(dbException());
     }
-    if (!isset($address_num) || empty($address_num)) {
+    if (!isset($address_num) || empty($address_num))
+    {
         $address_id = insert_id();
-        $sql = "INSERT INTO customers_addresses (customer_id, address_id) VALUES('$customerId', '$address_id')";
-        if (!query($sql)) {
+        $sql = "INSERT INTO customers_addresses (customer_id, address_id) VALUES('$customer_id', '$address_id')";
+        if (!query($sql))
+        {
             throw new Exception(dbException());
         }
     }
@@ -102,13 +110,13 @@ function update_customer_addresses(string $address_num, string $street_name, str
                                         <hr>
                                     </div>
                                 </div>
-                                <?php if (!isset($customerId))
+                                <?php if (!isset($customer_id))
                                 { echo '
-                                <p class="alert alert-'.htmlspecialchars($alertType).'">'.htmlspecialchars($alertMsg).'</p>
+                                <p class="alert alert-'.htmlspecialchars($alert_type).'">'.htmlspecialchars($alert_msg).'</p>
                                 <a class="btn btn-primary text-right" href="/account/my-details">Update my details</a>
                                 ';}
                                 else
-                                { echo isset($alertMsg) ? '<p class="alert alert-'.htmlspecialchars($alertType).'">'.htmlspecialchars($alertMsg).'</p>' : ''; ?>
+                                { echo isset($alert_msg) ? '<p class="alert alert-'.htmlspecialchars($alert_type).'">'.htmlspecialchars($alert_msg).'</p>' : ''; ?>
                                 <button class="btn btn-success text-right add-address-action"><i class="las la-plus-circle la-lg mr-2"></i>New address</button>
                                 <?php if (isset($address_list)) {?>
                                 <div class="row mt-2">

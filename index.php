@@ -20,7 +20,7 @@ if (isset($_POST["register-submit"]))
     }
     else
     {
-        [$alert_msg, $alert_type] = verify_captcha_response();
+        verify_captcha_response($alert_msg, $alert_type);
     }
     if (!isset($alert_msg))
     {
@@ -30,37 +30,36 @@ if (isset($_POST["register-submit"]))
         $result2 = check_email_availability($email);
         if ($result == 'true' && $result2 == 'true')
         {
-            [$alert_msg, $alert_type] = register_user($username, $email);
+            register_user($alert_msg, $alert_type, $username, $email);
         }
     }
 }
 
 if (isset($_POST["login-submit"]))
 {
-    [$alert_msg, $alert_type] = validate_login_fields();
+    validate_login_fields($alert_msg, $alert_type);
     if (!isset($alert_msg))
     {
-        [$alert_msg, $alert_type] = check_user_existence();
+        $id = check_user_existence($alert_msg, $alert_type);
         if (!isset($alert_msg))
         {
             set_username_cookie();
-            $_SESSION['user_id'] = $row['id'];
+            $_SESSION['user_id'] = $id;
             header("location:dashboard");
         }
     }
 }
 
-function validate_login_fields(): array
+function validate_login_fields(&$alert_msg, &$alert_type)
 {
     if (count($_POST) != count(array_filter($_POST)))
     {
         $alert_msg = "All fields are required";
         $alert_type = "danger";
     }
-    return array($alert_msg, $alert_type);
 }
 
-function verify_captcha_response(): array
+function verify_captcha_response(&$alert_msg, &$alert_type)
 {
     try
     {
@@ -68,19 +67,18 @@ function verify_captcha_response(): array
         $response = json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . $secret . '&response=' . rawurlencode($_POST['g-recaptcha-response'])), false, 512, JSON_THROW_ON_ERROR);
         if (!$response->success)
         {
-            $alertMsg = "ReCaptcha validation error";
-            $alertType = "danger";
+            $alert_msg = "ReCaptcha validation error";
+            $alert_type = "danger";
         }
     }
     catch (JsonException $e)
     {
-        $alertMsg = 'Oops, something went wrong. Please try again later.';
-        $alertType = "danger";
+        $alert_msg = 'Oops, something went wrong. Please try again later.';
+        $alert_type = "danger";
     }
-    return array($alertMsg, $alertType);
 }
 
-function check_user_existence(): array
+function check_user_existence(&$alert_msg, &$alert_type)
 {
     $login = escape_string($_POST["login"]);
     $password = escape_string($_POST["password"]);
@@ -90,17 +88,18 @@ function check_user_existence(): array
     {
         $alert_msg = "Invalid username or password";
         $alert_type = "danger";
+        return null;
     }
-    else
+
+    $row = mysqli_fetch_assoc($result);
+    if (!password_verify($password, $row['password']))
     {
-        $row = mysqli_fetch_assoc($result);
-        if (!password_verify($password, $row['password']))
-        {
-            $alert_msg = "Invalid username or password";
-            $alert_type = "danger";
-        }
+        $alert_msg = "Invalid username or password";
+        $alert_type = "danger";
+        return null;
     }
-    return array($alert_msg, $alert_type);
+
+    return $row['id'];
 }
 
 function set_username_cookie(): void
@@ -128,7 +127,7 @@ function check_email_availability(string $email)
     return file_get_contents($url);
 }
 
-function register_user(string $username, string $email): array
+function register_user(&$alert_msg, &$alert_type, string $username, string $email)
 {
     $password = escape_string($_POST["password"]);
     $password = password_hash($password, PASSWORD_DEFAULT);
@@ -138,7 +137,6 @@ function register_user(string $username, string $email): array
         $alert_msg = "You have successfully registered";
         $alert_type = "success";
     }
-    return array($alert_msg, $alert_type);
 }
 
 ?>

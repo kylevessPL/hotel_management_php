@@ -3,65 +3,72 @@ include 'helpers/include_all.php';
 include 'process/get_customer_id.php';
 include 'process/validate_customer_details_fields.php';
 
-get_customer_id($alertMsg, $alertType, $customerId);
+get_customer_id($alert_msg, $alert_type, $customer_id);
 
-if (isset($customerId))
+if (isset($customer_id))
 {
-    $sql = "SELECT first_name, last_name, document_type, document_id FROM customers WHERE id = '$customerId'";
+    $sql = "SELECT first_name, last_name, document_type, document_id FROM customers WHERE id = '$customer_id'";
     $result = query($sql);
     $customer_data = mysqli_fetch_assoc($result);
 }
 
-if (isset($_POST["customer-details-submit"]))
+function update_customer_details($customer_id, string $first_name, string $last_name, string $document_type, string $document_id): array
 {
-    validate_customer_details_fields($_POST, $alertMsg, $alertType);
-    if (isset($alertMsg) && $alertType != 'info')
+    if (!isset($customer_id))
     {
-        return;
+        $sql = "INSERT INTO customers (first_name, last_name, document_type, document_id) VALUES('$first_name', '$last_name', '$document_type', '$document_id')";
     }
-    $first_name = escape_string($_POST["first-name"]);
-    $last_name = escape_string($_POST["last-name"]);
-    $document_type = escape_string($_POST["document-type"]);
-    $document_id = escape_string($_POST["document-id"]);
-    autocommit(false);
-    try
+    else
     {
-        if (!isset($customerId)) {
-            $sql = "INSERT INTO customers (first_name, last_name, document_type, document_id) VALUES('$first_name', '$last_name', '$document_type', '$document_id')";
-        }
-        else
-        {
-            $sql = "UPDATE customers SET first_name = '$first_name', last_name = '$last_name', document_type = '$document_type', document_id = '$document_id' where id = '$customerId'";
-        }
+        $sql = "UPDATE customers SET first_name = '$first_name', last_name = '$last_name', document_type = '$document_type', document_id = '$document_id' where id = '$customer_id'";
+    }
+    if (!query($sql))
+    {
+        throw new Exception(dbException());
+    }
+    if (!isset($customer_id))
+    {
+        $sql = "UPDATE users SET customer_id = '" . insert_id() . "' where id = '" . $_SESSION['user_id'] . "'";
         if (!query($sql))
         {
             throw new Exception(dbException());
         }
-        if (!isset($customerId))
-        {
-            $sql = "UPDATE users SET customer_id = '".insert_id()."' where id = '".$_SESSION['user_id']."'";
-            if (!query($sql))
-            {
-                throw new Exception(dbException());
-            }
-            $alertMsg = "Thank you. You have now full access to all features on the site.";
-        }
-        else
-        {
-            $alertMsg = "Personal data modified successfully";
-        }
-        $alertType = "success";
-        commit_transaction();
-        autocommit();
+        $alert_msg = "Thank you. You have now full access to all features on the site.";
     }
-    catch (Throwable $e)
+    else
     {
-        $alertMsg = 'Oops, something went wrong. Please try again later.';
-        $alertType = "danger";
-        rollback_transaction();
-        autocommit();
+        $alert_msg = "Personal data modified successfully";
+    }
+    $alert_type = "success";
+    return array($alert_msg, $alert_type);
+}
+
+if (isset($_POST["customer-details-submit"]))
+{
+    validate_customer_details_fields($_POST, $alert_msg, $alert_type);
+    if (!isset($alert_msg) || $alert_type == 'info')
+    {
+        $first_name = escape_string($_POST["first-name"]);
+        $last_name = escape_string($_POST["last-name"]);
+        $document_type = escape_string($_POST["document-type"]);
+        $document_id = escape_string($_POST["document-id"]);
+        autocommit(false);
+        try
+        {
+            [$alert_msg, $alert_type] = update_customer_details($customer_id, $first_name, $last_name, $document_type, $document_id);
+            commit_transaction();
+            autocommit();
+        }
+        catch (Throwable $e)
+        {
+            $alert_msg = 'Oops, something went wrong. Please try again later.';
+            $alert_type = "danger";
+            rollback_transaction();
+            autocommit();
+        }
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -86,7 +93,7 @@ if (isset($_POST["customer-details-submit"]))
                                     <hr>
                                 </div>
                             </div>
-                            <?php echo isset($alertMsg) ? '<p class="alert alert-'.htmlspecialchars($alertType).'">'.htmlspecialchars($alertMsg).'</p>' : ''; ?>
+                            <?php echo isset($alert_msg) ? '<p class="alert alert-'.htmlspecialchars($alert_type).'">'.htmlspecialchars($alert_msg).'</p>' : ''; ?>
                             <div class="row">
                                 <div class="col-md-12">
                                     <form id="form-customer-details" name="form-customer-details" method="post" action="/account/my-details">

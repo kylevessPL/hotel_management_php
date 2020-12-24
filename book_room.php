@@ -8,7 +8,7 @@ if (isset($customer_id))
 {
     if (isset($_GET['id'], $_GET['start-date'], $_GET['end-date']))
     {
-        [$id, $start_date, $end_date, $alert_msg, $alert_type, $bed_number] = get_room_choice();
+        [$id, $start_date, $end_date, $bed_number] = get_room_choice($alert_msg, $alert_type);
     }
 
     $address_result = get_customer_addresses($customer_id);
@@ -17,7 +17,7 @@ if (isset($customer_id))
 $beds_result = get_bed_variants();
 $services_result = get_additional_services();
 
-function get_room_choice(): array
+function get_room_choice(&$alert_msg, &$alert_type): array
 {
     $id = escape_string($_GET['id']);
     $start_date = escape_string($_GET['start-date']);
@@ -26,8 +26,8 @@ function get_room_choice(): array
     $result = file_get_contents($url);
     if ($result == 'false')
     {
-        $alertMsg = "Room not available within $start_date - $end_date period";
-        $alertType = "warning";
+        $alert_msg = "Room not available within $start_date - $end_date period";
+        $alert_type = "warning";
     }
     else
     {
@@ -35,7 +35,7 @@ function get_room_choice(): array
         $result = query($sql);
         $bed_number = mysqli_fetch_array($result);
     }
-    return array($id, $start_date, $end_date, $alertMsg, $alertType, $bed_number);
+    return array($id, $start_date, $end_date, $bed_number);
 }
 
 function get_customer_addresses($customer_id)
