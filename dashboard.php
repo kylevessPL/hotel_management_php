@@ -2,30 +2,49 @@
 include 'helpers/include_all.php';
 include 'process/get_customer_id.php';
 
-get_customer_id($alertMsg, $alertType, $customerId);
+get_customer_id($alert_msg, $alert_type, $customer_id);
 
-if (isset($customerId))
+if (isset($customer_id))
 {
-    $sql = "SELECT COUNT(cb.id) AS count from customers_bookings cb " .
-    "INNER JOIN bookings b ON b.id = cb.booking_id " .
-    "WHERE customer_id = '$customerId' AND book_date >= '".date('Y-m-d', strtotime('first day of january this year'))."'";
-    $result = query($sql);
-    $bookings_count = mysqli_fetch_assoc($result)['count'];
-
-    $sql = "SELECT COUNT(id) AS count from payments WHERE booking_id IN (SELECT booking_id from customers_bookings WHERE customer_id = '$customerId')";
-    $result = query($sql);
-    $payments_count = mysqli_fetch_assoc($result)['count'];
+    $bookings_count = get_customer_bookings_count($customer_id);
+    $payments_count = get_customer_payments_count($customer_id);
 }
 
-$sql = "SELECT MIN(standard_price) AS min from rooms WHERE id NOT IN (SELECT room_id from bookings_rooms WHERE booking_id IN (SELECT id from bookings WHERE status IN ('Paid', 'Unpaid')))";
-$result = query($sql);
-$min_price = (int) mysqli_fetch_assoc($result)['min'];
+$min_price = get_room_min_price();
+$rooms_count = get_available_rooms_next_week();
 
-$start_date = date('Y-m-d', strtotime('next monday'));
-$end_date = date('Y-m-d', strtotime($start_date . 'next sunday'));
-$sql = "SELECT COUNT(id) AS count from rooms WHERE id NOT IN (SELECT room_id from bookings_rooms WHERE booking_id IN (SELECT id from bookings WHERE status != 'Cancelled' AND '$start_date' <= end_date AND '$end_date' >= start_date))";
-$result = query($sql);
-$rooms_count = (int) mysqli_fetch_assoc($result)['count'];
+function get_customer_payments_count($customerId)
+{
+    $sql = "SELECT COUNT(id) AS count from payments WHERE booking_id IN (SELECT booking_id from customers_bookings WHERE customer_id = '$customerId')";
+    $result = query($sql);
+    return mysqli_fetch_assoc($result)['count'];
+}
+
+function get_customer_bookings_count($customerId)
+{
+    $sql = "SELECT COUNT(cb.id) AS count from customers_bookings cb " .
+        "INNER JOIN bookings b ON b.id = cb.booking_id " .
+        "WHERE customer_id = '$customerId' AND book_date >= '" . date('Y-m-d', strtotime('first day of january this year')) . "'";
+    $result = query($sql);
+    return mysqli_fetch_assoc($result)['count'];
+}
+
+function get_room_min_price(): int
+{
+    $sql = "SELECT MIN(standard_price) AS min from rooms WHERE id NOT IN (SELECT room_id from bookings_rooms WHERE booking_id IN (SELECT id from bookings WHERE status IN ('Paid', 'Unpaid')))";
+    $result = query($sql);
+    return (int) mysqli_fetch_assoc($result)['min'];
+}
+
+function get_available_rooms_next_week(): int
+{
+    $start_date = date('Y-m-d', strtotime('next monday'));
+    $end_date = date('Y-m-d', strtotime($start_date . 'next sunday'));
+    $sql = "SELECT COUNT(id) AS count from rooms WHERE id NOT IN (SELECT room_id from bookings_rooms WHERE booking_id IN (SELECT id from bookings WHERE status != 'Cancelled' AND '$start_date' <= end_date AND '$end_date' >= start_date))";
+    $result = query($sql);
+    return (int) mysqli_fetch_assoc($result)['count'];
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +60,7 @@ $rooms_count = (int) mysqli_fetch_assoc($result)['count'];
             <?php view('breadcrumb.php'); ?>
             <p>Check the statistics & get familiar with our offer</p>
             <div class="row mb-5">
-                <?php if (isset($customerId)) { ?>
+                <?php if (isset($customer_id)) { ?>
                 <div class="col-12 col-md-6 col-lg-3 mb-4 mb-lg-0">
                     <div class="card animated-2 bg-success text-white overflow-hidden">
                         <div class="card-body bg-success">

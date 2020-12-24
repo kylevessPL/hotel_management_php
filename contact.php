@@ -4,52 +4,75 @@ include_once 'process/validate_contact_fields.php';
 
 if (isset($_POST["contact-submit"]))
 {
-    validate_contact_fields($_POST, $alertMsg, $alertType);
+    validate_contact_fields($_POST, $alert_msg, $alert_type);
     if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response']))
     {
-        $alertMsg = "ReCaptcha has to be verified";
-        $alertType = "danger";
+        $alert_msg = "ReCaptcha has to be verified";
+        $alert_type = "danger";
     }
+    else
+    {
+        [$alert_msg, $alert_type] = verify_captcha_response();
+    }
+    if(!isset($alert_msg))
+    {
+        [$to, $subject, $headers, $body] = create_mail_body();
+        [$alert_msg, $alert_type] = send_mail($to, $subject, $body, $headers);
+    }
+}
+
+function verify_captcha_response(): array
+{
     try
     {
         $secret = '6LeIFREaAAAAALZi0YgONK77yTrQ5lheSQL5Txg7';
-        $response = json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . $secret . '&response=' . rawurlencode($_POST['g-recaptcha-response'])), false, 512, JSON_THROW_ON_ERROR);
+        $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . $secret . '&response=' . rawurlencode($_POST['g-recaptcha-response']);
+        $content = file_get_contents($url);
+        $response = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
         if (!$response->success)
         {
-            $alertMsg = "ReCaptcha validation error";
-            $alertType = "danger";
+            $alert_msg = "ReCaptcha validation error";
+            $alert_type = "danger";
         }
     }
     catch (JsonException $e)
     {
-        $alertMsg = 'Oops, something went wrong. Please try again later.';
-        $alertType = "danger";
+        $alert_msg = 'Oops, something went wrong. Please try again later.';
+        $alert_type = "danger";
     }
-    if(!isset($alertMsg))
+    return array($alert_msg, $alert_type);
+}
+
+function create_mail_body(): array
+{
+    $to = 'kacperpiasta@gmail.com';
+    $subject = 'HoteLA: New client contact form message';
+    $name = escape_string($_POST["name"]);
+    $email = escape_string($_POST["email"]);
+    $message = escape_string($_POST["message"]);
+    $headers = [
+        'From' => $name,
+        'Reply-To' => $email,
+        'Content-type' => 'text/html; charset=iso-8859-1'
+    ];
+    $bodyParagraphs = ["Name: {$name}", "<br>Email: {$email}", "<br>Message:", $message];
+    $body = implode(PHP_EOL, $bodyParagraphs);
+    return array($to, $subject, $headers, $body);
+}
+
+function send_mail($to, $subject, $body, $headers): array
+{
+    if (mail($to, $subject, $body, $headers))
     {
-        $to = 'kacperpiasta@gmail.com';
-        $subject = 'HoteLA: New client contact form message';
-        $name = escape_string($_POST["name"]);
-        $email = escape_string($_POST["email"]);
-        $message = escape_string($_POST["message"]);
-        $headers = [
-            'From' => $name,
-            'Reply-To' => $email,
-            'Content-type' => 'text/html; charset=iso-8859-1'
-        ];
-        $bodyParagraphs = ["Name: {$name}", "<br>Email: {$email}", "<br>Message:", $message];
-        $body = implode(PHP_EOL, $bodyParagraphs);
-        if (mail($to, $subject, $body, $headers))
-        {
-            $alertMsg = "Message successfully sent. We'll get back to you as soon as possible.";
-            $alertType = "success";
-        }
-        else
-        {
-            $alertMsg = 'Oops, something went wrong. Please try again later.';
-            $alertType = "danger";
-        }
+        $alert_msg = "Message successfully sent. We'll get back to you as soon as possible.";
+        $alert_type = "success";
     }
+    else
+    {
+        $alert_msg = 'Oops, something went wrong. Please try again later.';
+        $alert_type = "danger";
+    }
+    return array($alert_msg, $alert_type);
 }
 
 ?>
@@ -71,7 +94,7 @@ if (isset($_POST["contact-submit"]))
                     <div class="card">
                         <div class="card-header bg-primary text-white"><i class="las la-envelope la-lg mr-2"></i> Contact us</div>
                         <div class="card-body">
-                            <?php echo isset($alertMsg) ? '<p class="alert alert-'.htmlspecialchars($alertType).'">'.htmlspecialchars($alertMsg).'</p>' : ''; ?>
+                            <?php echo isset($alert_msg) ? '<p class="alert alert-'.htmlspecialchars($alert_type).'">'.htmlspecialchars($alert_msg).'</p>' : ''; ?>
                             <form id="form-contact" name="form-contact" method="post" action="/support/contact">
                                 <div class="form-group">
                                     <label for="name">Full name<span style="color: red">*</span></label>

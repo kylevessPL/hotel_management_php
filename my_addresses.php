@@ -11,12 +11,7 @@ if (isset($customerId))
     $result = query($sql);
     if (mysqli_num_rows($result) > 0)
     {
-        while($row = mysqli_fetch_array($result))
-        {
-            $address_list[] = $row[0];
-        }
-        $sql = "SELECT street_name, house_number, zip_code, city FROM addresses where id IN (".implode(',', $address_list).")";
-        $result = query($sql);
+        $address_result = get_customer_addresses($result);
     }
     else
     {
@@ -28,51 +23,60 @@ if (isset($customerId))
 if (isset($_POST["address-submit"]))
 {
     validate_address_fields($_POST, $alertMsg, $alertType);
-    if (isset($alertMsg) || $alertType != 'info')
+    if (!isset($alertMsg) || $alertType == 'info')
     {
-        return;
-    }
-    $address_num = escape_string($_POST["addressNum"]);
-    $street_name = escape_string($_POST["streetName"]);
-    $house_number = escape_string($_POST["houseNumber"]);
-    $zip_code = escape_string($_POST["zipCode"]);
-    $city = escape_string($_POST["city"]);
-    autocommit(false);
-    try
-    {
-        if (!isset($address_num) || empty($address_num)) {
-            $sql = "INSERT INTO addresses (street_name, house_number, zip_code, city) VALUES('$street_name', '$house_number', '$zip_code', '$city')";
-        }
-        else
+        $address_num = escape_string($_POST["addressNum"]);
+        $street_name = escape_string($_POST["streetName"]);
+        $house_number = escape_string($_POST["houseNumber"]);
+        $zip_code = escape_string($_POST["zipCode"]);
+        $city = escape_string($_POST["city"]);
+        autocommit(false);
+        try
         {
-            $id = $address_list[$address_num - 1];
-            $sql = "UPDATE addresses SET street_name = '$street_name', house_number = '$house_number', zip_code = '$zip_code', city = '$city' where id = '$id'";
+            update_customer_addresses($address_num, $street_name, $house_number, $zip_code, $city, $address_list, $customerId);
+            header("Refresh:0");
+            commit_transaction();
+            autocommit();
         }
-        if (!query($sql))
+        catch (Throwable $e)
         {
-            throw new Exception(dbException());
+            $alertMsg = 'Oops, something went wrong. Please try again later.';
+            $alertType = "danger";
+            rollback_transaction();
+            autocommit();
         }
-        if(!isset($address_num) || empty($address_num))
-        {
-            $address_id = insert_id();
-            $sql = "INSERT INTO customers_addresses (customer_id, address_id) VALUES('$customerId', '$address_id')";
-            if (!query($sql))
-            {
-                throw new Exception(dbException());
-            }
-        }
-        header("Refresh:0");
-        commit_transaction();
-        autocommit();
-    }
-    catch (Throwable $e)
-    {
-        $alertMsg = 'Oops, something went wrong. Please try again later.';
-        $alertType = "danger";
-        rollback_transaction();
-        autocommit();
     }
 }
+
+function get_customer_addresses(mysqli_result $result)
+{
+    while ($row = mysqli_fetch_array($result)) {
+        $address_list[] = $row[0];
+    }
+    $sql = "SELECT street_name, house_number, zip_code, city FROM addresses where id IN (" . implode(',', $address_list) . ")";
+    return query($sql);
+}
+
+function update_customer_addresses(string $address_num, string $street_name, string $house_number, string $zip_code, string $city, $address_list, $customerId): void
+{
+    if (!isset($address_num) || empty($address_num)) {
+        $sql = "INSERT INTO addresses (street_name, house_number, zip_code, city) VALUES('$street_name', '$house_number', '$zip_code', '$city')";
+    } else {
+        $id = $address_list;
+        $sql = "UPDATE addresses SET street_name = '$street_name', house_number = '$house_number', zip_code = '$zip_code', city = '$city' where id = '$id'";
+    }
+    if (!query($sql)) {
+        throw new Exception(dbException());
+    }
+    if (!isset($address_num) || empty($address_num)) {
+        $address_id = insert_id();
+        $sql = "INSERT INTO customers_addresses (customer_id, address_id) VALUES('$customerId', '$address_id')";
+        if (!query($sql)) {
+            throw new Exception(dbException());
+        }
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -122,7 +126,7 @@ if (isset($_POST["address-submit"]))
                                                     <th scope="col" class="text-center">Delete</th>
                                                 </tr>
                                                 </thead>
-                                                <tbody><?php $count = 1; while($row = mysqli_fetch_array($result)) { echo "
+                                                <tbody><?php $count = 1; while($row = mysqli_fetch_array($address_result)) { echo "
                                                 <tr>
                                                     <th class='address-num align-middle' scope='row'>".htmlspecialchars($count)."</th>
                                                     <td class='address-street-name align-middle text-center'>".htmlspecialchars($row[0])."</td>

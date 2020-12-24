@@ -1,17 +1,32 @@
 <?php
 include 'helpers/include_all.php';
 
-$sql = "SELECT MIN(standard_price) AS 'min_price', MAX(standard_price) AS 'max_price' FROM rooms";
-$price_result = query($sql);
-$row = mysqli_fetch_array($price_result);
-$min_price = floor($row['min_price']);
-$max_price = ceil($row['max_price']);
+[$min_price, $max_price] = get_rooms_price_range();
+$beds_result = get_bed_variants();
+$amenities_result = get_room_amenities();
 
-$sql = "SELECT DISTINCT bed_amount FROM rooms ORDER BY 1";
-$beds_result = query($sql);
+function get_rooms_price_range(): array
+{
+    $sql = "SELECT MIN(standard_price) AS 'min_price', MAX(standard_price) AS 'max_price' FROM rooms";
+    $price_result = query($sql);
+    $row = mysqli_fetch_array($price_result);
+    $min_price = floor($row['min_price']);
+    $max_price = ceil($row['max_price']);
+    return array($min_price, $max_price);
+}
 
-$sql = "SELECT id, name FROM amenities ORDER BY 1";
-$amenities_result = query($sql);
+function get_bed_variants()
+{
+    $sql = "SELECT DISTINCT bed_amount FROM rooms ORDER BY 1";
+    return query($sql);
+}
+
+function get_room_amenities()
+{
+    $sql = "SELECT id, name FROM amenities ORDER BY 1";
+    return query($sql);
+}
+
 ?>
 
 <!DOCTYPE html>

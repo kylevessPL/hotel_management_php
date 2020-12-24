@@ -12,12 +12,56 @@ if (isset($_SESSION["user_id"]))
 
 if (isset($_POST["register-submit"]))
 {
-    validate_reg_fields($_POST, $alertMsg, $alertType);
+    validate_reg_fields($_POST, $alert_msg, $alert_type);
     if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response']))
     {
-        $alertMsg = "ReCaptcha has to be verified";
-        $alertType = "danger";
+        $alert_msg = "ReCaptcha has to be verified";
+        $alert_type = "danger";
     }
+    else
+    {
+        [$alert_msg, $alert_type] = verify_captcha_response();
+    }
+    if (!isset($alert_msg))
+    {
+        $username = escape_string($_POST["username"]);
+        $email = escape_string($_POST["email"]);
+        $result1 = check_username_availability($username);
+        $result2 = check_email_availability($email);
+        if ($result == 'true' && $result2 == 'true')
+        {
+            [$alert_msg, $alert_type] = register_user($username, $email);
+        }
+    }
+}
+
+if (isset($_POST["login-submit"]))
+{
+    [$alert_msg, $alert_type] = validate_login_fields();
+    if (!isset($alert_msg))
+    {
+        [$alert_msg, $alert_type] = check_user_existence();
+        if (!isset($alert_msg))
+        {
+            set_username_cookie();
+            $_SESSION['user_id'] = $row['id'];
+            header("location:dashboard");
+        }
+    }
+}
+
+function validate_login_fields(): array
+{
+    if (count($_POST) != count(array_filter($_POST)))
+    {
+        $alert_msg = "All fields are required";
+        $alert_type = "danger";
+    }
+    return array($alert_msg, $alert_type);
+}
+
+function verify_captcha_response(): array
+{
     try
     {
         $secret = '6LeIFREaAAAAALZi0YgONK77yTrQ5lheSQL5Txg7';
@@ -33,64 +77,34 @@ if (isset($_POST["register-submit"]))
         $alertMsg = 'Oops, something went wrong. Please try again later.';
         $alertType = "danger";
     }
-    if (isset($alertMsg))
-    {
-        return;
-    }
-    $username = escape_string($_POST["username"]);
-    $password = escape_string($_POST["password"]);
-    $email = escape_string($_POST["email"]);
-    $password = password_hash($password, PASSWORD_DEFAULT);
-    $sql1 = "SELECT id FROM users WHERE username = '$username'";
-    $sql2 = "SELECT id FROM users WHERE email = '$email'";
-    $result1 = query($sql1);
-    $result2 = query($sql2);
-    if (mysqli_num_rows($result1) > 0)
-    {
-        $alertMsg = "Username not available";
-        $alertType = "danger";
-    }
-    else if (mysqli_num_rows($result2) > 0)
-    {
-        $alertMsg = "There is already a user with this email";
-        $alertType = "danger";
-    }
-    else
-    {
-        $sql = "INSERT INTO users (username, password, email) VALUES('$username', '$password', '$email')";
-        if (query($sql))
-        {
-            $alertMsg = "You have successfully registered";
-            $alertType = "success";
-        }
-    }
+    return array($alertMsg, $alertType);
 }
 
-if (isset($_POST["login-submit"]))
+function check_user_existence(): array
 {
-    if (count($_POST) != count(array_filter($_POST)))
-    {
-        $alertMsg = "All fields are required";
-        $alertType = "danger";
-        return;
-    }
     $login = escape_string($_POST["login"]);
     $password = escape_string($_POST["password"]);
     $sql = "SELECT * FROM users WHERE username = '$login' OR email = '$login'";
     $result = query($sql);
     if (mysqli_num_rows($result) == 0)
     {
-        $alertMsg = "Invalid username or password";
-        $alertType = "danger";
-        return;
+        $alert_msg = "Invalid username or password";
+        $alert_type = "danger";
     }
-    $row = mysqli_fetch_assoc($result);
-    if (!password_verify($password, $row['password']))
+    else
     {
-        $alertMsg = "Invalid username or password";
-        $alertType = "danger";
-        return;
+        $row = mysqli_fetch_assoc($result);
+        if (!password_verify($password, $row['password']))
+        {
+            $alert_msg = "Invalid username or password";
+            $alert_type = "danger";
+        }
     }
+    return array($alert_msg, $alert_type);
+}
+
+function set_username_cookie(): void
+{
     if (isset($_POST["remember-me"]))
     {
         setcookie("login_remember", $_POST["login"], time() + 3600 * 24 * 30);
@@ -100,9 +114,33 @@ if (isset($_POST["login-submit"]))
         unset($_COOKIE['login_remember']);
         setcookie('login_remember', null, time() - 3600);
     }
-    $_SESSION['user_id'] = $row['id'];
-    header("location:dashboard");
 }
+
+function check_username_availability(string $username)
+{
+    $url = $_SERVER ["REQUEST_SCHEME"] . '://' . $_SERVER['SERVER_NAME'] . "/process/check_username_availability.php?username=" . rawurlencode($username);
+    return file_get_contents($url);
+}
+
+function check_email_availability(string $email)
+{
+    $url = $_SERVER ["REQUEST_SCHEME"] . '://' . $_SERVER['SERVER_NAME'] . "/process/check_email_availability.php?email=" . rawurlencode($email);
+    return file_get_contents($url);
+}
+
+function register_user(string $username, string $email): array
+{
+    $password = escape_string($_POST["password"]);
+    $password = password_hash($password, PASSWORD_DEFAULT);
+    $sql = "INSERT INTO users (username, password, email) VALUES('$username', '$password', '$email')";
+    if (query($sql))
+    {
+        $alert_msg = "You have successfully registered";
+        $alert_type = "success";
+    }
+    return array($alert_msg, $alert_type);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -126,12 +164,12 @@ if (isset($_POST["login-submit"]))
                 <div class="card-body">
                     <?php
                     if(isset($_GET["action"]) == "register" ||
-                    (isset($_POST["register-submit"]) && (isset($alertType) ? ($alertType != "success") : true)))
+                    (isset($_POST["register-submit"]) && (isset($alert_type) ? ($alert_type != "success") : true)))
                     {
                         ?>
                         <h5 class="card-title text-center mb-4">Register</h5>
-                        <p class="alert alert-<?php echo isset($alertType) ? htmlspecialchars($alertType) : 'info'; ?>">
-                            <?php echo isset($alertMsg) ? htmlspecialchars($alertMsg) : 'Fill in your data'; ?></p>
+                        <p class="alert alert-<?php echo isset($alert_type) ? htmlspecialchars($alert_type) : 'info'; ?>">
+                            <?php echo isset($alert_msg) ? htmlspecialchars($alert_msg) : 'Fill in your data'; ?></p>
                         <form id="form-register" name="form-register" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                             <div class="form-group">
                                 <label for="username">Username<span style="color: red">*</span></label>
@@ -164,9 +202,9 @@ if (isset($_POST["login-submit"]))
                     {
                         ?>
                         <h5 class="card-title text-center mb-4">Login</h5>
-                        <p class="alert alert-<?php echo $alertType ?? 'success'; ?>"
-                           style="display: <?php echo isset($alertMsg) ? 'block' : 'none'; ?>;">
-                            <?php echo $alertMsg ?? ''; ?></p>
+                        <p class="alert alert-<?php echo $alert_type ?? 'success'; ?>"
+                           style="display: <?php echo isset($alert_msg) ? 'block' : 'none'; ?>;">
+                            <?php echo $alert_msg ?? ''; ?></p>
                         <form id="form-login" name="form-login" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                             <div class="form-group">
                                 <label for="login">Username or e-mail</label>

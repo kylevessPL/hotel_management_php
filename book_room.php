@@ -2,19 +2,28 @@
 include 'helpers/include_all.php';
 include 'process/get_customer_id.php';
 
-get_customer_id($alertMsg, $alertType, $customerId);
+get_customer_id($alert_msg, $alert_type, $customer_id);
 
-if (!isset($customerId))
+if (isset($customer_id))
 {
-    return;
+    if (isset($_GET['id'], $_GET['start-date'], $_GET['end-date']))
+    {
+        [$id, $start_date, $end_date, $alert_msg, $alert_type, $bed_number] = get_room_choice();
+    }
+
+    $address_result = get_customer_addresses($customer_id);
 }
 
-if (isset($_GET['id'], $_GET['start-date'], $_GET['end-date']))
+$beds_result = get_bed_variants();
+$services_result = get_additional_services();
+
+function get_room_choice(): array
 {
     $id = escape_string($_GET['id']);
     $start_date = escape_string($_GET['start-date']);
     $end_date = escape_string($_GET['end-date']);
-    $result = file_get_contents($_SERVER ["REQUEST_SCHEME"].'://'.$_SERVER['SERVER_NAME']."/process/check_room_availability.php?id=$id&start-date=".rawurlencode($start_date)."&end-date=".rawurlencode($end_date)."");
+    $url = $_SERVER ["REQUEST_SCHEME"] . '://' . $_SERVER['SERVER_NAME'] . "/process/check_room_availability.php?id=" . $id . "&start-date=" . rawurlencode($start_date) . "&end-date=" . rawurlencode($end_date);
+    $result = file_get_contents($url);
     if ($result == 'false')
     {
         $alertMsg = "Room not available within $start_date - $end_date period";
@@ -26,16 +35,27 @@ if (isset($_GET['id'], $_GET['start-date'], $_GET['end-date']))
         $result = query($sql);
         $bed_number = mysqli_fetch_array($result);
     }
+    return array($id, $start_date, $end_date, $alertMsg, $alertType, $bed_number);
 }
 
-$sql = "SELECT id, street_name, house_number, zip_code, city FROM addresses where id IN (SELECT address_id FROM customers_addresses where customer_id = '$customerId') ORDER BY 1";
-$address_result = query($sql);
+function get_customer_addresses($customer_id)
+{
+    $sql = "SELECT id, street_name, house_number, zip_code, city FROM addresses where id IN (SELECT address_id FROM customers_addresses where customer_id = '$customer_id') ORDER BY 1";
+    return query($sql);
+}
 
-$sql = "SELECT DISTINCT bed_amount FROM rooms ORDER BY 1";
-$beds_result = query($sql);
+function get_bed_variants()
+{
+    $sql = "SELECT DISTINCT bed_amount FROM rooms ORDER BY 1";
+    return query($sql);
+}
 
-$sql = "SELECT id, name FROM additional_services ORDER BY 1";
-$services_result = query($sql);
+function get_additional_services()
+{
+    $sql = "SELECT id, name FROM additional_services ORDER BY 1";
+    return query($sql);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -57,15 +77,15 @@ $services_result = query($sql);
                             <h5>Booking form</h5>
                         </div>
                         <div class="card-body">
-                        <?php if (!isset($customerId))
+                        <?php if (!isset($customer_id))
                         { echo '
-                            <p class="alert alert-'.htmlspecialchars($alertType).'">'.htmlspecialchars($alertMsg).'</p>
+                            <p class="alert alert-'.htmlspecialchars($alert_type).'">'.htmlspecialchars($alert_msg).'</p>
                             <a class="btn btn-primary text-right" href="/account/my-details">Update my details</a>
                         ';}
                         else
                         {?>
-                            <p class="alert alert-<?php echo isset($alertType) ? htmlspecialchars($alertType) : 'info'; ?>">
-                                <?php echo isset($alertMsg) ? htmlspecialchars($alertMsg) : 'You can check available room list <a href="/dashboard/available-rooms">here</a>'; ?></p>
+                            <p class="alert alert-<?php echo isset($alert_type) ? htmlspecialchars($alert_type) : 'info'; ?>">
+                                <?php echo isset($alert_msg) ? htmlspecialchars($alert_msg) : 'You can check available room list <a href="/dashboard/available-rooms">here</a>'; ?></p>
                             <form id="booking-form" name="booking-form">
                                 <div id="booking-form-main">
                                     <div class="form-group row">
@@ -188,7 +208,7 @@ $services_result = query($sql);
 
 <script>
     function getCustomerId() {
-        return '<?php echo htmlspecialchars($customerId); ?>';
+        return '<?php echo htmlspecialchars($customer_id); ?>';
     }
 </script>
 
