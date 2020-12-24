@@ -242,6 +242,9 @@ function buildTable() {
         ],
         order: [[ 1, 'desc' ]],
         initComplete: function () {
+            if (!this.fnGetData().length) {
+                return;
+            }
             const column = this.api().column(7);
             const select = $('<select class="selectpicker" data-width="120px"><optgroup label="Default"><option value="" class="font-weight-bold" title="Status" selected>Status</option></optgroup></select>')
                 .appendTo($(column.header()).empty())
