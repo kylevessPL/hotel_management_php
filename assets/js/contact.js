@@ -16,7 +16,7 @@ $(function() {
                 minlength: 10
             },
             gRecaptchaResponse: {
-                required: function () {
+                required: function() {
                     return grecaptcha.getResponse() === '';
                 }
             }
@@ -50,7 +50,7 @@ $(function() {
             $(element).closest('textarea').removeClass('error').addClass('valid');
         },
         invalidHandler: () => $(this).find(":input.error:first").focus(),
-        submitHandler : function(form) {
+        submitHandler: function(form) {
             form.submit();
         }
     });

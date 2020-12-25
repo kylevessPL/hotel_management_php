@@ -19,7 +19,7 @@ $(function() {
         errorPlacement: function(error, element) {
             error.appendTo(element.parent().parent());
         },
-        submitHandler : function(form) {
+        submitHandler: function(form) {
             form.submit();
         }
     });
@@ -38,7 +38,7 @@ $(function() {
                     remote: {
                         url: 'process/check_username_availability',
                         data: {
-                            'username': function () {
+                            'username': function() {
                                 return $('#username').val();
                             }
                         }
@@ -60,14 +60,14 @@ $(function() {
                     remote: {
                         url: 'process/check_email_availability',
                         data: {
-                            'email': function () {
+                            'email': function() {
                                 return $('#email').val();
                             }
                         }
                     }
                 },
                 gRecaptchaResponse: {
-                    required: function () {
+                    required: function() {
                         return grecaptcha.getResponse() === '';
                     }
                 }
@@ -107,7 +107,7 @@ $(function() {
                 $(element).parent().find('iframe').removeClass('error').addClass('valid');
                 $(element).closest('input').removeClass('error').addClass('valid');
             },
-            submitHandler : function(form) {
+            submitHandler: function(form) {
                 form.submit();
             }
         });

@@ -20,10 +20,10 @@ function initCreditCardFormValidator() {
             },
             expiryYear: {
                 required: true,
-                min: function () {
+                min: function() {
                     return (new Date).getFullYear().toString().substring(2);
                 },
-                max: function () {
+                max: function() {
                     return (Number((new Date).getFullYear().toString().substring(2)) + 10).toString();
                 },
                 rangelength: [2, 2]
@@ -70,7 +70,7 @@ function initCreditCardFormValidator() {
                 error.insertAfter(element);
             }
         },
-        submitHandler : function() {
+        submitHandler: function() {
             $('.credit-card-alert').remove();
             $('.creditCardTab').prepend('<p class="alert alert-danger credit-card-alert">Unfortunately, we can\'t process your payment.</p>');
             return false;
@@ -85,7 +85,7 @@ function initCreditCardFormValidator() {
             if (~['amex', 'discover', 'jcb', 'maestro', 'mastercard', 'unionpay', 'visa'].indexOf(type) > -1) {
                 type = 'default';
             }
-            $(iconElement).html('<img role="img" style="width:48px;" src="/assets/images/' + type + '.svg" alt="' + type.charAt(0).toUpperCase() + type.slice(1) + '"/>');
+            $(iconElement).html('<img role="img" style="width: 48px;" src="/assets/images/' + type + '.svg" alt="' + type.charAt(0).toUpperCase() + type.slice(1) + '"/>');
         }
     });
 }

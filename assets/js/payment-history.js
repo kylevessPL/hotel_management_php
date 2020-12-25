@@ -1,24 +1,33 @@
-$(document).ready(function () {
+$(document).ready(function() {
+    buildPaymentHistory();
+    setStickySearchPane();
+});
+
+function buildPaymentHistory() {
     $.ajax({
         url: '../../process/get_payment_forms',
         type: "GET",
         dataType: 'JSON',
         success: function (response) {
-            let paymentFormOptions = [];
-            $.each(response, function (key, val) {
-                let iconType = getIconType(val['name']);
-                paymentFormOptions.push({
-                    "label": '<span title="'+val['name']+'"><i class="'+iconType+' la-lg mr-2" style="color: #007bff;"></i>'+val['name']+'</span>',
-                    "value": function(rowData, rowIdx) {
-                        return rowData['payment-form'] === val['name'];
-                    }
-                });
-            });
+            const paymentFormOptions = getPaymentFormOptions(response);
             buildTable(paymentFormOptions);
         }
     });
-    setStickySearchPane();
-});
+
+    function getPaymentFormOptions(response) {
+        let paymentFormOptions = [];
+        $.each(response, function (key, val) {
+            let iconType = getIconType(val['name']);
+            paymentFormOptions.push({
+                "label": '<span title="' + val['name'] + '"><i class="' + iconType + ' la-lg mr-2" style="color: #007bff;"></i>' + val['name'] + '</span>',
+                "value": function (rowData, rowIdx) {
+                    return rowData['payment-form'] === val['name'];
+                }
+            });
+        });
+        return paymentFormOptions;
+    }
+}
 
 function getIconType(paymentForm) {
     let icon = '';
@@ -133,29 +142,34 @@ function buildTable(paymentFormOptions) {
         ],
         order: [[ 1, 'desc' ]],
         searchPanes: { layout: 'columns-1' },
-        initComplete: function () {
+        initComplete: function() {
             if (!this.fnGetData().length) {
                 return;
             }
-            const column = this.api().column(3);
-            const select = $('<select class="selectpicker" data-width="170px"><optgroup label="Default"><option value="" class="font-weight-bold" title="Payment form" selected>Payment form</option></optgroup></select>')
-                .appendTo($(column.header()).empty())
-                .on('change', function () {
-                    const val = $.fn.dataTable.util.escapeRegex($(this).val());
-                    column
-                        .search(val ? '^' + val + '$' : '', true, false)
-                        .draw();
-                });
-            column.data().unique().sort().each(function (d, j) {
-                const iconType = getIconType(d);
-                const dataContent = "<i class='"+iconType+" la-lg mr-2' style='color: #007bff;'></i>" + d;
-                select.append('<option value="'+d+'" data-content="'+dataContent+'">'+d+'</option>')
-            });
+            const select = setPaymentFormsSelectData.call(this);
             select.selectpicker({
                 style: '',
                 styleBase: 'form-control',
             });
             $.fn.selectpicker.Constructor.BootstrapVersion = '4';
+
+            function setPaymentFormsSelectData() {
+                const column = this.api().column(3);
+                const select = $('<select class="selectpicker" data-width="170px"><optgroup label="Default"><option value="" class="font-weight-bold" title="Payment form" selected>Payment form</option></optgroup></select>')
+                    .appendTo($(column.header()).empty())
+                    .on('change', function() {
+                        const val = $.fn.dataTable.util.escapeRegex($(this).val());
+                        column
+                            .search(val ? '^' + val + '$' : '', true, false)
+                            .draw();
+                    });
+                column.data().unique().sort().each(function (d, j) {
+                    const iconType = getIconType(d);
+                    const dataContent = "<i class='" + iconType + " la-lg mr-2' style='color: #007bff;'></i>" + d;
+                    select.append('<option value="' + d + '" data-content="' + dataContent + '">' + d + '</option>')
+                });
+                return select;
+            }
         }
     };
     if (isCustomerIdSet()) {
@@ -166,7 +180,7 @@ function buildTable(paymentFormOptions) {
         }
     }
     const table = $('#paymentsTable').DataTable(data);
-    table.on( 'order.dt search.dt', function () {
+    table.on( 'order.dt search.dt', function() {
         table.column(0, { search: 'applied', order: 'applied' }).nodes().each( function (cell, i) {
             cell.innerHTML = i + 1;
         });

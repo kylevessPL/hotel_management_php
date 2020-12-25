@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function() {
     $('#document-type').selectpicker({
         style: '',
         styleBase: 'form-control'
@@ -44,7 +44,7 @@ $(function() {
                 regex: "Document ID must contain only capital letters, digits or - character"
             }
         },
-        submitHandler : function(form) {
+        submitHandler: function(form) {
             form.submit();
         }
     });

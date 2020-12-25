@@ -24,7 +24,7 @@ $(document).ready(function() {
         $('.addressRequest #addressSubmitBtn').attr('value', 'Submit changes');
         $('.addressRequest #addressModal').modal();
     });
-    $('body').on('hide.bs.modal', '#addressModal', function () {
+    $('body').on('hide.bs.modal', '#addressModal', function() {
         setTimeout(function() {
             $('#addressModal').remove();
             $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show()
@@ -125,7 +125,7 @@ function initAddressFormValidator() {
                 maxlength: "City name must be maximum 30 characters long"
             }
         },
-        submitHandler : function(form) {
+        submitHandler: function(form) {
             form.submit();
         }
     });

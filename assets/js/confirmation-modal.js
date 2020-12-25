@@ -23,7 +23,7 @@ $(document).ready(function() {
         $('#confirmationModal #actionRef').html('Delete').attr('href', href);
         $('#confirmationModal').modal();
     });
-    $('body').on('hide.bs.modal', '#confirmationModal', function () {
+    $('body').on('hide.bs.modal', '#confirmationModal', function() {
         setTimeout(function() {
             $('#confirmationModal').remove();
             $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show()
