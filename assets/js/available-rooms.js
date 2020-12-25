@@ -47,7 +47,70 @@ $(document).ready(function() {
         styleBase: 'form-control'
     });
     $.fn.selectpicker.Constructor.BootstrapVersion = '4';
+    setEvents();
 });
+
+function setEvents() {
+    $('body').on('click', '.viewRoomAmenitiesBtn', function (event) {
+        event.preventDefault();
+        const modal = getRoomDescModal();
+        $('.main-container').after(modal);
+        let selector3 = $(this).closest("tr");
+        if (selector3.hasClass('child')) {
+            selector3 = selector3.add(selector3.prev());
+        }
+        setRoomAmenities.call(this, selector3);
+        $('#viewRoomDescModalTitle').html('Room description');
+        $('#viewRoomDescRoomNumber').html('Room number: ' + selector3.find("td.dt-room-number").text());
+        $('#viewRoomDescBedAmount').html('<br>' + 'Bed amount: ' + selector3.find("td.dt-bed-amount").text());
+        $('#viewRoomDescStandardPrice').html('<br>' + 'Standard price: ' + selector3.find("td.dt-standard-price").text() + ' PLN');
+        $('#viewRoomDescAmenities').html('<br>' + 'Amenities: ');
+        let selector = $('#viewRoomDescModal');
+        selector.modal();
+        selector.on('hide.bs.modal', function() {
+            setTimeout(() => $('#viewRoomDescModal').remove(), 400);
+        });
+    });
+
+    function setRoomAmenities(selector) {
+        $.ajax({
+            url: '../../process/get_room_amenities',
+            type: "GET",
+            data: {id: selector.find("td.dt-id").text()},
+            dataType: 'JSON',
+            success: function (response) {
+                let list = '';
+                $.each(response, function (key, val) {
+                    list += '<li>' + val['name'] + '</li>';
+                });
+                $('#viewRoomDescAmenities').html('<br><ul class="list-unstyled"><li>Amenities:<ul>' + list + '</ul></li></ul>');
+            }
+        });
+    }
+
+    function getRoomDescModal() {
+        return `
+            <div aria-hidden="true" aria-labelledby="viewRoomDescModalTitle" class="modal fade" id="viewRoomDescModal" role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="viewRoomDescModalTitle"></h5><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="viewRoomDescRoomNumber"></div>
+                            <div id="viewRoomDescBedAmount"></div>
+                            <div id="viewRoomDescStandardPrice"></div>
+                            <div id="viewRoomDescAmenities"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+}
 
 function roomsSearchHandler() {
     const roomsTable = '#roomsTable';
@@ -134,64 +197,7 @@ function roomsSearchHandler() {
                     defaultContent: '<button class="btn btn-primary py-1 px-2 viewRoomAmenitiesBtn">View</button>'
                 }
             ],
-            order: [[ 2, 'asc' ]],
-            initComplete: function() {
-                $('.viewRoomAmenitiesBtn').on('click', function (event) {
-                    event.preventDefault();
-                    const modal = getRoomDescModal();
-                    $('.main-container').after(modal);
-                    setRoomAmenities.call(this);
-                    $('#viewRoomDescModalTitle').html('Room description');
-                    $('#viewRoomDescRoomNumber').html('Room number: ' + $(this).closest("tr").find("td.dt-room-number").text());
-                    $('#viewRoomDescBedAmount').html('<br>' + 'Bed amount: ' + $(this).closest("tr").find("td.dt-bed-amount").text());
-                    $('#viewRoomDescStandardPrice').html('<br>' + 'Standard price: ' + $(this).closest("tr").find("td.dt-standard-price").text() + ' PLN');
-                    $('#viewRoomDescAmenities').html('<br>' + 'Amenities: ');
-                    let selector = $('#viewRoomDescModal');
-                    selector.modal();
-                    selector.on('hide.bs.modal', function() {
-                        setTimeout(() => $('#viewRoomDescModal').remove(), 400);
-                    });
-                });
-
-                function setRoomAmenities() {
-                    $.ajax({
-                        url: '../../process/get_room_amenities',
-                        type: "GET",
-                        data: {id: $(this).closest("tr").find("td.dt-id").text()},
-                        dataType: 'JSON',
-                        success: function (response) {
-                            let list = '';
-                            $.each(response, function (key, val) {
-                                list += '<li>' + val['name'] + '</li>';
-                            });
-                            $('#viewRoomDescAmenities').html('<br><ul class="list-unstyled"><li>Amenities:<ul>' + list + '</ul></li></ul>');
-                        }
-                    });
-                }
-
-                function getRoomDescModal() {
-                    return `
-                        <div aria-hidden="true" aria-labelledby="viewRoomDescModalTitle" class="modal fade" id="viewRoomDescModal" role="dialog" tabindex="-1">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="viewRoomDescModalTitle"></h5><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div id="viewRoomDescRoomNumber"></div>
-                                        <div id="viewRoomDescBedAmount"></div>
-                                        <div id="viewRoomDescStandardPrice"></div>
-                                        <div id="viewRoomDescAmenities"></div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-            }
+            order: [[ 2, 'asc' ]]
         });
         table.on( 'order.dt search.dt', function() {
             table.column(0, { search: 'applied', order: 'applied' }).nodes().each( function (cell, i) {
