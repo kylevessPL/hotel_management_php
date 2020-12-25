@@ -5,4 +5,4 @@ INSERT INTO additional_services (name, price, `desc`) VALUES ('Lunch & Dinner Pa
 INSERT INTO additional_services (name, price, `desc`) VALUES ('Cleaning Service', 14.99,
 'With our additional cleaning service you are able to get your clothes washed every time you feel the need.');
 INSERT INTO additional_services (name, price, `desc`) VALUES ('Additional Bed', 24.99,
-'If you are staying with a child under 13 years old, you can order an additional bed. No other costs.');
+'If you stay with a child under 13 years old, you can order an additional bed. No other costs.');

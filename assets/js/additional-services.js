@@ -1,32 +1,7 @@
 $(document).ready(function() {
-    $('.service-name').each(function () {
-        let iconType = getIconType($(this).html());
-        $(this).prepend('<i class="'+iconType+' la-lg mr-2"></i>');
-    });
+    setIcon();
     $('.viewServiceBtn').on('click', function(event) {
-        event.preventDefault();
-        $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').hide();
-        const modal = getServiceDescModal();
-        $('.main-container').after(modal);
-        $.ajax({
-            url: '../../process/get_service_desc',
-            type: "GET",
-            data: { id: $(this).closest("tr").find("th.service-id").text() },
-            dataType: 'JSON',
-            success: function (response) {
-                $('#viewServiceDescDesc').html('<br>' + response[0]['desc']);
-            }
-        });
-        $('#viewServiceDescName').html($(this).closest("tr").find("td.service-name").html());
-        $('#viewServiceDescPrice').html('Price: ' + $(this).closest("tr").find("td.service-price").text() + ' PLN');
-        let selector = $('#viewServiceDescModal');
-        selector.modal();
-        selector.on('hide.bs.modal', function () {
-            setTimeout(function() {
-                $('#viewServiceDescModal').remove();
-                $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show()
-            }, 400);
-        });
+        handleViewServiceModal.call(this, event);
     });
 });
 
@@ -71,4 +46,41 @@ function getServiceDescModal() {
             </div>
         </div>
     `;
+}
+
+function setIcon() {
+    $('.service-name').each(function () {
+        let iconType = getIconType($(this).html());
+        $(this).prepend('<i class="' + iconType + ' la-lg mr-2"></i>');
+    });
+}
+
+function setServiceDesc() {
+    $.ajax({
+        url: '../../process/get_service_desc',
+        type: "GET",
+        data: {id: $(this).closest("tr").find("th.service-id").text()},
+        dataType: 'JSON',
+        success: function (response) {
+            $('#viewServiceDescDesc').html('<br>' + response[0]['desc']);
+        }
+    });
+}
+
+function handleViewServiceModal(event) {
+    event.preventDefault();
+    $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').hide();
+    const modal = getServiceDescModal();
+    $('.main-container').after(modal);
+    setServiceDesc.call(this);
+    $('#viewServiceDescName').html($(this).closest("tr").find("td.service-name").html());
+    $('#viewServiceDescPrice').html('Price: ' + $(this).closest("tr").find("td.service-price").text() + ' PLN');
+    let selector = $('#viewServiceDescModal');
+    selector.modal();
+    selector.on('hide.bs.modal', function () {
+        setTimeout(function () {
+            $('#viewServiceDescModal').remove();
+            $('.itQKmP, .hZAwTR, .iZQJIb, .muNJM').show()
+        }, 400);
+    });
 }
