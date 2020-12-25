@@ -1,8 +1,9 @@
 <?php
 
-$ch = curl_init();
 $client_id = "AZGlapLmFWkASH7ClvRamfciV36NZehDL3nEgjSJ3ipKQGBWAWB9rwj1OWL_6uSvv6tKMW3656nCzAhy";
 $secret = "ENip6UB15n3XgN2pAzP5RrhYRCrHweC0YLX3PDvYmz47Loeiw_HXFrtEh1MsbemAbvwMfaYfubcrtu9S";
+
+$ch = curl_init();
 
 curl_setopt($ch, CURLOPT_URL, "https://api.sandbox.paypal.com/v1/oauth2/token");
 curl_setopt($ch, CURLOPT_HEADER, false);

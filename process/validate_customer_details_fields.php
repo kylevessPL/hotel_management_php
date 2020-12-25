@@ -1,45 +1,45 @@
 <?php
 
-function validate_customer_details_fields(array $data, &$alertMsg, &$alertType)
+function validate_customer_details_fields(array $data, &$alert_msg, &$alert_type)
 {
-    if(!required_fields($data))
+    if (!required_fields($data))
     {
-        $alertMsg = "All fields are required";
-        $alertType = "danger";
+        $alert_msg = "All fields are required";
+        $alert_type = "danger";
         return;
     }
     $first_name = $data["first-name"];
     $last_name = $data["last-name"];
     $document_type = $data["document-type"];
     $document_id = $data["document-id"];
-    if(!valid_len(2, 30, $first_name))
+    if (!valid_len(2, 30, $first_name))
     {
-        $alertMsg = "First name must be between 2 and 30 characters long";
-        $alertType = "danger";
+        $alert_msg = "First name must be between 2 and 30 characters long";
+        $alert_type = "danger";
         return;
     }
-    if(!valid_len(2, 30, $last_name))
+    if (!valid_len(2, 30, $last_name))
     {
-        $alertMsg = "Last name must be between 2 and 30 characters long";
-        $alertType = "danger";
+        $alert_msg = "Last name must be between 2 and 30 characters long";
+        $alert_type = "danger";
         return;
     }
-    if(!valid_document_type($document_type))
+    if (!valid_document_type($document_type))
     {
-        $alertMsg = "Document is not a valid type";
-        $alertType = "danger";
+        $alert_msg = "Document is not a valid type";
+        $alert_type = "danger";
         return;
     }
-    if(!valid_len(7, 14, $document_id))
+    if (!valid_len(7, 14, $document_id))
     {
-        $alertMsg = "Document ID must be between 7 and 14 characters long";
-        $alertType = "danger";
+        $alert_msg = "Document ID must be between 7 and 14 characters long";
+        $alert_type = "danger";
         return;
     }
-    if(!valid_regex("/^[A-Z0-9 -]*$/", $document_id))
+    if (!valid_regex("/^[A-Z0-9 -]*$/", $document_id))
     {
-        $alertMsg = "Document ID must contain only capital letters, digits or - character";
-        $alertType = "danger";
+        $alert_msg = "Document ID must contain only capital letters, digits or - character";
+        $alert_type = "danger";
     }
 }
 

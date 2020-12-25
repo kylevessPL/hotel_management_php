@@ -1,18 +1,18 @@
 <?php
 
-function validate_contact_fields(array $data, &$alertMsg, &$alertType)
+function validate_contact_fields(array $data, &$alert_msg, &$alert_type)
 {
-    if(!required_fields($data))
+    if (!required_fields($data))
     {
-        $alertMsg = "All fields are required";
-        $alertType = "danger";
+        $alert_msg = "All fields are required";
+        $alert_type = "danger";
         return;
     }
     $email = $data["email"];
-    if(!valid_email($email))
+    if (!valid_email($email))
     {
-        $alertMsg = "E-mail not valid";
-        $alertType = "danger";
+        $alert_msg = "E-mail not valid";
+        $alert_type = "danger";
     }
 }
 

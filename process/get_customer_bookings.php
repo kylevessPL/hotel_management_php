@@ -2,9 +2,9 @@
 include_once dirname(__DIR__).'/helpers/conn.php';
 include_once dirname(__DIR__).'/process/get_customer_id.php';
 
-get_customer_id($alertMsg, $alertType, $customerId);
+get_customer_id($alert_msg, $alert_type, $customer_id);
 
-if (!isset($customerId))
+if (!isset($customer_id))
 {
     http_response_code(401);
     return;
@@ -14,7 +14,7 @@ $sql = "SELECT b.id, r.room_number, r.bed_amount, b.book_date, b.start_date, b.e
     "INNER JOIN bookings_rooms br ON b.id = br.booking_id " .
     "INNER JOIN rooms r on r.id = br.room_id " .
     "INNER JOIN customers_bookings cb on cb.booking_id = b.id " .
-    "WHERE cb.customer_id = '$customerId'";
+    "WHERE cb.customer_id = '$customer_id'";
 
 $result = query($sql);
 

@@ -1,51 +1,51 @@
 <?php
 
-function validate_address_fields(array $data, &$alertMsg, &$alertType)
+function validate_address_fields(array $data, &$alert_msg, &$alert_type)
 {
-    if(!required_fields($data))
+    if (!required_fields($data))
     {
-        $alertMsg = "All fields are required";
-        $alertType = "danger";
+        $alert_msg = "All fields are required";
+        $alert_type = "danger";
         return;
     }
     $street_name = $data["streetName"];
     $house_number = $data["houseNumber"];
     $zip_code = $data["zipCode"];
     $city = $data["city"];
-    if(!valid_len(2, 30, $street_name))
+    if (!valid_len(2, 30, $street_name))
     {
-        $alertMsg = "Street name must be between 2 and 30 characters long";
-        $alertType = "danger";
+        $alert_msg = "Street name must be between 2 and 30 characters long";
+        $alert_type = "danger";
         return;
     }
-    if(!valid_regex("/^[0-9a-zA-Z .\/]*$/", $house_number))
+    if (!valid_regex("/^[0-9a-zA-Z .\/]*$/", $house_number))
     {
-        $alertMsg = "House number must contain only letters and numbers";
-        $alertType = "danger";
+        $alert_msg = "House number must contain only letters and numbers";
+        $alert_type = "danger";
         return;
     }
-    if(!valid_len(1, 10, $house_number))
+    if (!valid_len(1, 10, $house_number))
     {
-        $alertMsg = "House number must be maximum 10 characters long";
-        $alertType = "danger";
+        $alert_msg = "House number must be maximum 10 characters long";
+        $alert_type = "danger";
         return;
     }
-    if(!valid_regex("/^[0-9 \-]*$/", $zip_code))
+    if (!valid_regex("/^[0-9 \-]*$/", $zip_code))
     {
-        $alertMsg = "Zip code must contain only numbers, spaces or a dash";
-        $alertType = "danger";
+        $alert_msg = "Zip code must contain only numbers, spaces or a dash";
+        $alert_type = "danger";
         return;
     }
-    if(!valid_len(2, 10, $zip_code))
+    if (!valid_len(2, 10, $zip_code))
     {
-        $alertMsg = "Zip code must be between 2 and 10 characters long";
-        $alertType = "danger";
+        $alert_msg = "Zip code must be between 2 and 10 characters long";
+        $alert_type = "danger";
         return;
     }
-    if(!valid_len(2, 30, $city))
+    if (!valid_len(2, 30, $city))
     {
-        $alertMsg = "City must be between 2 and 30 characters long";
-        $alertType = "danger";
+        $alert_msg = "City must be between 2 and 30 characters long";
+        $alert_type = "danger";
         return;
     }
 }
