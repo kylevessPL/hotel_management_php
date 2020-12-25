@@ -33,7 +33,7 @@ $(function() {
                 username: {
                     required: true,
                     minlength: 6,
-                    maxlength: 16,
+                    maxlength: 30,
                     regex: /^[a-zA-Z0-9.-_]*$/,
                     remote: {
                         url: 'process/check_username_availability',
@@ -47,7 +47,7 @@ $(function() {
                 password: {
                     required: true,
                     minlength: 8,
-                    maxlength: 15,
+                    maxlength: 255,
                     regex: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/
                 },
                 password2: {
@@ -76,14 +76,14 @@ $(function() {
                 username: {
                     required: "Username is mandatory",
                     minlength: "Username must be at least 6 characters long",
-                    maxlength: "Username must be maximum 16 characters long",
+                    maxlength: "Username must be maximum 30 characters long",
                     regex: "Username must contain only letters, digits or - _ . characters",
                     remote: "Username not available"
                 },
                 password: {
                     required: "Password is mandatory",
                     minlength: "Password must be at least 8 characters long",
-                    maxlength: "Password must be maximum 15 characters long",
+                    maxlength: "Password must be maximum 255 characters long",
                     regex: "Password must contain at least 1 capital letter and 1 digit"
                 },
                 password2: {

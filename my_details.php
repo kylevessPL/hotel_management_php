@@ -101,7 +101,7 @@ if (isset($_POST["customer-details-submit"]))
                                             <label for="first-name" class="col-4 col-form-label">First name<span style="color: red">*</span></label>
                                             <div class="col-8">
                                                 <input type="text" id="first-name" name="first-name" placeholder="Enter first name" class="form-control"
-                                                    <?php if (isset($_POST["customer-details-submit"]))
+                                                    <?php if (isset($alert_msg) && $alert_type == 'success')
                                                     {
                                                         echo 'value="'.htmlspecialchars($_POST['first-name']).'"';
                                                     }
@@ -116,7 +116,7 @@ if (isset($_POST["customer-details-submit"]))
                                             <label for="last-name" class="col-4 col-form-label">Last name<span style="color: red">*</span></label>
                                             <div class="col-8">
                                                 <input type="text" id="last-name" name="last-name" placeholder="Enter last name" class="form-control"
-                                                    <?php if (isset($_POST["customer-details-submit"]))
+                                                    <?php if (isset($alert_msg) && $alert_type == 'success')
                                                     {
                                                         echo 'value="'.htmlspecialchars($_POST['last-name']).'"';
                                                     }
@@ -132,13 +132,13 @@ if (isset($_POST["customer-details-submit"]))
                                             <div class="col-4">
                                                 <select id="document-type" name="document-type" class="selectpicker form-control">
                                                     <option value="ID card"
-                                                        <?php if ((isset($_POST["customer-details-submit"]) && $_POST['document-type'] == 'ID card') || (isset($customer_data) && $customer_data['document_type'] == 'ID card'))
+                                                        <?php if ((isset($alert_msg) && $alert_type == 'success' && $_POST['document-type'] == 'ID card') || (isset($customer_data) && $customer_data['document_type'] == 'ID card'))
                                                         {
                                                             echo 'selected';
                                                         }
                                                         ?>>ID card</option>
                                                     <option value="Passport"
-                                                        <?php if ((isset($_POST["customer-details-submit"]) && $_POST['document-type'] == 'Passport') || (isset($customer_data) && $customer_data['document_type'] == 'Passport'))
+                                                        <?php if ((isset($alert_msg) && $alert_type == 'success' && $_POST['document-type'] == 'Passport') || (isset($customer_data) && $customer_data['document_type'] == 'Passport'))
                                                         {
                                                             echo 'selected';
                                                         }
@@ -150,7 +150,7 @@ if (isset($_POST["customer-details-submit"]))
                                             <label for="document-id" class="col-4 col-form-label">Document ID<span style="color: red">*</span></label>
                                             <div class="col-8">
                                                 <input type="text" id="document-id" name="document-id" placeholder="Enter document ID" class="form-control"
-                                                    <?php if (isset($_POST["customer-details-submit"]))
+                                                    <?php if (isset($alert_msg) && $alert_type == 'success')
                                                     {
                                                         echo 'value="'.htmlspecialchars($_POST['document-id']).'"';
                                                     }

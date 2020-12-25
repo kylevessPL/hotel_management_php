@@ -23,7 +23,7 @@ if (isset($customer_id))
 if (isset($_POST["address-submit"]))
 {
     validate_address_fields($_POST, $alert_msg, $alert_type);
-    if (!isset($alertMsg) || $alertType == 'info')
+    if (!isset($alert_msg) || $alert_type == 'info')
     {
         $address_num = escape_string($_POST["addressNum"]);
         $street_name = escape_string($_POST["streetName"]);

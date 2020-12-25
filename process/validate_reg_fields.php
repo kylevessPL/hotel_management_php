@@ -12,9 +12,9 @@ function validate_reg_fields(array $data, &$alert_msg, &$alert_type)
     $password = $data["password"];
     $password2 = $data["password2"];
     $email = $data["email"];
-    if (!valid_len(6, 16, $username))
+    if (!valid_len(6, 30, $username))
     {
-        $alert_msg = "Username must be between 6 and 16 characters long";
+        $alert_msg = "Username must be between 6 and 30 characters long";
         $alert_type = "danger";
         return;
     }
@@ -24,9 +24,9 @@ function validate_reg_fields(array $data, &$alert_msg, &$alert_type)
         $alert_type = "danger";
         return;
     }
-    if (!valid_len(8, 15, $password))
+    if (!valid_len(8, 255, $password))
     {
-        $alert_msg = "Password must be between 8 and 15 characters long";
+        $alert_msg = "Password must be between 8 and 255 characters long";
         $alert_type = "danger";
         return;
     }
