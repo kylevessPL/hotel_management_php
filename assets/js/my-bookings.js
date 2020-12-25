@@ -13,15 +13,26 @@ function handleViewBookingDescModal() {
     let modal = getBookingDescModal();
     const mainContainer = $('.main-container');
     mainContainer.after(modal);
-    let selector = $(this).closest('tr');
-    let bookingId = getBookingId.call(this, selector);
+    let selector = '';
+    let bookingId = '';
+    if ($(this).hasClass('card')) {
+        selector = $(this);
+        bookingId = selector.find('.booking-id').html();
+        bookingId = bookingId.substring(bookingId.indexOf('#') + 1);
+    } else {
+        selector = $(this).closest('tr');
+        if (selector.hasClass('child')) {
+            selector = selector.add(selector.prev());
+        }
+        bookingId = selector.find('.booking-id').html();
+    }
     $('#viewBookingDescTitle').append(bookingId + ' details');
     $('#viewBookingDescBookingId').prepend(bookingId);
     $('#viewBookingDescBookDate').prepend(selector.find('.book-date').html());
     $('#viewBookingDescStartDate').prepend(selector.find('.start-date').html());
-    $('#viewBookingDescEndDate').prepend(selector.find('.end-date').html());
     $('#viewBookingDescRoomNumber').prepend(selector.find('.room-number').html());
     $('#viewBookingDescBedAmount').prepend(selector.find('.bed-amount').html());
+    $('#viewBookingDescEndDate').prepend(selector.find('.end-date').html());
     let bookingStatus = selector.find('.booking-status').html();
     let bookingStatusElement = $('#viewBookingDescBookingStatus');
     let color = getBookingStatusColor(bookingStatus, bookingStatusElement);
@@ -93,18 +104,6 @@ function handleViewBookingDescModal() {
     `;
     }
 
-    function getBookingId(selector) {
-        let bookingId = '';
-        if ($(this).hasClass('card')) {
-            selector = $(this);
-            bookingId = selector.find('.booking-id').html();
-            bookingId = bookingId.substring(bookingId.indexOf('#') + 1);
-        } else {
-            bookingId = selector.find('.booking-id').html();
-        }
-        return bookingId;
-    }
-
     function getBookingStatusColor(bookingStatus, bookingStatusElement) {
         let color = '';
         switch (bookingStatus) {
@@ -135,6 +134,7 @@ function handleViewBookingDescModal() {
                 color = 'black';
                 break;
         }
+        return color;
     }
 
     function handleCancelBooking(bookingId) {
@@ -367,28 +367,6 @@ function buildTable() {
                     select.append('<option value="' + d + '" data-content="' + dataContent + '">' + d + '</option>')
                 });
                 return select;
-
-                function getBadgeType(status) {
-                    let badge = '';
-                    switch (status) {
-                        case 'Paid':
-                            badge = 'success';
-                            break;
-                        case 'Unpaid':
-                            badge = 'warning';
-                            break;
-                        case 'Cancelled':
-                            badge = 'danger';
-                            break;
-                        case 'Completed':
-                            badge = 'primary';
-                            break;
-                        default:
-                            badge = 'secondary';
-                            break;
-                    }
-                    return badge;
-                }
             }
         }
     }
@@ -406,4 +384,26 @@ function buildTable() {
         });
     }).draw();
     new $.fn.dataTable.FixedHeader(table);
+
+    function getBadgeType(status) {
+        let badge = '';
+        switch (status) {
+            case 'Paid':
+                badge = 'success';
+                break;
+            case 'Unpaid':
+                badge = 'warning';
+                break;
+            case 'Cancelled':
+                badge = 'danger';
+                break;
+            case 'Completed':
+                badge = 'primary';
+                break;
+            default:
+                badge = 'secondary';
+                break;
+        }
+        return badge;
+    }
 }
