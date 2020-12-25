@@ -388,9 +388,9 @@ function setEvents() {
 }
 
 function setRoomItem() {
-    const roomItem = $('.roomItem');
-    if (roomItem.length > 0) {
-        roomItem.remove();
+    const roomItem = '.roomItem';
+    if ($(roomItem).length > 0) {
+        $(roomItem).remove();
         setPeriodItem();
         updateTotal();
     }
@@ -402,7 +402,7 @@ function setRoomItem() {
     }
 
     function setPeriodItem() {
-        if (roomItem.length === 0) {
+        if ($(roomItem).length === 0) {
             $('.periodItem').remove();
         } else {
             const startDate = moment($('#startDate').val(), 'DD/MM/YYYY');
