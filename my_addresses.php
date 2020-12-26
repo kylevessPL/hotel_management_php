@@ -5,6 +5,34 @@ include 'process/validate_address_fields.php';
 
 get_customer_id($alert_msg, $alert_type, $customer_id);
 
+if (isset($_POST["address-submit"], $customer_id))
+{
+    validate_address_fields($_POST, $alert_msg, $alert_type);
+    if (!isset($alert_msg) || $alert_type == 'info')
+    {
+        $address_num = escape_string($_POST["addressNum"]);
+        $street_name = escape_string($_POST["streetName"]);
+        $house_number = escape_string($_POST["houseNumber"]);
+        $zip_code = escape_string($_POST["zipCode"]);
+        $city = escape_string($_POST["city"]);
+        $address_list = get_customer_addresses($customer_id);
+        autocommit(false);
+        try
+        {
+            update_customer_addresses($street_name, $house_number, $zip_code, $city, $address_list, $address_num, $customer_id);
+            commit_transaction();
+            autocommit();
+        }
+        catch (Throwable $e)
+        {
+            $alert_msg = 'Oops, something went wrong. Please try again later.';
+            $alert_type = "danger";
+            rollback_transaction();
+            autocommit();
+        }
+    }
+}
+
 if (isset($customer_id))
 {
     $address_list = get_customer_addresses($customer_id);
@@ -17,34 +45,6 @@ if (isset($customer_id))
     {
         $sql = "SELECT street_name, house_number, zip_code, city FROM addresses where id IN (".implode(',', $address_list).")";
         $address_result = query($sql);
-    }
-}
-
-if (isset($_POST["address-submit"]))
-{
-    validate_address_fields($_POST, $alert_msg, $alert_type);
-    if (!isset($alert_msg) || $alert_type == 'info')
-    {
-        $address_num = escape_string($_POST["addressNum"]);
-        $street_name = escape_string($_POST["streetName"]);
-        $house_number = escape_string($_POST["houseNumber"]);
-        $zip_code = escape_string($_POST["zipCode"]);
-        $city = escape_string($_POST["city"]);
-        autocommit(false);
-        try
-        {
-            update_customer_addresses($street_name, $house_number, $zip_code, $city, $address_list, $address_num, $customer_id);
-            header("Refresh:0");
-            commit_transaction();
-            autocommit();
-        }
-        catch (Throwable $e)
-        {
-            $alert_msg = 'Oops, something went wrong. Please try again later.';
-            $alert_type = "danger";
-            rollback_transaction();
-            autocommit();
-        }
     }
 }
 
