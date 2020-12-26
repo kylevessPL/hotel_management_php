@@ -16,7 +16,7 @@ if (isset($_POST["contact-submit"]))
     }
     if(!isset($alert_msg))
     {
-        [$to, $subject, $headers, $body] = create_mail_body();
+        [$to, $subject, $body, $headers] = create_mail_body();
         send_mail($alert_msg, $alert_type, $to, $subject, $body, $headers);
     }
 }
@@ -54,9 +54,9 @@ function create_mail_body(): array
         'Reply-To' => $email,
         'Content-type' => 'text/html; charset=iso-8859-1'
     ];
-    $bodyParagraphs = ["Name: {$name}", "<br>Email: {$email}", "<br>Message:", $message];
-    $body = implode(PHP_EOL, $bodyParagraphs);
-    return array($to, $subject, $headers, $body);
+    $body_paragraphs = ["Name: {$name}", "<br>Email: {$email}", "<br>Message:", $message];
+    $body = implode(PHP_EOL, $body_paragraphs);
+    return array($to, $subject, $body, $headers);
 }
 
 function send_mail(&$alert_msg, &$alert_type, $to, $subject, $body, $headers)

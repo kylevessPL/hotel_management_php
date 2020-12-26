@@ -215,7 +215,11 @@ function register_user(&$alert_msg, &$alert_type, string $username, string $emai
                                     <input type="text" id="login" name="login" class="form-control" placeholder="Enter username or email"
                                            value=
                                            <?php
-                                           if(isset($_COOKIE["login_remember"]))
+                                           if (isset($_POST["login"], $alert_msg))
+                                           {
+                                               echo '"', htmlspecialchars($_POST["login"]), '"';
+                                           }
+                                           else if (isset($_COOKIE["login_remember"]))
                                            {
                                                echo '"', htmlspecialchars($_COOKIE["login_remember"]), '"';
                                            }

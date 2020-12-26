@@ -19,7 +19,7 @@ $array = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
         <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4">
             <?php view('breadcrumb.php'); ?>
             <p>Frequently asked questions</p>
-            <div class="row mb-4">
+            <div class="row">
                 <div class="col-12 col-xl-7 mb-lg-0">
                     <div class="accordion" id="accordionFaq">
                         <div class="card">
@@ -30,7 +30,7 @@ $array = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
                             </div>
                             <div id="faqOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionFaq">
                                 <div class="card-body">
-                                    <p>Yes, we have breakfast, lunch & dinner packs - each of them available in affordable price. More information <a href="/dashboard/additional-services" target="_blank">here</a>.</p>
+                                    <p>Yes, we have breakfast, lunch & dinner packs - each of them available in affordable price. More information <a href="/dashboard/additional-services">here</a>.</p>
                                 </div>
                             </div>
                         </div>
@@ -54,7 +54,7 @@ $array = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
                             </div>
                             <div id="faqThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionFaq">
                                 <div class="card-body">
-                                    <p>Yes, of course. For children under 13 years old you can order an additional bed. No additional costs. More information <a href="/dashboard/additional-services" target="_blank">here</a>.</p>
+                                    <p>Yes, of course. For children under 13 years old you can order an additional bed. No additional costs. More information <a href="/dashboard/additional-services">here</a>.</p>
                                 </div>
                             </div>
                         </div>

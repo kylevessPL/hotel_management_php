@@ -18,6 +18,16 @@
     display: block;
 }
 
+.navbarDropdownToggle {
+    min-width: 160px;
+}
+
+.navbarDropdownToggle::after {
+    position: absolute;
+    top: 17px;
+    right: 15px;
+}
+
 .nav-item > a {
     color: #0c68f1;
 }
