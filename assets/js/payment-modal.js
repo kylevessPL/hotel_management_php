@@ -71,8 +71,10 @@ function initCreditCardFormValidator() {
             }
         },
         submitHandler: function() {
-            $('.credit-card-alert').remove();
-            $('.creditCardTab').prepend('<p class="alert alert-danger credit-card-alert">Unfortunately, we can\'t process your payment.</p>');
+            setTimeout(function () {
+                $('.credit-card-alert').remove();
+                $('.creditCardTab').prepend('<p class="alert alert-danger credit-card-alert">Unfortunately, we can\'t process your payment.</p>');
+            }, 1000);
             return false;
         }
     });
