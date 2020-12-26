@@ -20,6 +20,7 @@
 
 .navbarDropdownToggle {
     min-width: 160px;
+    padding-right: 40px;
 }
 
 .navbarDropdownToggle::after {
