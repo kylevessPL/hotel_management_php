@@ -168,7 +168,7 @@ function register_user(&$alert_msg, &$alert_type, string $username, string $emai
                         <h5 class="card-title text-center mb-4">Register</h5>
                         <p class="alert alert-<?php echo isset($alert_type) ? htmlspecialchars($alert_type) : 'info'; ?>">
                             <?php echo isset($alert_msg) ? htmlspecialchars($alert_msg) : 'Fill in your data'; ?></p>
-                        <form id="form-register" name="form-register" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
+                        <form id="form-register" name="form-register" method="post" action="/">
                             <div class="form-group">
                                 <label for="username">Username<span style="color: red">*</span></label>
                                 <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" autocomplete="off" autofocus>
@@ -203,7 +203,7 @@ function register_user(&$alert_msg, &$alert_type, string $username, string $emai
                         <p class="alert alert-<?php echo $alert_type ?? 'success'; ?>"
                            style="display: <?php echo isset($alert_msg) ? 'block' : 'none'; ?>;">
                             <?php echo $alert_msg ?? ''; ?></p>
-                        <form id="form-login" name="form-login" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
+                        <form id="form-login" name="form-login" method="post" action="/">
                             <div class="form-group">
                                 <label for="login">Username or e-mail</label>
                                 <div class="input-group">
