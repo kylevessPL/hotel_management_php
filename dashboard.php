@@ -48,7 +48,7 @@ function get_available_rooms_next_week(): int
 ?>
 
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <?php view('head.php'); ?>
 
 <body class="min-vh-100 d-flex flex-column">
@@ -70,7 +70,7 @@ function get_available_rooms_next_week(): int
                             <h6 class="text-uppercase">Bookings</h6>
                             <div>
                                 <h1 class="display-4"><?php echo $bookings_count; ?>
-                                    <lead class="d-inline-block" style="font-size: 20px;">this year</lead>
+                                    <span class="d-inline-block" style="font-size: 20px;">this year</span>
                                 </h1>
                             </div>
                         </div>
@@ -85,7 +85,7 @@ function get_available_rooms_next_week(): int
                             <h6 class="text-uppercase">Payments</h6>
                             <div>
                                 <h1 class="display-4"><?php echo $payments_count; ?>
-                                    <lead class="d-inline-block" style="font-size: 20px;">in total</lead>
+                                    <span class="d-inline-block" style="font-size: 20px;">in total</span>
                                 </h1>
                             </div>
                         </div>
@@ -101,7 +101,7 @@ function get_available_rooms_next_week(): int
                             <h6 class="text-uppercase">Available rooms</h6>
                             <div>
                                 <h1 class="display-4"><?php echo $rooms_count; ?>
-                                    <lead class="d-inline-block" style="font-size: 20px;">for next week</lead>
+                                    <span class="d-inline-block" style="font-size: 20px;">for next week</span>
                                 </h1>
                             </div>
                         </div>

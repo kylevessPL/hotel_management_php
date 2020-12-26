@@ -76,7 +76,7 @@ function send_mail(&$alert_msg, &$alert_type, $to, $subject, $body, $headers)
 ?>
 
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <?php view('head.php'); ?>
 
 <body class="min-vh-100 d-flex flex-column">
@@ -119,7 +119,7 @@ function send_mail(&$alert_msg, &$alert_type, $to, $subject, $body, $headers)
                 <div class="col-12 col-xl-5">
                     <div class="container-fluid">
                         <div class="map-responsive">
-                            <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDZhKZ5AjqR2uMcr9ujCJQVUoox8_SHNiA&q=al.+Marszałka+Józefa+Piłsudskiego+75,+90-368+Łódź" width="100%" height="450" style="border:0" allowfullscreen></iframe>
+                            <iframe class="w-100" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDZhKZ5AjqR2uMcr9ujCJQVUoox8_SHNiA&q=al.+Marszałka+Józefa+Piłsudskiego+75,+90-368+Łódź" height="450" style="border:0" allowfullscreen></iframe>
                         </div>
                     </div>
                     <div class="row text-center mt-4">

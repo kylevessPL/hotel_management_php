@@ -59,7 +59,7 @@ function get_additional_services()
 ?>
 
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <?php view('head.php'); ?>
 
 <body class="min-vh-100 d-flex flex-column">

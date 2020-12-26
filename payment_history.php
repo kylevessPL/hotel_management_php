@@ -7,7 +7,7 @@ get_customer_id($alert_msg, $alert_type, $customer_id);
 ?>
 
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <?php view('head.php'); ?>
 
 <body class="min-vh-100 d-flex flex-column">

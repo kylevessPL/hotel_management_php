@@ -17,10 +17,10 @@ $user_data = mysqli_fetch_assoc($query);
     </div>
     <div class="col-12 col-md-5 col-lg-8 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
         <div class="dropdown navbarDropdown">
-            <button class="btn btn-primary dropdown-toggle navbarDropdownToggle text-left" type="button" aria-expanded="false">
+            <button class="btn btn-primary dropdown-toggle navbarDropdownToggle text-left" id="navbar-dropdown-button" type="button" aria-expanded="false">
                 Hello, <?php echo $user_data['username']; ?>
             </button>
-            <ul class="dropdown-menu dropdown-menu-right w-100" aria-labelledby="navbarDropdownToggle">
+            <ul class="dropdown-menu dropdown-menu-right w-100" aria-labelledby="navbar-dropdown-button">
                 <li>
                     <a class="dropdown-item pl-2" href="/account/my-details">
                         <i class="las la-address-book align-top mr-1" style="font-size: 28px;"></i>My details

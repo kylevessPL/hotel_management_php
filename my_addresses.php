@@ -89,7 +89,7 @@ function update_customer_addresses(string $street_name, string $house_number, st
 ?>
 
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <?php view('head.php'); ?>
 
 <body class="min-vh-100 d-flex flex-column">
