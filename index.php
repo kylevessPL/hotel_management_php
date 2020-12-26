@@ -161,7 +161,7 @@ function register_user(&$alert_msg, &$alert_type, string $username, string $emai
             <div class="card my-5">
                 <div class="card-body">
                     <?php
-                    if(isset($_GET["action"]) == "register" ||
+                    if (isset($_GET["action"]) == "register" ||
                     (isset($_POST["register-submit"]) && (isset($alert_type) ? ($alert_type != "success") : true)))
                     {
                         ?>

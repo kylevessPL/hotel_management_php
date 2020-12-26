@@ -14,7 +14,7 @@ if (isset($_POST["contact-submit"]))
     {
         verify_captcha_response($alert_msg, $alert_type);
     }
-    if(!isset($alert_msg))
+    if (!isset($alert_msg))
     {
         [$to, $subject, $body, $headers] = create_mail_body();
         send_mail($alert_msg, $alert_type, $to, $subject, $body, $headers);

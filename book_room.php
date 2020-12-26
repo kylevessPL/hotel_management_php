@@ -91,11 +91,11 @@ function get_additional_services()
                                     <div class="form-group row">
                                         <div class="col-sm-6">
                                             <label class="control-label" for="startDate">Start date<span style="color: red">*</span></label>
-                                            <input class="form-control" id="startDate" type="text" name="startDate" value="<?php if(isset($bed_number)) { echo htmlspecialchars($start_date); } ?>" placeholder="dd/MM/yyyy" autocomplete="off">
+                                            <input class="form-control" id="startDate" type="text" name="startDate" value="<?php if (isset($bed_number)) { echo htmlspecialchars($start_date); } ?>" placeholder="dd/MM/yyyy" autocomplete="off">
                                         </div>
                                         <div class="col-sm-6">
                                             <label class="control-label" for="endDate">End date<span style="color: red">*</span></label>
-                                            <input class="form-control" id="endDate" type="text" name="endDate" value="<?php if(isset($bed_number)) { echo htmlspecialchars($end_date); } ?>" placeholder="dd/MM/yyyy" autocomplete="off">
+                                            <input class="form-control" id="endDate" type="text" name="endDate" value="<?php if (isset($bed_number)) { echo htmlspecialchars($end_date); } ?>" placeholder="dd/MM/yyyy" autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -186,7 +186,7 @@ function get_additional_services()
 <script src="/assets/js/book-room.js"></script>
 <script src="/assets/js/payment-modal.js"></script>
 
-<?php if(isset($bed_number[0])) { ?>
+<?php if (isset($bed_number[0])) { ?>
 <script>
     const startDate = $('#startDate');
     const endDate = $('#endDate');

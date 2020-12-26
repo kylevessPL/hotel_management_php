@@ -10,7 +10,7 @@ if (empty($_GET['promo-code']))
 $code = escape_string($_GET['promo-code']);
 $sql = "SELECT id FROM discounts WHERE code = '$code'";
 $result = query($sql);
-if(mysqli_num_rows($result) > 0)
+if (mysqli_num_rows($result) > 0)
 {
     echo 'true';
 }
