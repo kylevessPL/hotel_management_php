@@ -146,7 +146,7 @@ function formatNumberInput(input) {
 }
 
 function getCurrentMonth() {
-    return (new Date).getMonth().toString();
+    return ((new Date).getMonth() + 1).toString();
 }
 
 function getCurrentYear() {
