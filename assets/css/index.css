@@ -1,7 +1,38 @@
-body {
-    background: url('../../assets/images/index-background.png') no-repeat center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+footer {
+    color: #caced1 !important;
+}
+
+.footer-main {
+    background-color: #28323C;
+}
+
+.sub-footer {
+    background-color: #1E242A;
+}
+
+.carousel-item {
+    height: 500px;
+}
+
+.carousel-caption {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    top: 0;
+    bottom: 0;
+    left: 2%;
+}
+
+.carousel-caption h2,
+.carousel-caption p {
+    text-shadow: 2px 2px 3px rgba(0,0,0,1);
+}
+
+.carousel-item img {
+    object-fit: cover;
+    left: 0;
+    width: 100%;
+    height: auto;
+    top: 80%;
+    transform: translateY(-20%);
 }

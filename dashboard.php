@@ -191,7 +191,7 @@ function get_available_rooms_next_week(): int
 <a href="assets/images/gym.png" data-lightbox="infrastructure-gallery" data-title="Gym"></a>
 <a href="assets/images/valet_parking.png" data-lightbox="infrastructure-gallery" data-title="Secured valet parking"></a>
 
-<?php view('footer.php'); ?>
+<?php view('footer_dashboard.php'); ?>
 
 <?php view('scripts.php'); ?>
 <script src="/assets/js/dashboard.js"></script>

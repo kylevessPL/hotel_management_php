@@ -173,9 +173,10 @@ if (isset($_POST["customer-details-submit"]))
         </main>
     </div>
 </div>
-<?php view('footer.php'); ?>
+<?php view('footer_dashboard.php'); ?>
 
 <?php view('scripts.php'); ?>
+<script src="https://apps.elfsight.com/p/platform.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>

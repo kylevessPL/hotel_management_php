@@ -121,9 +121,10 @@ $array = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
         </main>
     </div>
 </div>
-<?php view('footer.php'); ?>
+<?php view('footer_dashboard.php'); ?>
 
 <?php view('scripts.php'); ?>
+<script src="https://apps.elfsight.com/p/platform.js" defer></script>
 <script src="/assets/js/faq.js"></script>
 <script src="/assets/js/chat.js"></script>
 

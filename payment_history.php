@@ -47,7 +47,7 @@ get_customer_id($alert_msg, $alert_type, $customer_id);
         </main>
     </div>
 </div>
-<?php view('footer.php'); ?>
+<?php view('footer_dashboard.php'); ?>
 
 <?php view('scripts.php'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>

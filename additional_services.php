@@ -54,9 +54,10 @@ $result = query($sql);
         </main>
     </div>
 </div>
-<?php view('footer.php'); ?>
+<?php view('footer_dashboard.php'); ?>
 
 <?php view('scripts.php'); ?>
+<script src="https://apps.elfsight.com/p/platform.js" defer></script>
 <script src="/assets/js/additional-services.js"></script>
 <script src="/assets/js/chat.js"></script>
 

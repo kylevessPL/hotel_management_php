@@ -1,3 +1,14 @@
+.btn-circle {
+    width: 50px;
+    height: 50px;
+    padding: 7px 10px;
+    border-radius: 25px;
+    font-size: 10px;
+    text-align: center;
+    background-color: #5c8ff3;
+    border-color: #5c8ff3;
+}
+
 .btn:focus,
 .page-link:focus,
 .custom-control-input:focus ~ .custom-control-label::before {
