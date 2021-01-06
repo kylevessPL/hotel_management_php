@@ -54,7 +54,7 @@ $result = query($sql);
         </main>
     </div>
 </div>
-<?php view('footer_dashboard.php'); ?>
+<?php view('footer.php'); ?>
 
 <?php view('scripts.php'); ?>
 <script src="https://apps.elfsight.com/p/platform.js" defer></script>

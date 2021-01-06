@@ -150,7 +150,7 @@ function send_mail(&$alert_msg, &$alert_type, $to, $subject, $body, $headers)
         </main>
     </div>
 </div>
-<?php view('footer_dashboard.php'); ?>
+<?php view('footer.php'); ?>
 
 <?php view('scripts.php'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>

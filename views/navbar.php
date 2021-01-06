@@ -6,7 +6,7 @@ $user_data = mysqli_fetch_assoc($query);
 ?>
 
 <nav class="navbar navbar-light bg-light p-2 flex-shrink-0">
-    <div class="d-flex col-12 col-md-3 col-lg-2 mb-2 mb-lg-0 flex-wrap flex-md-nowrap justify-content-between">
+    <div class="d-flex justify-content-between col-12 col-md-3 col-lg-2 mb-lg-0">
         <a class="navbar-brand" href="/dashboard">
             <img src="/assets/images/favicon.ico" alt="HoteLA logo" width="52" height="52" class="mr-2">
             HoteLA Client Dashboard

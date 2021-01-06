@@ -163,7 +163,7 @@ function update_customer_addresses(string $street_name, string $house_number, st
         </div>
     </div>
 </div>
-<?php view('footer_dashboard.php'); ?>
+<?php view('footer.php'); ?>
 
 <?php view('scripts.php'); ?>
 <script src="https://apps.elfsight.com/p/platform.js" defer></script>

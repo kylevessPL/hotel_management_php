@@ -155,19 +155,6 @@
     }
 }
 
-.navbar {
-    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .1);
-}
-
-@media (min-width: 768px) {
-    .navbar {
-        top: 0;
-        position: -webkit-sticky;
-        position: sticky;
-        z-index: 999;
-    }
-}
-
 @media print {
     body.modal-open {
         visibility: hidden;
